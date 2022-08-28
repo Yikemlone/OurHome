@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.Client", "OurHome\Client\OurHome.Client.csproj", "{11360DC4-E0C3-43B8-A67D-7B556F3D5015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Client", "OurHome\Client\OurHome.Client.csproj", "{11360DC4-E0C3-43B8-A67D-7B556F3D5015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.Server", "OurHome\Server\OurHome.Server.csproj", "{5BB90054-D9D3-43DB-8F8A-741361067D01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Server", "OurHome\Server\OurHome.Server.csproj", "{5BB90054-D9D3-43DB-8F8A-741361067D01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.Shared", "OurHome\Shared\OurHome.Shared.csproj", "{59B1DF5E-DFEC-4D5F-BD20-7C0F901AF7DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Shared", "OurHome\Shared\OurHome.Shared.csproj", "{59B1DF5E-DFEC-4D5F-BD20-7C0F901AF7DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
