@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
+using OurHome.Server;
+using OurHome.Server.Services.Bills;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,12 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSingleton<IBillsService, BillsService>();
+
+// DB setup
+builder.Services.AddDbContext<OurHomeDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"))
+);
 
 var app = builder.Build();
 
