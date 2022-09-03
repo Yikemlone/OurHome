@@ -4,30 +4,25 @@
 
 <PageTitle>Bills</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello!</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true"><b>Hello!</b></MudText>
 <MudText Class="mb-8">Bills displayed here!</MudText>
 <MudAlert Severity="Severity.Normal"> This is a test thing <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
 
-@*Need to use a chart series for line charts *@
-<MudChart ChartType="ChartType.Line" ChartSeries="@billsDto2"/>
-
-@*Need to use a double array fir pie/donut*@
-<MudChart ChartType="ChartType.Pie" InputData="@billsDto" Width="300px" Height="300px"/>
+@*Need to use a double array for pie/donut*@
+<MudChart ChartType="ChartType.Pie" InputData="@billsDto" Width="300px" Height="300px" ChartOptions="@chartOptions"/>
 
 @code 
 {
     private double[] billsDto = new double[] { 0.5, 0.1, 3};
-    private List<ChartSeries> billsDto2 = new List<ChartSeries>();
+    private ChartOptions chartOptions = new();
 
-    void Test() 
+    protected override void OnParametersSet() => chartOptions.ChartPalette = new string[]
     {
-        double[] decimals = { 0.5, 0.1, 3};
+        "#ff4081ff",
+        "#ff4085ff",
+        "#ff4090ff",
+        "#ff4095ff",
+        "#ff4100ff",
+    };
 
-        billsDto2.Add(new ChartSeries()
-        {
-            Name = "test",
-            Data = decimals
-        });
-    }
-    
 }
