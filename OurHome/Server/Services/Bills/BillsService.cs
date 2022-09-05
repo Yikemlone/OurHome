@@ -24,6 +24,7 @@ namespace OurHome.Server.Services.Bills
                 }).ToList();
 
             return Task.FromResult(billsList);
+
         }
 
         public Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills()

@@ -12,7 +12,7 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddSingleton<IBillsService, BillsService>();
+builder.Services.AddScoped<IBillsService, BillsService>();
 
 // DB setup
 builder.Services.AddDbContext<OurHomeDbContext>(options =>

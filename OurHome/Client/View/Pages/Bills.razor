@@ -4,16 +4,12 @@
 
 <PageTitle>Bills</PageTitle>
 
-<MudText Typo="Typo.h3" GutterBottom="true"><b>Hello!</b></MudText>
+<MudText Typo="Typo.h3" GutterBottom="true"><b>Bills</b></MudText>
 <MudText Class="mb-8">Bills displayed here!</MudText>
 <MudAlert Severity="Severity.Normal"> This is a test thing <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
 
-@*Need to use a double array for pie/donut*@
-<MudPaper Class="n3 d-flex align-center flex-grow-1 gap-4" Elevation="0">
-   @* <MudPaper Class="py-8 d-flex flex-1 mud-theme-primary"/>
-    <MudPaper Class="py-16 d-flex flex-1 mud-theme-primary"/>
-    <MudPaper Class="py-12 d-flex flex-1 mud-theme-primary"/>*@
-    <MudChart ChartType="ChartType.Donut" InputData="@billsDto" Width="300px" Height="300px" ChartOptions="@chartOptions"/>
+<MudPaper Class="d-flex flex-grow-1 gap-4" Elevation="0">
+    <MudChart ChartType="ChartType.Donut" InputData="@billsDto" Width="100%" ChartOptions="@chartOptions"/>
 </MudPaper>
 
 @code 
@@ -32,7 +28,7 @@
 
     public Task GetModelAsync() 
     {
-
+        
 
 
 

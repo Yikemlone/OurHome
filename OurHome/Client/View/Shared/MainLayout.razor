@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
 <MudDialogProvider />
@@ -7,9 +8,9 @@
 <MudLayout>
 
     <MudAppBar Elevation="1" Color="Color.Secondary">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
         <MudSpacer />
-        <MudIconButton aria-label="Toggle light/dark theme" Icon="@GetThemeIcon()" Color="MudBlazor.Color.Inherit" OnClick="DarkMode" />
+        <MudIconButton aria-label="Toggle light/dark theme" Icon="@GetThemeIcon()" Color="MudBlazor.Color.Inherit" OnClick="DarkMode"/>
         <MudIconButton aria-label="Tea" Icon="@Icons.Material.Outlined.Coffee" Color="MudBlazor.Color.Inherit" OnClick="MakeTea"/>
     </MudAppBar>
 
@@ -28,29 +29,31 @@
 
 </MudLayout>
 
-
-@*1a1a27ff black *@ 
-@*92929fff grey*@
-
-
-@code {
-    bool _drawerOpen = true;
+@code 
+{
+    private bool _drawerOpen = true;
     private MudTheme _theme = new();
     private bool _isDarkMode = true;
 
-    void DrawerToggle()
+    private void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
 
-    void DarkMode()
+    private void DarkMode()
     {
         _isDarkMode = !_isDarkMode;
     }
 
-    void MakeTea()
+    private void MakeTea()
     {
-        
+        Snackbar.Configuration.SnackbarVariant = Variant.Outlined;
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.TopCenter;
+        Snackbar.Add("Making Tea", Severity.Success, config => 
+        { 
+            config.VisibleStateDuration = 1000; 
+            config.Icon = @Icons.Material.Outlined.Coffee;
+        });
     }
 
     private string GetThemeIcon()
