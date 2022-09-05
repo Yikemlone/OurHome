@@ -6,6 +6,8 @@ namespace OurHome.Server.Services.Bills
     {
         public Task<IEnumerable<BillsDto>> GetBills()
         {
+
+
             throw new NotImplementedException();
         }
 
