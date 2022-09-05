@@ -9,7 +9,12 @@
 <MudAlert Severity="Severity.Normal"> This is a test thing <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
 
 @*Need to use a double array for pie/donut*@
-<MudChart ChartType="ChartType.Pie" InputData="@billsDto" Width="300px" Height="300px" ChartOptions="@chartOptions"/>
+<MudPaper Class="n3 d-flex align-center flex-grow-1 gap-4" Elevation="0">
+   @* <MudPaper Class="py-8 d-flex flex-1 mud-theme-primary"/>
+    <MudPaper Class="py-16 d-flex flex-1 mud-theme-primary"/>
+    <MudPaper Class="py-12 d-flex flex-1 mud-theme-primary"/>*@
+    <MudChart ChartType="ChartType.Donut" InputData="@billsDto" Width="300px" Height="300px" ChartOptions="@chartOptions"/>
+</MudPaper>
 
 @code 
 {
