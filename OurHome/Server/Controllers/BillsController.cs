@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OurHome.Server.Services.Bills;
 using OurHome.Shared.DTO;
 
@@ -16,28 +17,38 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpGet]
-        public BillsDto GetBills()
+        public IEnumerable<BillsDto> GetBills()
         {
-            return new BillsDto();
+            var bills = _billsService.GetBills();
+            List<BillsDto> retVal = (List<BillsDto>) bills.Result;
+
+            return retVal;
         }
 
         [HttpGet]
         [Route("/people/{person}")]
-        public BillsDto GetPersonsBills(string person)
+        public PersonsBillsDto GetPersonsBills(string person)
         {
-            return new BillsDto();
+            var bill = _billsService.GetPersonsBills(person);
+            PersonsBillsDto retVal = bill.Result;
+
+            return retVal;
         }   
         
         [HttpGet]
         [Route("/people")]
-        public IEnumerable<BillsDto> GetPeoplesBills()
+        public IEnumerable<PersonsBillsDto> GetPeoplesBills()
         {
-            throw new NotImplementedException();
+            var bills = _billsService.GetPeoplesBills();
+            List<PersonsBillsDto> retVal = (List<PersonsBillsDto>)bills.Result;
+
+            return retVal;
         }
 
         [HttpPost]
         public Task SetBills([FromBody] BillsDto updatedBills)
         {
+            _billsService.UpdateBills(updatedBills);
             return Task.CompletedTask;
         }
     }
