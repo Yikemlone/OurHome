@@ -1,6 +1,4 @@
 ﻿@page "/bills"
-@using OurHome.Shared.DTO
-
 
 <PageTitle>Bills</PageTitle>
 
@@ -8,31 +6,15 @@
 <MudText Class="mb-8">Bills displayed here!</MudText>
 <MudAlert Severity="Severity.Normal"> This is a test thing <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
 
-<MudPaper Class="d-flex flex-grow-1 gap-4" Elevation="0">
-    <MudChart ChartType="ChartType.Donut" InputData="@billsDto" Width="100%" ChartOptions="@chartOptions"/>
-</MudPaper>
 
-@code 
-{
-    private double[] billsDto = new double[] { 0.5, 0.1, 3};
-    private ChartOptions chartOptions = new();
-
-    protected override void OnParametersSet() => chartOptions.ChartPalette = new string[]
+<MudPaper Class="pa-4 mt-2 d-flex justify-center" Elevation="1" Style="background: var(--mud-palette-background)">
+   
+    @if (bills.Count != 0)
+    { 
+        <MudChart ChartType="ChartType.Donut" InputData="@billsPrices" InputLabels="@inputLabls" ChartOptions="@chartOptions"/>
+    } else 
     {
-        "#ff4081ff",
-        "#81FF40ff",
-        "#4081ffff",
-        "#40CDff",
-        "#ff4100ff",
-    };
-
-    public Task GetModelAsync() 
-    {
-        
-
-
-
-        return Task.CompletedTask;
+        <p>Loading...</p>
     }
 
-}
+</MudPaper>
