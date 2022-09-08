@@ -20,27 +20,27 @@ namespace OurHome.Server.Controllers
         public IEnumerable<BillsDto> GetBills()
         {
             var bills = _billsService.GetBills();
-            List<BillsDto> retVal = (List<BillsDto>) bills.Result;
+            List<BillsDto> retVal = bills.Result.ToList();
 
             return retVal;
         }
 
         [HttpGet]
-        [Route("/people/{person}")]
+        [Route("people")]
+        public IEnumerable<PersonsBillsDto> GetPeoplesBills()
+        {
+            var personsBills = _billsService.GetPeoplesBills();
+            List<PersonsBillsDto> retVal = personsBills.Result.ToList();
+
+            return retVal;
+        }
+
+        [HttpGet]
+        [Route("people/{person}")]
         public PersonsBillsDto GetPersonsBills(string person)
         {
             var bill = _billsService.GetPersonsBills(person);
             PersonsBillsDto retVal = bill.Result;
-
-            return retVal;
-        }   
-        
-        [HttpGet]
-        [Route("/people")]
-        public IEnumerable<PersonsBillsDto> GetPeoplesBills()
-        {
-            var bills = _billsService.GetPeoplesBills();
-            List<PersonsBillsDto> retVal = (List<PersonsBillsDto>)bills.Result;
 
             return retVal;
         }

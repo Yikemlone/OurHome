@@ -9,9 +9,22 @@
 
 <MudPaper Class="pa-4 mt-2 d-flex justify-center" Elevation="1" Style="background: var(--mud-palette-background)">
    
-    @if (bills.Count != 0)
+    @if (BillsList.Count != 0)
     { 
-        <MudChart ChartType="ChartType.Donut" InputData="@billsPrices" InputLabels="@inputLabls" ChartOptions="@chartOptions"/>
+        <MudChart ChartType="ChartType.Donut" InputData="@BillsPrices" InputLabels="@InputLabls" ChartOptions="@ChartOptions"/>
+    } else 
+    {
+        <p>Loading...</p>
+    }
+
+</MudPaper>
+
+
+<MudPaper Class="pa-4 mt-2 d-flex justify-center" Elevation="1" Style="background: var(--mud-palette-background)">
+   
+    @if (BillsList.Count != 0)
+    { 
+        <MudChart ChartType="ChartType.Donut" InputData="@BillsPrices" InputLabels="@InputLabls" ChartOptions="@ChartOptions"/>
     } else 
     {
         <p>Loading...</p>

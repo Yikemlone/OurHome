@@ -6,19 +6,23 @@ namespace OurHome.Client.View.Pages
 {
     public partial class Bills
     {
-        public ChartOptions chartOptions { get; set; }
-        public HttpClient client { get; set; }
-        public List<BillsDto> bills { get; set; }
-        public string[] inputLabls { get; set; }
-        public double[] billsPrices { get; set; }
+        private string API_URL = "/api/Bills";
+        public ChartOptions ChartOptions { get; set; }
+        public HttpClient Client { get; set; }
+        public List<BillsDto> BillsList { get; set; }
+        public string[] InputLabls { get; set; }
+        public double[] BillsPrices { get; set; }
+        private List<PersonsBillsDto> PersonsBills { get; set; }
 
         public Bills()
-        {   
-            bills = new List<BillsDto>();
-            chartOptions = new();
-            client = new HttpClient() { BaseAddress = new Uri("https://localhost:5001") };
+        {
+            BillsList = new List<BillsDto>();
+            PersonsBills = new List<PersonsBillsDto>();
+            ChartOptions = new();
 
-            chartOptions.ChartPalette = new string[]
+            Client = new HttpClient() { BaseAddress = new Uri("https://localhost:5001") };
+
+            ChartOptions.ChartPalette = new string[]
             {
                 "#ff4081",
                 "#81FF40",
@@ -31,28 +35,33 @@ namespace OurHome.Client.View.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            bills = (await GetModelAsync()).ToList();
+            BillsList = (await GetModelAsync()).ToList();
             UpdateChart();
+            PersonsBills = (await GetPeoplesBills()).ToList();
         }
 
         public void UpdateChart() 
         {
-            billsPrices = new double[bills.Count];
-            inputLabls = new string[bills.Count];
+            BillsPrices = new double[BillsList.Count];
+            InputLabls = new string[BillsList.Count];
 
-            for (int i = 0; i < bills.Count; i++)
+            for (int i = 0; i < BillsList.Count; i++)
             {
-                inputLabls[i] = bills[i].Bill;
-                billsPrices[i] = (double) bills[i].Price;
+                InputLabls[i] = BillsList[i].Bill;
+                BillsPrices[i] = (double)BillsList[i].Price;
             }
 
             StateHasChanged();
         }
 
-        public async Task<List<BillsDto>> GetModelAsync()
+        public async Task<IEnumerable<BillsDto>> GetModelAsync()
         {
-            string endpoint = "/api/Bills";
-            return bills = await client.GetFromJsonAsync<List<BillsDto>>(endpoint);
+            return await Client.GetFromJsonAsync<List<BillsDto>>(API_URL);
+        }
+
+        public async Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills() 
+        {
+            return await Client.GetFromJsonAsync<List<PersonsBillsDto>>(API_URL + "/people");
         }
 
     }
