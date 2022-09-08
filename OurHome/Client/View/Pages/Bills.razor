@@ -11,7 +11,7 @@
    
     @if (BillsList.Count != 0)
     { 
-        <MudChart ChartType="ChartType.Donut" InputData="@BillsPrices" InputLabels="@InputLabls" ChartOptions="@ChartOptions"/>
+        <MudChart ChartType="ChartType.Pie" InputData="@BillsPrices" InputLabels="@InputLabls" ChartOptions="@ChartOptions"/>
     } else 
     {
         <p>Loading...</p>
@@ -22,9 +22,9 @@
 
 <MudPaper Class="pa-4 mt-2 d-flex justify-center" Elevation="1" Style="background: var(--mud-palette-background)">
    
-    @if (BillsList.Count != 0)
-    { 
-        <MudChart ChartType="ChartType.Donut" InputData="@BillsPrices" InputLabels="@InputLabls" ChartOptions="@ChartOptions"/>
+    @if (Series.Count != 0)
+    {
+        <MudChart ChartType="ChartType.Line" ChartSeries="@Series" Width="100%" Height="350px" XAxisLabels="@XAxisLabels" />
     } else 
     {
         <p>Loading...</p>

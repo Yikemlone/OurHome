@@ -13,12 +13,16 @@ namespace OurHome.Client.View.Pages
         public string[] InputLabls { get; set; }
         public double[] BillsPrices { get; set; }
         private List<PersonsBillsDto> PersonsBills { get; set; }
+        private List<ChartSeries> Series { get; set; }
+
+        public string[] XAxisLabels = { "Rent", "Bins", "Electricity", "Milk", "Oil", "Internet" };
 
         public Bills()
         {
             BillsList = new List<BillsDto>();
             PersonsBills = new List<PersonsBillsDto>();
             ChartOptions = new();
+            Series = new();
 
             Client = new HttpClient() { BaseAddress = new Uri("https://localhost:5001") };
 
@@ -38,6 +42,24 @@ namespace OurHome.Client.View.Pages
             BillsList = (await GetModelAsync()).ToList();
             UpdateChart();
             PersonsBills = (await GetPeoplesBills()).ToList();
+
+
+            foreach (PersonsBillsDto personsBills in PersonsBills)
+            {
+                Series.Add(new ChartSeries
+                {
+                    Name = personsBills.Name,
+                    Data = new double[]
+                    {
+                        (double) personsBills.Rent,
+                        (double) personsBills.Bins,
+                        (double) personsBills.Electricity,
+                        (double) personsBills.Milk,
+                        (double) personsBills.Oil,
+                        (double) personsBills.Internet
+                    }
+                });
+            }
         }
 
         public void UpdateChart() 
