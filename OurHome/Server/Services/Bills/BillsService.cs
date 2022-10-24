@@ -1,4 +1,5 @@
-﻿using OurHome.Shared.DTO;
+﻿using OurHome.Server.Models;
+using OurHome.Shared.DTO;
 using System;
 
 namespace OurHome.Server.Services.Bills
@@ -18,7 +19,7 @@ namespace OurHome.Server.Services.Bills
             IEnumerable<BillsDto> billsList = _context.Bills
                 .Select(c => new BillsDto()
                 {
-                    ID = c.ID,
+                    BillID = c.BillID,
                     Bill = c.Bill,
                     Price = c.Price
                 }).ToList();
@@ -32,11 +33,11 @@ namespace OurHome.Server.Services.Bills
             IEnumerable<PersonsBillsDto> billsList = _context.PersonsBills
                 .Select(c => new PersonsBillsDto()
                 {
+                    PersonID = c.PersonID,
                     Bins = c.Bins,
                     Electricity = c.Electricity,
                     Internet = c.Internet,
                     Milk = c.Milk,
-                    Name = c.Name,
                     Oil = c.Oil,
                     Rent = c.Rent 
                 }).ToList();
@@ -44,17 +45,17 @@ namespace OurHome.Server.Services.Bills
             return Task.FromResult(billsList);
         }
 
-        public Task<PersonsBillsDto> GetPersonsBills(string person)
+        public Task<PersonsBillsDto> GetPersonsBills(int personID)
         {
             PersonsBillsDto personsBills = (PersonsBillsDto) _context.PersonsBills
-                .Where(c => person == c.Name)
+                .Where(c => personID == c.PersonID)
                 .Select(c => new PersonsBillsDto()
                 {
+                    PersonID = c.PersonID,
                     Bins = c.Bins,
                     Electricity = c.Electricity,
                     Internet = c.Internet,
                     Milk = c.Milk,
-                    Name = c.Name,
                     Oil = c.Oil,
                     Rent = c.Rent
                 });
@@ -65,7 +66,7 @@ namespace OurHome.Server.Services.Bills
         public Task UpdateBills(BillsDto updatedBills)
         {
             var oldBills = (BillsDto) _context.Bills
-            .Where(c => updatedBills.ID == c.ID);
+            .Where(c => updatedBills.BillID == c.BillID);
 
             oldBills.Bill = updatedBills.Bill;
             oldBills.Price = updatedBills.Price;

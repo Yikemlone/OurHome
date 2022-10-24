@@ -1,19 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace OurHome.Server.Models
 {
-    public class PersonsBills
+    public class PastBills
     {
         [Key]
         [Column(TypeName = "int")]
-        public int PersonsBillID { get; set; }
+        public int PastBillID { get; set; }
 
 
-        [Column(TypeName = "int")]
-        public int PersonID { get; set; }
-        public Person Person { get; set; }
+        [Column(TypeName = "date")]
+        public DateTime BillMonth { get; set; }
 
 
         [Column(TypeName = "decimal(10,2)")]
@@ -29,14 +28,11 @@ namespace OurHome.Server.Models
 
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Electricity { get; set; }
+        public decimal? Oil { get; set; }
 
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Milk { get; set; }
+        public decimal? Electric { get; set; }
 
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal Oil { get; set; }
     }
 }

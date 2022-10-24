@@ -37,7 +37,7 @@ namespace OurHome.Server.Controllers
 
         [HttpGet]
         [Route("people/{person}")]
-        public PersonsBillsDto GetPersonsBills(string person)
+        public PersonsBillsDto GetPersonsBills(int person)
         {
             var bill = _billsService.GetPersonsBills(person);
             PersonsBillsDto retVal = bill.Result;

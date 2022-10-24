@@ -8,7 +8,7 @@ namespace OurHome.Shared.DTO
 {
     public class BillsDto
     {
-        public int ID { get; set; }
+        public int BillID { get; set; }
         public string Bill { get; set; }
         public decimal Price { get; set; }
     }

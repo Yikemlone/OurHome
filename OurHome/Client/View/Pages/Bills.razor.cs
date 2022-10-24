@@ -14,8 +14,8 @@ namespace OurHome.Client.View.Pages
         public double[] BillsPrices { get; set; }
         private List<PersonsBillsDto> PersonsBills { get; set; }
         private List<ChartSeries> Series { get; set; }
-
-        public string[] XAxisLabels = { "Rent", "Bins", "Electricity", "Milk", "Oil", "Internet" };
+        private double BillsTotal { get; set; }
+        private bool selected = true;
 
         public Bills()
         {
@@ -43,12 +43,11 @@ namespace OurHome.Client.View.Pages
             UpdateChart();
             PersonsBills = (await GetPeoplesBills()).ToList();
 
-
             foreach (PersonsBillsDto personsBills in PersonsBills)
             {
                 Series.Add(new ChartSeries
                 {
-                    Name = personsBills.Name,
+                    Name = personsBills.PersonID.ToString(),
                     Data = new double[]
                     {
                         (double) personsBills.Rent,
@@ -69,8 +68,9 @@ namespace OurHome.Client.View.Pages
 
             for (int i = 0; i < BillsList.Count; i++)
             {
-                InputLabls[i] = BillsList[i].Bill;
+                InputLabls[i] = BillsList[i].Bill + " - " + (double)BillsList[i].Price;
                 BillsPrices[i] = (double)BillsList[i].Price;
+                BillsTotal += (double)BillsList[i].Price;
             }
 
             StateHasChanged();
@@ -84,6 +84,17 @@ namespace OurHome.Client.View.Pages
         public async Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills() 
         {
             return await Client.GetFromJsonAsync<List<PersonsBillsDto>>(API_URL + "/people");
+        }
+
+        private void ChangeColour() 
+        {
+            selected = !selected;
+            StateHasChanged();
+        }
+
+        private void DisplayPeronsBills(PersonsBillsDto personsBills) 
+        {
+            /// The purpose of this is display the perosn that was clicked on bills
         }
 
     }

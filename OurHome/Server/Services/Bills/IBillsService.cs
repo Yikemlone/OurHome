@@ -6,7 +6,7 @@ namespace OurHome.Server.Services.Bills
     {
         public Task<IEnumerable<BillsDto>> GetBills();
         public Task UpdateBills(BillsDto updatedBills);
-        public Task<PersonsBillsDto> GetPersonsBills(string person);
+        public Task<PersonsBillsDto> GetPersonsBills(int personID);
         public Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills();
 
     }

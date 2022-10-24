@@ -4,19 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OurHome.Server.Models
 {
-    public class Bills
+    public class Person
     {
         [Key]
         [Column(TypeName = "int")]
-        public int BillID { get; set; }
+        public int PersonID { get; set; }
 
 
         [Column(TypeName = "nvarchar(50)")]
-        public string Bill { get; set; }
-
-
-        [Column(TypeName = "decimal")]
-        public decimal Price { get; set; }
+        public int PersonName { get; set; }
 
     }
 }
