@@ -17,10 +17,10 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<BillsDto> GetBills()
+        public IEnumerable<BillDto> GetBills()
         {
             var bills = _billsService.GetBills();
-            List<BillsDto> retVal = bills.Result.ToList();
+            List<BillDto> retVal = bills.Result.ToList();
 
             return retVal;
         }
@@ -46,7 +46,7 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpPost]
-        public Task SetBills([FromBody] BillsDto updatedBills)
+        public Task SetBills([FromBody] BillDto updatedBills)
         {
             _billsService.UpdateBills(updatedBills);
             return Task.CompletedTask;

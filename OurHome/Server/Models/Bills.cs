@@ -16,7 +16,7 @@ namespace OurHome.Server.Models
 
 
         [Column(TypeName = "decimal")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
     }
 }

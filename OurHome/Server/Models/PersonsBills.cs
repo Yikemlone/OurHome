@@ -8,12 +8,7 @@ namespace OurHome.Server.Models
     {
         [Key]
         [Column(TypeName = "int")]
-        public int PersonsBillID { get; set; }
-
-
-        [Column(TypeName = "int")]
         public int PersonID { get; set; }
-        public Person Person { get; set; }
 
 
         [Column(TypeName = "decimal(10,2)")]
@@ -29,14 +24,10 @@ namespace OurHome.Server.Models
 
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Electricity { get; set; }
+        public decimal? Electricity { get; set; }
 
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Milk { get; set; }
-
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal Oil { get; set; }
+        public decimal? Oil { get; set; }
     }
 }

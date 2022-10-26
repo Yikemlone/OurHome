@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurHome.Server;
 
@@ -11,9 +12,10 @@ using OurHome.Server;
 namespace OurHome.Server.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    partial class OurHomeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025201631_Renaming coloum")]
+    partial class Renamingcoloum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

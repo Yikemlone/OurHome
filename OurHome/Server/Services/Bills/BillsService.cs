@@ -14,10 +14,10 @@ namespace OurHome.Server.Services.Bills
             _context = context;
         }
 
-        public Task<IEnumerable<BillsDto>> GetBills()
+        public Task<IEnumerable<BillDto>> GetBills()
         {
-            IEnumerable<BillsDto> billsList = _context.Bills
-                .Select(c => new BillsDto()
+            IEnumerable<BillDto> billsList = _context.Bills
+                .Select(c => new BillDto()
                 {
                     BillID = c.BillID,
                     Bill = c.Bill,
@@ -37,7 +37,6 @@ namespace OurHome.Server.Services.Bills
                     Bins = c.Bins,
                     Electricity = c.Electricity,
                     Internet = c.Internet,
-                    Milk = c.Milk,
                     Oil = c.Oil,
                     Rent = c.Rent 
                 }).ToList();
@@ -55,7 +54,6 @@ namespace OurHome.Server.Services.Bills
                     Bins = c.Bins,
                     Electricity = c.Electricity,
                     Internet = c.Internet,
-                    Milk = c.Milk,
                     Oil = c.Oil,
                     Rent = c.Rent
                 });
@@ -63,9 +61,9 @@ namespace OurHome.Server.Services.Bills
             return Task.FromResult(personsBills);
         }
 
-        public Task UpdateBills(BillsDto updatedBills)
+        public Task UpdateBills(BillDto updatedBills)
         {
-            var oldBills = (BillsDto) _context.Bills
+            var oldBills = (BillDto) _context.Bills
             .Where(c => updatedBills.BillID == c.BillID);
 
             oldBills.Bill = updatedBills.Bill;

@@ -8,7 +8,7 @@ namespace OurHome.Server.Models
     {
         [Key]
         [Column(TypeName = "int")]
-        public int PersonID { get; set; }
+        public int BillID { get; set; }
 
 
         [Column(TypeName = "date")]

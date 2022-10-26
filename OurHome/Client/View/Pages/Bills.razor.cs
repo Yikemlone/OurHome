@@ -9,7 +9,7 @@ namespace OurHome.Client.View.Pages
         private string API_URL = "/api/Bills";
         public ChartOptions ChartOptions { get; set; }
         public HttpClient Client { get; set; }
-        public List<BillsDto> BillsList { get; set; }
+        public List<BillDto> BillsList { get; set; }
         public string[] InputLabls { get; set; }
         public double[] BillsPrices { get; set; }
         private List<PersonsBillsDto> PersonsBills { get; set; }
@@ -19,7 +19,7 @@ namespace OurHome.Client.View.Pages
 
         public Bills()
         {
-            BillsList = new List<BillsDto>();
+            BillsList = new List<BillDto>();
             PersonsBills = new List<PersonsBillsDto>();
             ChartOptions = new();
             Series = new();
@@ -53,7 +53,6 @@ namespace OurHome.Client.View.Pages
                         (double) personsBills.Rent,
                         (double) personsBills.Bins,
                         (double) personsBills.Electricity,
-                        (double) personsBills.Milk,
                         (double) personsBills.Oil,
                         (double) personsBills.Internet
                     }
@@ -76,9 +75,9 @@ namespace OurHome.Client.View.Pages
             StateHasChanged();
         }
 
-        public async Task<IEnumerable<BillsDto>> GetModelAsync()
+        public async Task<IEnumerable<BillDto>> GetModelAsync()
         {
-            return await Client.GetFromJsonAsync<List<BillsDto>>(API_URL);
+            return await Client.GetFromJsonAsync<List<BillDto>>(API_URL);
         }
 
         public async Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills() 

@@ -4,8 +4,8 @@ namespace OurHome.Server.Services.Bills
 {
     public interface IBillsService
     {
-        public Task<IEnumerable<BillsDto>> GetBills();
-        public Task UpdateBills(BillsDto updatedBills);
+        public Task<IEnumerable<BillDto>> GetBills();
+        public Task UpdateBills(BillDto updatedBills);
         public Task<PersonsBillsDto> GetPersonsBills(int personID);
         public Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills();
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurHome.Server;
 
@@ -11,9 +12,10 @@ using OurHome.Server;
 namespace OurHome.Server.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    partial class OurHomeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025184435_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace OurHome.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal");
 
                     b.HasKey("BillID");
@@ -44,16 +46,16 @@ namespace OurHome.Server.Migrations
 
             modelBuilder.Entity("OurHome.Server.Models.BillsDueDate", b =>
                 {
-                    b.Property<int>("BillID")
+                    b.Property<int>("PersonID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonID"), 1L, 1);
 
                     b.Property<DateTime>("BillDueDate")
                         .HasColumnType("date");
 
-                    b.HasKey("BillID");
+                    b.HasKey("PersonID");
 
                     b.ToTable("BillsDueDate");
                 });
@@ -146,19 +148,27 @@ namespace OurHome.Server.Migrations
                     b.Property<decimal>("Bins")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal?>("Electricity")
+                    b.Property<decimal>("Electricity")
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("Internet")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal?>("Oil")
+                    b.Property<decimal>("Milk")
                         .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("Oil")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<int>("PersonID1")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Rent")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("PersonID");
+
+                    b.HasIndex("PersonID1");
 
                     b.ToTable("PersonsBills");
                 });
@@ -168,6 +178,17 @@ namespace OurHome.Server.Migrations
                     b.HasOne("OurHome.Server.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("OurHome.Server.Models.PersonsBills", b =>
+                {
+                    b.HasOne("OurHome.Server.Models.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonID1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

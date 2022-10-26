@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OurHome.Server;
 
@@ -11,9 +12,10 @@ using OurHome.Server;
 namespace OurHome.Server.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    partial class OurHomeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221025190511_Adding Nullables")]
+    partial class AddingNullables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,16 +46,16 @@ namespace OurHome.Server.Migrations
 
             modelBuilder.Entity("OurHome.Server.Models.BillsDueDate", b =>
                 {
-                    b.Property<int>("BillID")
+                    b.Property<int>("PersonID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonID"), 1L, 1);
 
                     b.Property<DateTime>("BillDueDate")
                         .HasColumnType("date");
 
-                    b.HasKey("BillID");
+                    b.HasKey("PersonID");
 
                     b.ToTable("BillsDueDate");
                 });
