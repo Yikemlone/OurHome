@@ -11,7 +11,7 @@ namespace OurHome.Shared.DTO
     public class PersonDto
     {
         public int PersonID { get; set; }
-        public int PersonName { get; set; }
+        public string PersonName { get; set; }
 
     }
 }

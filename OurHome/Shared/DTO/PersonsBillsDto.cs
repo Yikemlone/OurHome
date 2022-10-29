@@ -9,6 +9,7 @@ namespace OurHome.Shared.DTO
     public class PersonsBillsDto
     {
         public int PersonID { get; set; }
+        public string? Name { get; set; }
         public decimal Rent { get; set; }
         public decimal Internet { get; set; }
         public decimal Bins { get; set; }

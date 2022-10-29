@@ -1,6 +1,7 @@
 ﻿using OurHome.Server.Models;
 using OurHome.Shared.DTO;
 using System;
+using System.Collections.Generic;
 
 namespace OurHome.Server.Services.Bills
 {
@@ -14,7 +15,7 @@ namespace OurHome.Server.Services.Bills
             _context = context;
         }
 
-        public Task<IEnumerable<BillDto>> GetBills()
+        public async Task<IEnumerable<BillDto>> GetBills()
         {
             IEnumerable<BillDto> billsList = _context.Bills
                 .Select(c => new BillDto()
@@ -22,29 +23,31 @@ namespace OurHome.Server.Services.Bills
                     BillID = c.BillID,
                     Bill = c.Bill,
                     Price = c.Price
-                }).ToList();
+                });
 
-            return Task.FromResult(billsList);
-
+            return billsList;
         }
 
-        public Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills()
+        public async Task<IEnumerable<PersonsBillsDto>> GetPeoplesBills()
         {
             IEnumerable<PersonsBillsDto> billsList = _context.PersonsBills
-                .Select(c => new PersonsBillsDto()
-                {
-                    PersonID = c.PersonID,
-                    Bins = c.Bins,
-                    Electricity = c.Electricity,
-                    Internet = c.Internet,
-                    Oil = c.Oil,
-                    Rent = c.Rent 
-                }).ToList();
+                .Join(_context.Person,
+                    bills => bills.PersonID,
+                    person => person.PersonID,
+                    (bills, person) => new PersonsBillsDto()
+                    {
+                        Name = person.PersonName.ToString(), // NEED TO UPDATE DATABASE FOR THIS
+                        Bins = bills.Bins,
+                        Electricity = bills.Electricity,
+                        Internet = bills.Internet,
+                        Oil = bills.Oil,
+                        Rent = bills.Rent 
+                    });
 
-            return Task.FromResult(billsList);
+            return billsList;
         }
 
-        public Task<PersonsBillsDto> GetPersonsBills(int personID)
+        public async Task<PersonsBillsDto> GetPersonsBills(int personID)
         {
             PersonsBillsDto personsBills = (PersonsBillsDto) _context.PersonsBills
                 .Where(c => personID == c.PersonID)
@@ -58,20 +61,63 @@ namespace OurHome.Server.Services.Bills
                     Rent = c.Rent
                 });
 
-            return Task.FromResult(personsBills);
+            return personsBills;
         }
 
-        public Task UpdateBills(BillDto updatedBills)
+        // TEST IF THIS EVEN WORKS
+        public async Task UpdateBills(BillDto updatedBills)
         {
             var oldBills = (BillDto) _context.Bills
             .Where(c => updatedBills.BillID == c.BillID);
 
             oldBills.Bill = updatedBills.Bill;
             oldBills.Price = updatedBills.Price;
-
             _context.SaveChanges();
-
-            return Task.CompletedTask;
         }
+
+        public async Task<IEnumerable<PastBillDto>> GetPastBills()
+        {
+            IEnumerable<PastBillDto> pastBills = _context.PastBills
+                .Select(pb => new PastBillDto
+                {
+                    PastBillID = pb.PastBillID,
+                    BillMonth = pb.BillMonth,
+                    Bins = pb.Bins,
+                    Electric = pb.Electric, 
+                    Internet = pb.Internet,
+                    Rent = pb.Rent,
+                    Oil = pb.Oil
+                });
+
+            return pastBills;
+        }
+
+        public async Task<IEnumerable<PayedBillDto>> GetPayedBills()
+        {
+            IEnumerable<PayedBillDto> payedBills = _context.PayedBills
+                .Select(payedBills => new PayedBillDto
+                {
+                    PayedBillID = payedBills.PayedBillID,
+                    PaymentType = payedBills.PaymentType,
+                    BillDate = payedBills.BillDate,
+                    Bill = payedBills.Bill,
+                    PersonID = payedBills.PersonID
+                });
+
+            return payedBills;
+        }
+
+        public async Task<IEnumerable<BillDueDateDto>> GetBillDueDates()
+        {
+            IEnumerable<BillDueDateDto> payedBills = _context.BillsDueDate
+             .Select(due => new BillDueDateDto
+             {
+                 BillID = due.BillID,
+                 BillDueDate = due.BillDueDate
+             });
+
+            return payedBills;
+        }
+
     }
 }

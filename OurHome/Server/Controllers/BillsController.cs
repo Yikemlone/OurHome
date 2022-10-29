@@ -17,39 +17,62 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<BillDto> GetBills()
+        public List<BillDto> GetBills()
         {
             var bills = _billsService.GetBills();
             List<BillDto> retVal = bills.Result.ToList();
-
             return retVal;
         }
 
         [HttpGet]
         [Route("people")]
-        public IEnumerable<PersonsBillsDto> GetPeoplesBills()
+        public async Task<List<PersonsBillsDto>> GetPeoplesBills()
         {
-            var personsBills = _billsService.GetPeoplesBills();
-            List<PersonsBillsDto> retVal = personsBills.Result.ToList();
-
+            var personsBills = await _billsService.GetPeoplesBills();
+            List<PersonsBillsDto> retVal = personsBills.ToList();
             return retVal;
         }
 
         [HttpGet]
         [Route("people/{person}")]
-        public PersonsBillsDto GetPersonsBills(int person)
+        public async Task<PersonsBillsDto> GetPersonsBills(int person)
         {
-            var bill = _billsService.GetPersonsBills(person);
-            PersonsBillsDto retVal = bill.Result;
-
+            var personBills = await _billsService.GetPersonsBills(person);
+            PersonsBillsDto retVal = personBills;
             return retVal;
         }
 
         [HttpPost]
-        public Task SetBills([FromBody] BillDto updatedBills)
+        public async Task UpdateBills([FromBody] BillDto updatedBills)
         {
-            _billsService.UpdateBills(updatedBills);
-            return Task.CompletedTask;
+            await _billsService.UpdateBills(updatedBills);
+        }
+
+        [HttpGet]
+        [Route("past-bills")]
+        public async Task<List<PastBillDto>> GetPastBills()
+        {
+            var pastBills = await _billsService.GetPastBills();
+            List<PastBillDto> retVal = pastBills.ToList();
+            return retVal;
+        }
+
+        [HttpGet]
+        [Route("dates")]
+        public async Task<List<BillDueDateDto>> GetBillDueDates()
+        {
+            var billDueDate = await _billsService.GetBillDueDates();
+            List<BillDueDateDto> retVal = billDueDate.ToList();
+            return retVal;
+        }
+
+        [HttpGet]
+        [Route("payed-bills")]
+        public async Task<List<PayedBillDto>> GetPayedBills()
+        {
+            var payedBill = await _billsService.GetPayedBills();
+            List<PayedBillDto> retVal = payedBill.ToList();
+            return retVal;
         }
     }
 }
