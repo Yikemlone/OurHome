@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
-using OurHome.Server;
+using OurHome.DataAccess.Context;
 using OurHome.Server.Services.Bills;
 
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
-// Add services to the container.
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IBillsService, BillsService>();
+//builder.Services.AddScoped<IBillsService, BillsService>();
 
-// DB setup
 builder.Services.AddDbContext<OurHomeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"))
 );
@@ -37,7 +33,6 @@ app.UseHttpsRedirection();
 
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 
