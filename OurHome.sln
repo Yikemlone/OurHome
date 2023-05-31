@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.Model", "OurHome.Model\OurHome.Model.csproj", "{2FA1C7CC-8612-45EE-A8B4-74A28A780237}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Model", "OurHome.Model\OurHome.Model.csproj", "{2FA1C7CC-8612-45EE-A8B4-74A28A780237}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.DataAccess", "OurHome.DataAccess\OurHome.DataAccess.csproj", "{63A5F348-3916-485E-93FE-17E17154A1CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.DataAccess", "OurHome.DataAccess\OurHome.DataAccess.csproj", "{63A5F348-3916-485E-93FE-17E17154A1CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

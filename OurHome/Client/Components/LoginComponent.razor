@@ -1,0 +1,53 @@
+﻿@inject NavigationManager navigationManager
+@inject IdentityAuthenticationStateProvider authStateProvider
+
+<MudContainer MaxWidth="MaxWidth.Large">
+    <EditForm Model="@_model" OnValidSubmit="OnSubmit">
+        <DataAnnotationsValidator />
+            <MudCard Class="ma-16 pl-16 pr-16">
+
+                <MudCardContent>
+                    <div class="ma-13 pl-16 pr-16">
+                        <MudTextField Variant="Variant.Filled" Required RequiredError="Must enter a username" 
+                            Label="Username" @bind-Value="_model.UserName" For="@(() => _model.UserName)" />
+
+                        <MudTextField Variant="Variant.Filled" Required RequiredError="Must enter a password" 
+                            InputType="InputType.Password" Label="Password" Class="mt-3" @bind-Value="_model.Password" For="@(() => _model.Password)" />
+
+                        <MudCheckBox @bind-Value="@_model.RememberMe" T="bool" Label="Remember Me" />
+                    </div>
+
+                    <MudStack Row="true" Spacing="6" Justify="Justify.Center">
+
+                        <MudText Typo="Typo.subtitle1" style="color: red">@_error</MudText>
+
+                        <MudButton Variant="Variant.Outlined" OnClick="OnSubmit" Color="Color.Secondary">Sign in</MudButton>
+                        <MudButton  Href="/" Variant="Variant.Outlined" Color="Color.Primary">Create Account</MudButton>
+
+                    </MudStack>
+
+                </MudCardContent>
+
+            </MudCard>
+    </EditForm>
+</MudContainer>
+
+@code {
+    private LoginParameters _model = new();
+    private string _error;
+
+    async Task OnSubmit()
+    {
+        _error = null;
+
+        try
+        {
+            await authStateProvider.Login(_model);
+            navigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            _error = "A user by those credentials does not exist";
+        }
+    }
+}

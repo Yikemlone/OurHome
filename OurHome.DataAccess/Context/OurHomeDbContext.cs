@@ -7,11 +7,13 @@ namespace OurHome.DataAccess.Context
 {
     public class OurHomeDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
-        public DbSet<Bill> PersonsBills { get; set; }
-        public DbSet<UserBill> Person { get; set; }
+        DbSet<Bill> Bills { get; set; }
+        DbSet<UserBill> UserBills { get; set; }
 
         public OurHomeDbContext(DbContextOptions options) : base(options)
         {
         }
+
+
     }
 }

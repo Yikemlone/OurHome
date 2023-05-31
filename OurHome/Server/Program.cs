@@ -1,19 +1,68 @@
 ﻿using Microsoft.AspNetCore.Hosting.StaticWebAssets;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
-using OurHome.Server.Services.Bills;
+using OurHome.Models.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 //builder.Services.AddScoped<IBillsService, BillsService>();
 
 builder.Services.AddDbContext<OurHomeDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
 );
+
+// Identity
+builder.Services.AddIdentity<User, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<OurHomeDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy("IsAdmin", policy => policy.RequireClaim("AdminRole", "admin"));
+    options.AddPolicy("IsUser", policy => policy.RequireClaim("UserRole", "user"));
+});
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = false;
+
+    // Lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+    options.Lockout.MaxFailedAccessAttempts = 10;
+    options.Lockout.AllowedForNewUsers = true;
+
+    // User settings
+    options.User.RequireUniqueEmail = false;
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin();  //set the allowed origin  
+        });
+});
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

@@ -1,5 +1,19 @@
 ﻿@page "/"
 
-<PageTitle>Login</PageTitle>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
 
-<MudText Typo="Typo.h3" GutterBottom="true"><b>This will redirect to login or home page</b></MudText>
+    <AuthorizeView Policy="IsUser">
+        <Authorized>
+            <RedirectComponent URL="/home"/>
+        </Authorized>
+
+        <NotAuthorized>
+            <RedirectComponent URL="/login"/>
+        </NotAuthorized>
+    </AuthorizeView>
+
+    <AuthorizeView Policy="IsAdmin">
+        <RedirectComponent URL="/admin"/>
+    </AuthorizeView>
+     
+</MudContainer>

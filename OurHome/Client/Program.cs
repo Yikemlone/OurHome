@@ -13,8 +13,7 @@ builder.Services.AddOptions();
 
 builder.Services.AddAuthorizationCore(options => {
     options.AddPolicy("IsAdmin", policy => policy.RequireClaim("AdminRole", "admin"));
-    options.AddPolicy("IsManager", policy => policy.RequireClaim("ManagerRole", "manager"));
-    options.AddPolicy("IsCustomer", policy => policy.RequireClaim("CustomerRole", "customer"));
+    options.AddPolicy("IsUser", policy => policy.RequireClaim("UserRole", "user"));
 });
 
 builder.Services.AddScoped<IdentityAuthenticationStateProvider>();

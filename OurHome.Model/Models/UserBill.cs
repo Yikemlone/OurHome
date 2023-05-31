@@ -11,7 +11,7 @@ namespace OurHome.Models.Models
         public DateTime DatePayed { get; set; }
         public bool Payed { get; set; } = false;
 
-        public int UserID { get; set; } 
+        public Guid UserID { get; set; }
         public User? User { get; set; }
 
         public int BillID { get; set; }
