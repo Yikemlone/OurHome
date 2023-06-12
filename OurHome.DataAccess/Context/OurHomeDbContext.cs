@@ -14,6 +14,7 @@ namespace OurHome.DataAccess.Context
         {
         }
 
-
+        // TODO
+        // Figure out how to add new users to the database using OnModelCreate
     }
 }
