@@ -1,3 +1,5 @@
+using OurHome.Models.Models;
+
 namespace OurHome.UnitTests
 {
     public class BillTests
@@ -13,7 +15,11 @@ namespace OurHome.UnitTests
         public void CreateNewBillDefault_ShouldCreateBill()
         {
             // Arrange
+           // Bill bill = new Bill();
+
             // Act
+           // BillTests.CreateBill(bill);
+
             // Assert
             throw new NotImplementedException();
         }
