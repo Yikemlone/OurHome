@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace OurHome.Models.Models
 {
     public class UserBill
     {
-        [Key]
         public int ID { get; set; }
 
-        public string PaymentType { get; set; } = "";
+        public string PaymentType { get; set; }
         public DateTime DatePayed { get; set; }
-        public bool Payed { get; set; } = false;
+        public bool Payed { get; set; }
         public string PersonalNote { get; set; }
         public decimal? UserPrice { get; set; }
+        public bool PendingApproval { get; set; } 
 
         public Guid UserID { get; set; }
         public User? User { get; set; }

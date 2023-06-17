@@ -1,10 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OurHome.Model.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace OurHome.Models.Models
 {
-    /// <summary>
-    /// The bills users create to assign other users a the price owed to the creator.
-    /// </summary>
     public class Bill
     {
         [Key]
@@ -20,6 +18,9 @@ namespace OurHome.Models.Models
 
         public Guid UserID { get; set; }
         public User? User { get; set; }
+
+        public int HomeID { get; set; }
+        public Home? Home { get; set; }
 
     }
 }
