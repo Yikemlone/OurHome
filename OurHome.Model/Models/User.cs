@@ -8,6 +8,7 @@ namespace OurHome.Models.Models
         public List<Bill>? Bills { get; set; }
         public List<UserBill>? UserBills { get; set; }
         public List<HomeUsers>? HomeUsers { get; set; }
-
+        public List<Invitation>? ReceivedInvitations { get; set; }
+        public List<Invitation>? SentInvitations { get; set; }
     }
 }
