@@ -22,6 +22,21 @@ namespace OurHome.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HomeUser", b =>
+                {
+                    b.Property<int>("HomesID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("HomesID", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("Test", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -191,12 +206,7 @@ namespace OurHome.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("ID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Homes");
                 });
@@ -230,29 +240,6 @@ namespace OurHome.DataAccess.Migrations
                     b.HasIndex("HomeID");
 
                     b.ToTable("HomeBills");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeUsers", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("HomeID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("HomeID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("HomeUsers");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.Invitation", b =>
@@ -439,6 +426,21 @@ namespace OurHome.DataAccess.Migrations
                     b.ToTable("UserBills");
                 });
 
+            modelBuilder.Entity("HomeUser", b =>
+                {
+                    b.HasOne("OurHome.Model.Models.Home", null)
+                        .WithMany()
+                        .HasForeignKey("HomesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -493,29 +495,18 @@ namespace OurHome.DataAccess.Migrations
             modelBuilder.Entity("OurHome.Model.Models.BillCoOwner", b =>
                 {
                     b.HasOne("OurHome.Models.Models.Bill", "Bill")
-                        .WithMany()
+                        .WithMany("BillCoOwners")
                         .HasForeignKey("BillID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OurHome.Models.Models.User", "User")
-                        .WithMany()
+                        .WithMany("BillCoOwners")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Bill");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.Home", b =>
-                {
-                    b.HasOne("OurHome.Models.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -529,25 +520,6 @@ namespace OurHome.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Home");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeUsers", b =>
-                {
-                    b.HasOne("OurHome.Model.Models.Home", "Home")
-                        .WithMany("HomeUsers")
-                        .HasForeignKey("HomeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Models.Models.User", "User")
-                        .WithMany("HomeUsers")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Home");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.Invitation", b =>
@@ -619,16 +591,19 @@ namespace OurHome.DataAccess.Migrations
                 {
                     b.Navigation("HomeBills");
 
-                    b.Navigation("HomeUsers");
-
                     b.Navigation("Invitations");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
+                {
+                    b.Navigation("BillCoOwners");
                 });
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
                 {
-                    b.Navigation("Bills");
+                    b.Navigation("BillCoOwners");
 
-                    b.Navigation("HomeUsers");
+                    b.Navigation("Bills");
 
                     b.Navigation("ReceivedInvitations");
 
