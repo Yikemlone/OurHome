@@ -16,12 +16,12 @@ namespace OurHome.Models.Models
         public string Note { get; set; }
 
 
-        public Guid UserID { get; set; }
-        public User? User { get; set; }
+        public Guid BillOwnerID { get; set; }
+        public User User { get; set; }
 
         public int HomeID { get; set; }
-        public Home? Home { get; set; }
+        public Home Home { get; set; }
 
-        public List<User> BillCoOwners { get; set; }
+        public List<User>? BillCoOwners { get; set; }
     }
 }

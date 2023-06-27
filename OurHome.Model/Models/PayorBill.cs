@@ -1,7 +1,7 @@
 ﻿
 namespace OurHome.Models.Models
 {
-    public class UserBill
+    public class PayorBill
     {
         public int ID { get; set; }
 
@@ -13,9 +13,9 @@ namespace OurHome.Models.Models
         public bool PendingApproval { get; set; } 
 
         public Guid UserID { get; set; }
-        public User? User { get; set; }
+        public User User { get; set; }
 
         public int BillID { get; set; }
-        public Bill? Bill { get; set; }
+        public Bill Bill { get; set; }
     }
 }
