@@ -12,7 +12,7 @@ using OurHome.DataAccess.Context;
 namespace OurHome.DataAccess.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    [Migration("20230627165539_init")]
+    [Migration("20230702153526_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -175,6 +175,10 @@ namespace OurHome.DataAccess.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("BillID");
+
+                    b.HasIndex("UserID");
+
                     b.ToTable("BillCoOwners");
                 });
 
@@ -239,22 +243,9 @@ namespace OurHome.DataAccess.Migrations
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BillID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HomeUsersHomeID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("HomeUsersUserID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("HomeID", "UserID");
 
-                    b.HasIndex("BillID");
-
                     b.HasIndex("UserID");
-
-                    b.HasIndex("HomeUsersHomeID", "HomeUsersUserID");
 
                     b.ToTable("HomeUsers");
                 });
@@ -386,6 +377,9 @@ namespace OurHome.DataAccess.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BillID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -431,6 +425,8 @@ namespace OurHome.DataAccess.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BillID");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -494,6 +490,25 @@ namespace OurHome.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("OurHome.Model.Models.BillCoOwner", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.Bill", "Bill")
+                        .WithMany()
+                        .HasForeignKey("BillID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bill");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("OurHome.Model.Models.Home", b =>
                 {
                     b.HasOne("OurHome.Models.Models.User", "User")
@@ -518,27 +533,15 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Model.Models.HomeUsers", b =>
                 {
-                    b.HasOne("OurHome.Models.Models.Bill", null)
-                        .WithMany()
-                        .HasForeignKey("BillID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("OurHome.Model.Models.Home", null)
-                        .WithMany()
+                        .WithMany("HomeUsers")
                         .HasForeignKey("HomeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OurHome.Models.Models.User", null)
-                        .WithMany()
+                        .WithMany("HomesJoined")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Model.Models.HomeUsers", null)
-                        .WithMany()
-                        .HasForeignKey("HomeUsersHomeID", "HomeUsersUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -575,7 +578,7 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "User")
                         .WithMany("BillsOwned")
                         .HasForeignKey("BillOwnerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("OurHome.Model.Models.Home", "Home")
@@ -608,16 +611,32 @@ namespace OurHome.DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("OurHome.Models.Models.User", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.Bill", null)
+                        .WithMany("BillCoOwners")
+                        .HasForeignKey("BillID");
+                });
+
             modelBuilder.Entity("OurHome.Model.Models.Home", b =>
                 {
                     b.Navigation("HomeBills");
 
+                    b.Navigation("HomeUsers");
+
                     b.Navigation("Invitations");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
+                {
+                    b.Navigation("BillCoOwners");
                 });
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
                 {
                     b.Navigation("BillsOwned");
+
+                    b.Navigation("HomesJoined");
 
                     b.Navigation("HomesOwned");
 

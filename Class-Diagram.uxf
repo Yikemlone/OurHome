@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>740</x><y>110</y><w>210</w><h>180</h></coordinates><panel_attributes>Bill
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>770</x><y>0</y><w>210</w><h>180</h></coordinates><panel_attributes>Bill
 -
 ID - int (PK)
 BillName - string
@@ -11,35 +11,35 @@ Note - string
 BillOwnerID - Guid (FK)
 HomeID - int (FK)
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>720</x><y>520</y><w>230</w><h>70</h></coordinates><panel_attributes>User
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>750</x><y>410</y><w>230</w><h>70</h></coordinates><panel_attributes>User
 -
 ID - Guid (PK)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>840</x><y>280</y><w>90</w><h>260</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>870</x><y>170</y><w>90</w><h>260</h></coordinates><panel_attributes>lt=-
 m1=0.*
 Owns
 m2=1
-Owned by</panel_attributes><additional_attributes>10;10;10;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>350</x><y>820</y><w>230</w><h>70</h></coordinates><panel_attributes>Home
+Owned by</panel_attributes><additional_attributes>10;10;10;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>710</y><w>230</w><h>70</h></coordinates><panel_attributes>Home
 -
 ID - int
 Name - string 
 HomeOwnerID - Guid (FK)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>810</x><y>820</y><w>230</w><h>60</h></coordinates><panel_attributes>HomeUser
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>840</x><y>710</y><w>230</w><h>60</h></coordinates><panel_attributes>HomeUser
 -
 UserID - Guid (CK)
 HomeID - int (CK)
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>580</y><w>350</w><h>260</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>470</y><w>350</w><h>260</h></coordinates><panel_attributes>lt=-
 m1=0.*
 Owns
 m2=1
-Owned by</panel_attributes><additional_attributes>10;240;10;140;320;140;320;10</additional_attributes></element><element><id>Relation</id><coordinates><x>570</x><y>840</y><w>260</w><h>50</h></coordinates><panel_attributes>lt=-
+Owned by</panel_attributes><additional_attributes>10;240;10;140;320;140;320;10</additional_attributes></element><element><id>Relation</id><coordinates><x>600</x><y>730</y><w>260</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=1
 Occupies
 m2=1.*
-Occupied by</panel_attributes><additional_attributes>10;20;240;20</additional_attributes></element><element><id>Relation</id><coordinates><x>910</x><y>580</y><w>90</w><h>260</h></coordinates><panel_attributes>lt=-
+Occupied by</panel_attributes><additional_attributes>10;20;240;20</additional_attributes></element><element><id>Relation</id><coordinates><x>940</x><y>470</y><w>90</w><h>260</h></coordinates><panel_attributes>lt=-
 m1=1
 Related to
 m2=0.*
-Relates to</panel_attributes><additional_attributes>10;10;10;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>350</x><y>1050</y><w>230</w><h>130</h></coordinates><panel_attributes>HomeBill
+Relates to</panel_attributes><additional_attributes>10;10;10;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>380</x><y>940</y><w>230</w><h>130</h></coordinates><panel_attributes>HomeBill
 -
 ID - int
 BillName - string 
@@ -47,29 +47,29 @@ DueDate - DateTime
 Price - decimal?
 PriceVaries - bool
 
-HomeID - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>880</y><w>100</w><h>190</h></coordinates><panel_attributes>lt=-
+HomeID - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>480</x><y>770</y><w>100</w><h>190</h></coordinates><panel_attributes>lt=-
 m1=0.*
 Manages
 m2=1
-Managed by</panel_attributes><additional_attributes>10;170;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>500</y><w>230</w><h>100</h></coordinates><panel_attributes>Invitation
+Managed by</panel_attributes><additional_attributes>10;170;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>340</x><y>390</y><w>230</w><h>100</h></coordinates><panel_attributes>Invitation
 -
 ID - int
 Status- string
 FromUser - Guid (FK)
 ToUser - Guid (FK)
-HomeID - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>530</x><y>520</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=-
+HomeID - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>410</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=1
 Sends
 m2=0.*
-Sent by</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>530</x><y>560</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=-
+Sent by</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>450</y><w>210</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=1
 Recieve
 m2=0.*
-Recieved by</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>240</x><y>560</y><w>130</w><h>340</h></coordinates><panel_attributes>lt=-
+Recieved by</panel_attributes><additional_attributes>190;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>270</x><y>450</y><w>130</w><h>340</h></coordinates><panel_attributes>lt=-
 m1=0.*
 associates with
 m2=1
-associated with</panel_attributes><additional_attributes>70;10;10;10;10;310;110;310</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1090</x><y>120</y><w>230</w><h>160</h></coordinates><panel_attributes>PayorBill
+associated with</panel_attributes><additional_attributes>70;10;10;10;10;310;110;310</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1120</x><y>10</y><w>230</w><h>160</h></coordinates><panel_attributes>PayorBill
 -
 ID - int (PK)
 DatePayed - DateTime
@@ -79,25 +79,25 @@ Price - decimal?
 PendingApproval
 
 UserID - Guid (FK)
-BillID  - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>940</x><y>270</y><w>340</w><h>320</h></coordinates><panel_attributes>lt=-
+BillID  - int (FK)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>970</x><y>160</y><w>340</w><h>320</h></coordinates><panel_attributes>lt=-
 m1=1
 Pays
 m2=0.*
-Payed by</panel_attributes><additional_attributes>10;290;270;290;270;10</additional_attributes></element><element><id>Relation</id><coordinates><x>940</x><y>180</y><w>170</w><h>60</h></coordinates><panel_attributes>lt=-
+Payed by</panel_attributes><additional_attributes>10;290;270;290;270;10</additional_attributes></element><element><id>Relation</id><coordinates><x>970</x><y>70</y><w>170</w><h>60</h></coordinates><panel_attributes>lt=-
 m1=1.*
 Has
 m2=1
 Has a
-</panel_attributes><additional_attributes>150;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>170</y><w>210</w><h>70</h></coordinates><panel_attributes>BillCoOwner
+</panel_attributes><additional_attributes>150;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>350</x><y>60</y><w>210</w><h>70</h></coordinates><panel_attributes>BillCoOwner
 -
 UserID - Guid (CK)
 BillID - int (CK)
 Price - decimal? 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>190</y><w>240</w><h>50</h></coordinates><panel_attributes>lt=-
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>80</y><w>240</w><h>50</h></coordinates><panel_attributes>lt=-
 m1=1
 Shares payment
 m2=0.*
-Be shared with</panel_attributes><additional_attributes>220;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>420</x><y>230</y><w>360</w><h>310</h></coordinates><panel_attributes>lt=-
+Be shared with</panel_attributes><additional_attributes>220;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>450</x><y>120</y><w>360</w><h>310</h></coordinates><panel_attributes>lt=-
 m1=1.*
 Can be a
 m2=1

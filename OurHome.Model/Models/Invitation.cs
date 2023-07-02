@@ -19,3 +19,4 @@ namespace OurHome.Model.Models
         public Home Home { get; set; }
     }
 }
+  

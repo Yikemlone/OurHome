@@ -38,6 +38,7 @@ namespace OurHome.DataAccess.Context
                 .HasForeignKey(a => a.FromUserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
             // Bills and co-owners config
             builder.Entity<User>()
                 .HasMany(b => b.PayorBills)
@@ -53,14 +54,10 @@ namespace OurHome.DataAccess.Context
 
             // Many-to-many config 
             builder.Entity<Home>()
-                .HasMany(u => u.HomeUsers)
-                .WithMany()
-                .UsingEntity<HomeUsers>(hm => hm.HasKey(prop => new { prop.HomeID, prop.UserID }));
+                .HasMany(u => u.Users)
+                .WithMany(u => u.Homes)
+                .UsingEntity<HomeUsers>();
 
-            builder.Entity<Bill>()
-                .HasMany(u => u.BillCoOwners)
-                .WithMany()
-                .UsingEntity<HomeUsers>(hm => hm.HasKey(prop => new { prop.HomeID, prop.UserID }));
 
             // Delete behaviours
             builder.Entity<Home>()
@@ -69,11 +66,11 @@ namespace OurHome.DataAccess.Context
                 .HasForeignKey(fk => fk.HomeOwnerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<HomeUsers>()
-                .HasOne(h => h.User)
-                .WithMany(u => u.HomesJoined)
-                .HasForeignKey(fk => fk.UserID)
-                .OnDelete(DeleteBehavior.Restrict);
+            //builder.Entity<HomeUsers>()
+            //    .HasOne(h => h.User)
+            //    .WithMany(u => u.HomesJoined)
+            //    .HasForeignKey(fk => fk.UserID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             //builder.Entity<HomeUsers>()
             //    .HasOne(u => u.Home)

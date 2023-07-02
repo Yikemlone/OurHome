@@ -26,46 +26,6 @@ namespace OurHome.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BillCoOwners",
-                columns: table => new
-                {
-                    ID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BillID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BillCoOwners", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -99,12 +59,6 @@ namespace OurHome.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -119,12 +73,6 @@ namespace OurHome.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,12 +91,32 @@ namespace OurHome.DataAccess.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BillID = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,7 +182,7 @@ namespace OurHome.DataAccess.Migrations
                         column: x => x.BillOwnerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Bills_Homes_HomeID",
                         column: x => x.HomeID,
@@ -240,6 +208,30 @@ namespace OurHome.DataAccess.Migrations
                     table.PrimaryKey("PK_HomeBills", x => x.ID);
                     table.ForeignKey(
                         name: "FK_HomeBills_Homes_HomeID",
+                        column: x => x.HomeID,
+                        principalTable: "Homes",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HomeUsers",
+                columns: table => new
+                {
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HomeID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeUsers", x => new { x.HomeID, x.UserID });
+                    table.ForeignKey(
+                        name: "FK_HomeUsers_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_HomeUsers_Homes_HomeID",
                         column: x => x.HomeID,
                         principalTable: "Homes",
                         principalColumn: "ID",
@@ -281,40 +273,28 @@ namespace OurHome.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HomeUsers",
+                name: "BillCoOwners",
                 columns: table => new
                 {
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    HomeID = table.Column<int>(type: "int", nullable: false),
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BillID = table.Column<int>(type: "int", nullable: false),
-                    HomeUsersHomeID = table.Column<int>(type: "int", nullable: false),
-                    HomeUsersUserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HomeUsers", x => new { x.HomeID, x.UserID });
+                    table.PrimaryKey("PK_BillCoOwners", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_HomeUsers_AspNetUsers_UserID",
+                        name: "FK_BillCoOwners_AspNetUsers_UserID",
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_HomeUsers_Bills_BillID",
+                        name: "FK_BillCoOwners_Bills_BillID",
                         column: x => x.BillID,
                         principalTable: "Bills",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_HomeUsers_HomeUsers_HomeUsersHomeID_HomeUsersUserID",
-                        columns: x => new { x.HomeUsersHomeID, x.HomeUsersUserID },
-                        principalTable: "HomeUsers",
-                        principalColumns: new[] { "HomeID", "UserID" },
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_HomeUsers_Homes_HomeID",
-                        column: x => x.HomeID,
-                        principalTable: "Homes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -384,11 +364,26 @@ namespace OurHome.DataAccess.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_BillID",
+                table: "AspNetUsers",
+                column: "BillID");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillCoOwners_BillID",
+                table: "BillCoOwners",
+                column: "BillID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillCoOwners_UserID",
+                table: "BillCoOwners",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_BillOwnerID",
@@ -409,16 +404,6 @@ namespace OurHome.DataAccess.Migrations
                 name: "IX_Homes_HomeOwnerID",
                 table: "Homes",
                 column: "HomeOwnerID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HomeUsers_BillID",
-                table: "HomeUsers",
-                column: "BillID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HomeUsers_HomeUsersHomeID_HomeUsersUserID",
-                table: "HomeUsers",
-                columns: new[] { "HomeUsersHomeID", "HomeUsersUserID" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_HomeUsers_UserID",
@@ -449,11 +434,50 @@ namespace OurHome.DataAccess.Migrations
                 name: "IX_PayorBills_UserID",
                 table: "PayorBills",
                 column: "UserID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Bills_BillID",
+                table: "AspNetUsers",
+                column: "BillID",
+                principalTable: "Bills",
+                principalColumn: "ID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Bills_AspNetUsers_BillOwnerID",
+                table: "Bills");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Homes_AspNetUsers_HomeOwnerID",
+                table: "Homes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -488,13 +512,13 @@ namespace OurHome.DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Bills");
 
             migrationBuilder.DropTable(
                 name: "Homes");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }
