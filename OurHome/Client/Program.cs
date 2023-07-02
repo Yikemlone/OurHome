@@ -12,8 +12,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddOptions();
 
 builder.Services.AddAuthorizationCore(options => {
-    options.AddPolicy("IsAdmin", policy => policy.RequireClaim("AdminRole", "admin"));
-    options.AddPolicy("IsUser", policy => policy.RequireClaim("UserRole", "user"));
+    options.AddPolicy("HomeOwner", policy => policy.RequireClaim("HomeOwner", "homeOwner"));
+    options.AddPolicy("HomeUser", policy => policy.RequireClaim("HomeUser", "homeUser"));
+    options.AddPolicy("User", policy => policy.RequireClaim("User", "user"));
 });
 
 builder.Services.AddScoped<IdentityAuthenticationStateProvider>();

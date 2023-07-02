@@ -49,5 +49,22 @@ namespace OurHome.UnitTests
             throw new NotImplementedException();
         }
 
+        [Fact]
+        public void DeleteBillNoPayments_ShouldDeleteTheBill() 
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void DeleteBillWithPayments_ShouldNotDeleteTheBill()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void UpdateBillWithPayments_ShouldUpdateTheBill()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
