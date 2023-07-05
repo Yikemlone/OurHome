@@ -508,13 +508,13 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Model.Models.Home", b =>
                 {
-                    b.HasOne("OurHome.Models.Models.User", "User")
+                    b.HasOne("OurHome.Models.Models.User", "HomeOwnerUser")
                         .WithMany("HomesOwned")
                         .HasForeignKey("HomeOwnerID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("HomeOwnerUser");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.HomeBill", b =>
@@ -600,7 +600,7 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "User")
                         .WithMany("PayorBills")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Bill");

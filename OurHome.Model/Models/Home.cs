@@ -10,7 +10,7 @@ namespace OurHome.Model.Models
         public string Name { get; set; }
 
         public Guid HomeOwnerID { get; set; }
-        public User User { get; set; }
+        public User  HomeOwnerUser { get; set; }
 
 
         // This is a nav property needed for a many-to-many

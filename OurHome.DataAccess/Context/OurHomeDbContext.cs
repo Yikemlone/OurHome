@@ -25,7 +25,6 @@ namespace OurHome.DataAccess.Context
         {
             base.OnModelCreating(builder);
 
-            // Inviatations config
             builder.Entity<User>()
                 .HasMany(a => a.SentInvitations)
                 .WithOne(a => a.ToUser)
@@ -38,12 +37,11 @@ namespace OurHome.DataAccess.Context
                 .HasForeignKey(a => a.FromUserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-            // Bills and co-owners config
             builder.Entity<User>()
                 .HasMany(b => b.PayorBills)
                 .WithOne(b => b.User)
-                .HasForeignKey(b => b.UserID);
+                .HasForeignKey(b => b.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Bill>()
                 .HasOne(b => b.User)
@@ -51,39 +49,16 @@ namespace OurHome.DataAccess.Context
                 .HasForeignKey(b => b.BillOwnerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
-            // Many-to-many config 
             builder.Entity<Home>()
                 .HasMany(u => u.Users)
                 .WithMany(u => u.Homes)
                 .UsingEntity<HomeUsers>();
 
-
-            // Delete behaviours
             builder.Entity<Home>()
-                .HasOne(h => h.User)
+                .HasOne(h => h.HomeOwnerUser)
                 .WithMany(u => u.HomesOwned)
                 .HasForeignKey(fk => fk.HomeOwnerID)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            //builder.Entity<HomeUsers>()
-            //    .HasOne(h => h.User)
-            //    .WithMany(u => u.HomesJoined)
-            //    .HasForeignKey(fk => fk.UserID)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //builder.Entity<HomeUsers>()
-            //    .HasOne(u => u.Home)
-            //    .WithMany(u => u.HomeUsers)
-            //    .HasForeignKey(u => u.HomeID)
-            //    .OnDelete(DeleteBehavior.ClientCascade);
-
-            //// This doesn't make sense to me yet, need to research FluentAPI
-            //builder.Entity<HomeUsers>()
-            //    .HasOne(u => u.User)
-            //    .WithMany(u => u.HomeUsers)
-            //    .HasForeignKey(u => u.UserID)
-            //    .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

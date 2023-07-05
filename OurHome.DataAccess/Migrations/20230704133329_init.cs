@@ -322,7 +322,7 @@ namespace OurHome.DataAccess.Migrations
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PayorBills_Bills_BillID",
                         column: x => x.BillID,
