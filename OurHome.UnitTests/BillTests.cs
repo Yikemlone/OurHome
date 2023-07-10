@@ -111,6 +111,7 @@ namespace OurHome.UnitTests
                 List<Bill> bills = billService.GetAll().ToList();
 
                 // Assert
+                Assert.Fail("Still needs to be implemented"); // Throws error 
                 Assert.Single(bills);
 
                 context.Database.EnsureDeleted(); // Reset Database

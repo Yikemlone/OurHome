@@ -5,13 +5,38 @@ using OurHome.Server.Services.Bills;
 
 namespace OurHome.DataAccess.Services.BillsServices
 {
-    public class BillService : RepositoryService<Bill>, IBillsService
+    public class BillService : IRepositoryService<Bill>, IBillsService
     {
         private readonly OurHomeDbContext _context;
 
-        public BillService(OurHomeDbContext context) : base(context)
+        public BillService(OurHomeDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Bill> AddAsync(Bill obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Bill> UpdateAsync(Bill obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async void DeleteAsync(Bill obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Bill>> GetAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Bill> GetAsync(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Bill> CreateNewReocurringBill(Bill bill)
@@ -32,13 +57,6 @@ namespace OurHome.DataAccess.Services.BillsServices
             return newBill;
         }
 
-        // Need to think about how I am using these methods better
-        // One was meant to be divide the owner price before the payer bill price,
-        // then divide it out per person
-        public async Task<decimal> DivideBillOwnersPrice(decimal billPrice, int totalOwners)
-        {
-            return billPrice / totalOwners;
-        }
 
         public async Task<decimal?> CalculateBillPrices(Bill bill) 
         {
@@ -62,5 +80,6 @@ namespace OurHome.DataAccess.Services.BillsServices
             //    billPayorPrice = billPrice / billPayors.Count;
             //}
         }
+
     }
 }
