@@ -23,5 +23,6 @@ namespace OurHome.Models.Models
         public Home? Home { get; set; }
 
         public List<User>? BillCoOwners { get; set; }
+        public List<User>? CoOwners { get; set; }
     }
 }

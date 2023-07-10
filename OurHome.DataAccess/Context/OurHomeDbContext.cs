@@ -54,6 +54,11 @@ namespace OurHome.DataAccess.Context
                 .WithMany(u => u.Homes)
                 .UsingEntity<HomeUsers>();
 
+            builder.Entity<Bill>()
+                .HasMany(u => u.CoOwners)
+                .WithMany(u => u.BillsCoOwned)
+                .UsingEntity<BillCoOwner>();
+
             builder.Entity<Home>()
                 .HasOne(h => h.HomeOwner)
                 .WithMany(u => u.HomesOwned)

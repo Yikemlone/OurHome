@@ -7,10 +7,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<SupportedPlatform Include="browser" />
+	  <ProjectReference Include="..\..\OurHome.Model\OurHome.Model.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="DTO\" />
+		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 </Project>

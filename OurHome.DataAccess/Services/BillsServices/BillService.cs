@@ -16,6 +16,19 @@ namespace OurHome.DataAccess.Services.BillsServices
 
         public async Task<Bill> AddAsync(Bill obj)
         {
+            // In here, we are basically adding 3 things.
+            // 1. Bill
+            // 2. Co-Owner
+            // 3. BillPayors
+
+            // The reason I want to return the Bill is so that now we
+            // can seperate the concern of having anything but just adding
+            // a single bill.
+
+            // There still may be an issue with calculating Bill price
+            // for co-owners because we need to calculate the bill price
+            // before we add the co-owners. 
+
             throw new NotImplementedException();
         }
 
@@ -57,7 +70,7 @@ namespace OurHome.DataAccess.Services.BillsServices
             return newBill;
         }
 
-
+        //
         public async Task<decimal?> CalculateBillPrices(Bill bill) 
         {
             // A few things can happen here:
