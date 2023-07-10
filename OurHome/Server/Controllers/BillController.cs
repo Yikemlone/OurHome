@@ -12,35 +12,35 @@ namespace OurHome.Server.Controllers
 
         [HttpGet]
         [Route("all")]
-        public Task<List<Bill>> GetAllBills() 
+        public Task<List<Bill>> GetAll() 
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
         [Route("{ID}")]
-        public Task<Bill> GetBill() 
+        public Task<Bill> Get(int ID) 
         {
             throw new NotImplementedException();
         }
 
         [HttpPost]
         [Route("add")]
-        public async Task AddBill([FromBody] Bill bill) 
+        public async Task Add([FromBody] Bill bill) 
         { 
 
         }
 
         [HttpPost]
         [Route("update")]
-        public async Task UpdateBill([FromBody] Bill bill) 
+        public async Task Update([FromBody] Bill bill) 
         { 
         
         }
 
         [HttpPost]
         [Route("delete")]
-        public async Task DeleteBill([FromBody] Bill bill)
+        public async Task Delete([FromBody] Bill bill)
         {
 
         }

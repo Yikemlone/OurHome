@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
-using OurHome.DataAccess.Services.RepoService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OurHome.DataAccess.Services.RepositoryServices;
 
 namespace OurHome.DataAccess.Services.RepositoryServices
 {
@@ -20,31 +15,31 @@ namespace OurHome.DataAccess.Services.RepositoryServices
             this.dbSet = _context.Set<T>();
         }
 
-
-        public Task<bool> Add(T obj)
+        public void Add(T obj)
         {
             dbSet.Add(obj);
-            return
         }
 
-        public Task<bool> Delete(T obj)
+        public void Update(T obj)
         {
-            throw new NotImplementedException();
+            dbSet.Update(obj);
         }
 
-        public Task<T> Get(int id)
-        {
-            throw new NotImplementedException();
+        public void Delete(T obj)
+        { 
+            dbSet.Remove(obj);
         }
 
-        public Task<IEnumerable<T>> GetAll()
+        public T Get(int id)
         {
-            throw new NotImplementedException();
+            if (id == 0) return null;
+            else return dbSet.Find(id);
         }
 
-        public Task<bool> Update(T obj)
+        public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            IQueryable<T> list = dbSet;
+            return list.ToList();
         }
     }
 }

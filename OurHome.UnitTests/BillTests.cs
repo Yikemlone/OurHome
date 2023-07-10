@@ -1,33 +1,120 @@
+using OurHome.DataAccess.Services.BillsServices;
+using OurHome.Model.Models;
 using OurHome.Models.Models;
 
 namespace OurHome.UnitTests
 {
     public class BillTests
     {
-        private readonly IBillsService billsService;
+        private readonly IBillsService _billsService;
 
-        //public BillTests(IBillsService billsService)
-        //{
-        //    this.billsService = billsService;
-        //}
+        private readonly DbContextOptions<OurHomeDbContext> _options = new DbContextOptionsBuilder<OurHomeDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDB")
+            .Options;
 
         [Fact]
-        public void CreateNewBillDefault_ShouldCreateBill()
+        public async void CreateNewBill_ShouldCreateBill()
         {
-            // Arrange
-           // Bill bill = new Bill();
+            using (var context = new OurHomeDbContext(_options)) 
+            {
+                // Arrange
+                User user = new();
 
-            // Act
-           // BillTests.CreateBill(bill);
+                Home home = new Home() 
+                {
+                    Name = "OurHome",
+                    HomeOwner = user,
+                };
 
-            // Assert
-            throw new NotImplementedException();
+                Bill bill = new Bill()
+                {
+                    BillName = "Bins",
+                    DateTime = DateTime.Now,
+                    Home = home,
+                    BillOwner = user,
+                    Price = 20M,
+                    Note = "Hello, please pay the bill for bins",
+                    Reoccurring = true,
+                    SplitBill =  false
+                };
+                
+                BillService billService = new(context);
+
+                // Act
+                context.Add(bill);
+                context.SaveChanges();
+                List<Bill> bills = billService.GetAll().ToList();
+
+                // Assert
+                Assert.Single(bills);
+
+                context.Database.EnsureDeleted(); // Reset Database
+            }
         }
-
+         
         [Fact]
-        public void CreateSplitBill_ShouldSplitBillPrice()
+        public void CreateSplitPayorsBill_ShouldSplitBillPrice()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User ownerUser = new();
+
+                Home home = new Home()
+                {
+                    Name = "OurHome",
+                    HomeOwner = ownerUser,
+                };
+
+                Bill bill = new Bill()
+                {
+                    BillName = "Bins",
+                    DateTime = DateTime.Now,
+                    Home = home,
+                    BillOwner = ownerUser,
+                    Price = 20M,
+                    Note = "Hello, please pay the bill for bins",
+                    Reoccurring = true,
+                    SplitBill = true,
+                };
+
+                List<BillPayor> billPayors = new List<BillPayor>() 
+                {
+                    new()
+                    {
+                        User = new(),
+                        Bill = bill,
+                    },
+                    new()
+                    {
+                        User = new(),
+                        Bill = bill
+                    },
+                    new()
+                    {
+                        User = new(),
+                        Bill = bill
+                    },
+                    new()
+                    {
+                        User = new(),
+                        Bill = bill
+                    }
+                };
+
+                BillService billService = new(context);
+
+                // Act
+                context.Add(bill);
+                context.SaveChanges();
+
+                List<Bill> bills = billService.GetAll().ToList();
+
+                // Assert
+                Assert.Single(bills);
+
+                context.Database.EnsureDeleted(); // Reset Database
+            }
         }
 
         [Fact]
@@ -38,7 +125,7 @@ namespace OurHome.UnitTests
 
         [Theory]
         [InlineData()]
-        public void CoOwnerBillWithSplit_ShouldSplitTheBillPricesCorrectly() 
+        public void CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly() 
         {
             throw new NotImplementedException();
         }

@@ -10,13 +10,13 @@ namespace OurHome.Model.Models
         public string Status { get; set; }
 
         public Guid FromUserID { get; set; }
-        public User FromUser { get; set; }
+        public User? FromUser { get; set; }
 
         public Guid ToUserID { get; set; }
-        public User ToUser { get; set; }
+        public User? ToUser { get; set; }
 
         public int HomeID { get; set; }
-        public Home Home { get; set; }
+        public Home? Home { get; set; }
     }
 }
   

@@ -1,12 +1,12 @@
-﻿namespace OurHome.DataAccess.Services.RepoService
+﻿namespace OurHome.DataAccess.Services.RepositoryServices
 {
     public interface IRepositoryService<T> where T : class
     {
-        Task<T> Get(int id);
-        Task<IEnumerable<T>> GetAll();
+        void Add(T obj);
+        void Update(T obj);
+        void Delete(T obj);
 
-        Task<bool> Add(T obj);
-        Task<bool> Update(T obj);
-        Task<bool> Delete(T obj);
+        IEnumerable<T> GetAll();
+        T Get(int id);
     }
 }

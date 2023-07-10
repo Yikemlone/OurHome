@@ -11,6 +11,6 @@ namespace OurHome.Model.Models
         public bool PriceVaries { get; set; }
 
         public int HomeID { get; set; }
-        public Home Home { get; set; }
+        public Home? Home { get; set; }
     }
 }

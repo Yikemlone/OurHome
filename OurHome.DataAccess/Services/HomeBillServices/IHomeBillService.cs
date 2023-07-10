@@ -1,4 +1,4 @@
-﻿using OurHome.DataAccess.Services.RepoService;
+﻿using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Model.Models;
 
 namespace OurHome.DataAccess.Services.HomeBillServices

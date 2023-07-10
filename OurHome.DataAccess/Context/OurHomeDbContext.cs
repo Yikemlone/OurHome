@@ -15,7 +15,7 @@ namespace OurHome.DataAccess.Context
         public DbSet<HomeBill> HomeBills { get; set; }
         public DbSet<HomeUsers> HomeUsers { get; set; }
         public DbSet<Invitation> Invations { get; set; }
-        public DbSet<PayorBill> PayorBills { get; set; }
+        public DbSet<BillPayor> BillPayors { get; set; }
 
         public OurHomeDbContext(DbContextOptions options) : base(options)
         {
@@ -38,13 +38,13 @@ namespace OurHome.DataAccess.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<User>()
-                .HasMany(b => b.PayorBills)
+                .HasMany(b => b.BillPayors)
                 .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Bill>()
-                .HasOne(b => b.User)
+                .HasOne(b => b.BillOwner)
                 .WithMany(b => b.BillsOwned)
                 .HasForeignKey(b => b.BillOwnerID)
                 .OnDelete(DeleteBehavior.Restrict);
@@ -55,7 +55,7 @@ namespace OurHome.DataAccess.Context
                 .UsingEntity<HomeUsers>();
 
             builder.Entity<Home>()
-                .HasOne(h => h.HomeOwnerUser)
+                .HasOne(h => h.HomeOwner)
                 .WithMany(u => u.HomesOwned)
                 .HasForeignKey(fk => fk.HomeOwnerID)
                 .OnDelete(DeleteBehavior.Restrict);

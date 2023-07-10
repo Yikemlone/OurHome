@@ -7,7 +7,7 @@ namespace OurHome.Models.Models
     {
         // User owned
         public List<Bill>? BillsOwned { get; set; }
-        public List<PayorBill>? PayorBills { get; set; }
+        public List<BillPayor>? BillPayors { get; set; }
         public List<Home>? HomesOwned { get; set; }
 
         // Invitations 

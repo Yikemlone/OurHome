@@ -300,15 +300,15 @@ namespace OurHome.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PayorBills",
+                name: "BillPayors",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PaymentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DatePayed = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DatePayed = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Payed = table.Column<bool>(type: "bit", nullable: false),
-                    PersonalNote = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PersonalNote = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     PendingApproval = table.Column<bool>(type: "bit", nullable: false),
                     UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -316,15 +316,15 @@ namespace OurHome.DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PayorBills", x => x.ID);
+                    table.PrimaryKey("PK_BillPayors", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_PayorBills_AspNetUsers_UserID",
+                        name: "FK_BillPayors_AspNetUsers_UserID",
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PayorBills_Bills_BillID",
+                        name: "FK_BillPayors_Bills_BillID",
                         column: x => x.BillID,
                         principalTable: "Bills",
                         principalColumn: "ID",
@@ -386,6 +386,16 @@ namespace OurHome.DataAccess.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BillPayors_BillID",
+                table: "BillPayors",
+                column: "BillID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillPayors_UserID",
+                table: "BillPayors",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bills_BillOwnerID",
                 table: "Bills",
                 column: "BillOwnerID");
@@ -424,16 +434,6 @@ namespace OurHome.DataAccess.Migrations
                 name: "IX_Invations_ToUserID",
                 table: "Invations",
                 column: "ToUserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PayorBills_BillID",
-                table: "PayorBills",
-                column: "BillID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PayorBills_UserID",
-                table: "PayorBills",
-                column: "UserID");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -497,6 +497,9 @@ namespace OurHome.DataAccess.Migrations
                 name: "BillCoOwners");
 
             migrationBuilder.DropTable(
+                name: "BillPayors");
+
+            migrationBuilder.DropTable(
                 name: "HomeBills");
 
             migrationBuilder.DropTable(
@@ -504,9 +507,6 @@ namespace OurHome.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Invations");
-
-            migrationBuilder.DropTable(
-                name: "PayorBills");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

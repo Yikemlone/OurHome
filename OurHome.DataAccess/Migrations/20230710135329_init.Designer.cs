@@ -12,7 +12,7 @@ using OurHome.DataAccess.Context;
 namespace OurHome.DataAccess.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    [Migration("20230704133329_init")]
+    [Migration("20230710135329_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -325,7 +325,7 @@ namespace OurHome.DataAccess.Migrations
                     b.ToTable("Bills");
                 });
 
-            modelBuilder.Entity("OurHome.Models.Models.PayorBill", b =>
+            modelBuilder.Entity("OurHome.Models.Models.BillPayor", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -336,21 +336,19 @@ namespace OurHome.DataAccess.Migrations
                     b.Property<int>("BillID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DatePayed")
+                    b.Property<DateTime?>("DatePayed")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("Payed")
                         .HasColumnType("bit");
 
                     b.Property<string>("PaymentType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PendingApproval")
                         .HasColumnType("bit");
 
                     b.Property<string>("PersonalNote")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserID")
@@ -365,7 +363,7 @@ namespace OurHome.DataAccess.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("PayorBills");
+                    b.ToTable("BillPayors");
                 });
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
@@ -511,13 +509,13 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Model.Models.Home", b =>
                 {
-                    b.HasOne("OurHome.Models.Models.User", "HomeOwnerUser")
+                    b.HasOne("OurHome.Models.Models.User", "HomeOwner")
                         .WithMany("HomesOwned")
                         .HasForeignKey("HomeOwnerID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("HomeOwnerUser");
+                    b.Navigation("HomeOwner");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.HomeBill", b =>
@@ -575,7 +573,7 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
                 {
-                    b.HasOne("OurHome.Models.Models.User", "User")
+                    b.HasOne("OurHome.Models.Models.User", "BillOwner")
                         .WithMany("BillsOwned")
                         .HasForeignKey("BillOwnerID")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -587,12 +585,12 @@ namespace OurHome.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Home");
+                    b.Navigation("BillOwner");
 
-                    b.Navigation("User");
+                    b.Navigation("Home");
                 });
 
-            modelBuilder.Entity("OurHome.Models.Models.PayorBill", b =>
+            modelBuilder.Entity("OurHome.Models.Models.BillPayor", b =>
                 {
                     b.HasOne("OurHome.Models.Models.Bill", "Bill")
                         .WithMany()
@@ -601,7 +599,7 @@ namespace OurHome.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("OurHome.Models.Models.User", "User")
-                        .WithMany("PayorBills")
+                        .WithMany("BillPayors")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -634,13 +632,13 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
                 {
+                    b.Navigation("BillPayors");
+
                     b.Navigation("BillsOwned");
 
                     b.Navigation("HomesJoined");
 
                     b.Navigation("HomesOwned");
-
-                    b.Navigation("PayorBills");
 
                     b.Navigation("ReceivedInvitations");
 

@@ -9,14 +9,21 @@ namespace OurHome.Server.Controllers
     {
         [HttpGet]
         [Route("all")]
-        public Task<List<Bill>> GetAllUserBills()
+        public Task<List<BillPayor>> GetAll()
         {
             throw new NotImplementedException();
         }
 
         [HttpGet]
         [Route("{ID}")]
-        public Task<Bill> GetUserBill()
+        public Task<BillPayor> Get(int ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost]
+        [Route("/update")]
+        public Task Update([FromBody] BillPayor payorBill) 
         {
             throw new NotImplementedException();
         }

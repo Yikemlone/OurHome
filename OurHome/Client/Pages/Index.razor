@@ -2,7 +2,10 @@
 
 <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
 
-    <AuthorizeView Policy="IsUser">
+
+    @*Make sure to revist these permissions *@
+
+    <AuthorizeView Policy="User">
         <Authorized>
             <RedirectComponent URL="/home"/>
         </Authorized>
@@ -12,7 +15,7 @@
         </NotAuthorized>
     </AuthorizeView>
 
-    <AuthorizeView Policy="IsAdmin">
+    <AuthorizeView Policy="HomeOwner">
         <RedirectComponent URL="/admin"/>
     </AuthorizeView>
      
