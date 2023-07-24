@@ -1,12 +1,13 @@
-﻿using OurHome.DataAccess.Services.RepositoryServices;
-using OurHome.Models.Models;
+﻿using OurHome.Models.Models;
 
 namespace OurHome.Server.Services.Bills
 {
-    public interface IBillsService : IRepositoryService<Bill>
+    public interface IBillsService
     {
-        Task<decimal> DivideBillOwnersPrice(decimal billPrice, int totalOwners);
-        Task<Bill> CreateNewReocurringBill(Bill bill);
+        Task<Bill> AddBillAsync(Bill bill);
+        Task<Bill?> GetBillAsync(int ID);
+        Task<List<Bill>>GetAllBillsAsync(Guid billOwnerID);
+        Bill CreateNewReocurringBill(Bill bill);
     }
 }
     

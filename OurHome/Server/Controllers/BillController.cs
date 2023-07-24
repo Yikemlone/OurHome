@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OurHome.DataAccess.Context;
+using OurHome.DataAccess.Services.BillCoOwnerService;
+using OurHome.Model.Models;
 using OurHome.Models.Models;
 using OurHome.Server.Services.Bills;
 using OurHome.Shared.DTO;
@@ -11,11 +14,14 @@ namespace OurHome.Server.Controllers
     [Route("/api/[controller]")]
     public class BillController : ControllerBase
     {
-        private IBillsService _billsService;
+        private OurHomeDbContext _context;
+        private readonly IBillsService _billsService;
+        private readonly IBillCoOwnerService _billCoOwnerService;
 
-        public BillController(IBillsService billsService)
+        public BillController(IBillsService billsService, IBillCoOwnerService billCoOwnerService)
         {
             _billsService = billsService;
+            _billCoOwnerService = billCoOwnerService;
         }
 
 
@@ -35,21 +41,24 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task Add([FromBody] CreateBillDTO billDTO) 
+        public async Task Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            // Create the Bill
-            // Return the Bill
-            // Check if Co-Oweners is > 0
-            // IF TRUE ADD BOTH OWNER AND CO-OWNER TO DATABASE, DON'T TOUCH ORIGINAL BILL
-            // Use Bill to create Co-Owners
+            // IF > 0 TRUE ADD BOTH OWNER AND CO-OWNER TO DATABASE, DON'T TOUCH ORIGINAL BILL
 
-            // Pass in all Bill Co-Owners
             // Divide the Bill price by amount of Co-Owners
             // Foreach Co-owner, create a BillPayor Bill
             // Assign each unique user ID
             // Use Bill to create Bill Payors
 
-            var bill = await _billsService.AddAsync(billDTO.Bill);
+            Bill bill = await _billsService.AddBillAsync(createBillDTO.Bill);
+
+            if (createBillDTO.BillCoOwners.Count > 0) 
+            {
+                await _billCoOwnerService.AddAllAsync(createBillDTO.BillCoOwners, bill);
+            }
+
+
+
         }
 
         [HttpPost]

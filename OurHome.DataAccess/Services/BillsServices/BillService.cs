@@ -1,11 +1,11 @@
-﻿using OurHome.DataAccess.Context;
-using OurHome.DataAccess.Services.RepositoryServices;
+﻿using Microsoft.EntityFrameworkCore;
+using OurHome.DataAccess.Context;
 using OurHome.Models.Models;
 using OurHome.Server.Services.Bills;
 
 namespace OurHome.DataAccess.Services.BillsServices
 {
-    public class BillService : IRepositoryService<Bill>, IBillsService
+    public class BillService : IBillsService
     {
         private readonly OurHomeDbContext _context;
 
@@ -14,45 +14,45 @@ namespace OurHome.DataAccess.Services.BillsServices
             _context = context;
         }
 
-        public async Task<Bill> AddAsync(Bill obj)
+        public async Task<Bill> AddBillAsync(Bill obj)
         {
-            // In here, we are basically adding 3 things.
-            // 1. Bill
-            // 2. Co-Owner
-            // 3. BillPayors
+            Bill newBill = new()
+            {
+                BillName = obj.BillName,
+                BillOwner = obj.BillOwner,
+                DateTime = obj.DateTime,
+                HomeID = obj.HomeID,
+                Price = obj.Price,
+                Note = obj.Note,
+                Reoccurring = obj.Reoccurring,
+                SplitBill = obj.SplitBill
+            };
 
-            // The reason I want to return the Bill is so that now we
-            // can seperate the concern of having anything but just adding
-            // a single bill.
+            await _context.Bills.AddAsync(newBill);
 
-            // There still may be an issue with calculating Bill price
-            // for co-owners because we need to calculate the bill price
-            // before we add the co-owners. 
-
-            throw new NotImplementedException();
+            return newBill;
         }
 
-        public async Task<Bill> UpdateAsync(Bill obj)
+        public async Task<List<Bill>> GetAllBillsAsync(Guid billOwnerID)
         {
-            throw new NotImplementedException();
+            List<Bill> bills = await _context.Bills
+                .Where(u => u.BillOwnerID == billOwnerID)
+                .Select(m => m)
+                .ToListAsync();
+
+            return bills;
         }
 
-        public async void DeleteAsync(Bill obj)
+        public async Task<Bill?> GetBillAsync(int id)
         {
-            throw new NotImplementedException();
+            Bill? bills = await _context.Bills
+                .Where(b => b.ID == id)
+                .Select(m => m).FirstOrDefaultAsync();
+
+            return bills;
         }
 
-        public async Task<IEnumerable<Bill>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Bill> GetAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Bill> CreateNewReocurringBill(Bill bill)
+        public Bill CreateNewReocurringBill(Bill bill)
         {
             Bill newBill = new Bill()
             {
@@ -70,29 +70,15 @@ namespace OurHome.DataAccess.Services.BillsServices
             return newBill;
         }
 
-        //
-        public async Task<decimal?> CalculateBillPrices(Bill bill) 
+
+
+
+        // NEED TO THINK ABOUT THESE MORE
+        public async Task<Bill> UpdateAsync(Bill obj)
         {
-            // A few things can happen here:
-            // If no split, but still co-owner, we should only divide co-owner only
-            // If split and co-owner, we should divide by co-owners, then payors
-            // If split and no co-owner, we should only divide by payors
-
-            var billPrice = bill.Price;
-
-            if (bill.BillCoOwners.Count > 0)
-            {
-                int billOwnersCount = bill.BillCoOwners.Count + 1; // Plus 1 to account for the bill owner
-                billPrice = bill.Price / billOwnersCount;
-            }
-
-            return billPrice;
-
-            //if (bill.SplitBill) 
-            //{
-            //    billPayorPrice = billPrice / billPayors.Count;
-            //}
+            // If user needs to update, ensure it's correct user maybe?
+            _context.Update(obj);
+            return obj;
         }
-
     }
 }

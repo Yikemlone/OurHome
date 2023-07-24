@@ -15,7 +15,7 @@ namespace OurHome.DataAccess.Context
         public DbSet<HomeBill> HomeBills { get; set; }
         public DbSet<HomeUsers> HomeUsers { get; set; }
         public DbSet<Invitation> Invations { get; set; }
-        public DbSet<BillPayor> BillPayors { get; set; }
+        public DbSet<BillPayorBill> BillPayors { get; set; }
 
         public OurHomeDbContext(DbContextOptions options) : base(options)
         {

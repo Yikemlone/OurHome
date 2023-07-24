@@ -1,7 +1,7 @@
 ﻿
 namespace OurHome.Models.Models
 {
-    public class BillPayor
+    public class BillPayorBill
     {
         public int ID { get; set; }
 

@@ -7,7 +7,7 @@
         /// </summary>
         /// <param name="obj"></param>
         /// <returns>Return the T object that was added.</returns>
-        Task<T> AddAsync(T obj);
+        abstract Task<T> AddAsync(T obj);
 
         /// <summary> 
         /// Updates the T object to the database context.

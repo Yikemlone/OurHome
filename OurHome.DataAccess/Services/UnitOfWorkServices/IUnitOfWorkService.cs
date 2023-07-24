@@ -8,7 +8,7 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
     public interface IUnitOfWorkService : IDisposable
     {
         IBillsService BillsService { get; }
-        IUserBillService UserBillService { get; }
+        IBillPayorService UserBillService { get; }
         IHomeBillService HomeBillService { get; }
         IUserService UserService { get; }
 

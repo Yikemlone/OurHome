@@ -43,7 +43,7 @@ namespace OurHome.UnitTests
                 // Act
                 context.Add(bill);
                 context.SaveChanges();
-                List<Bill> bills = billService.GetAll().ToList();
+                List<Bill> bills = await billService.GetAllBillsAsync(user.Id);
 
                 // Assert
                 Assert.Single(bills);
@@ -53,7 +53,7 @@ namespace OurHome.UnitTests
         }
          
         [Fact]
-        public void CreateSplitPayorsBill_ShouldSplitBillPrice()
+        public async void CreateSplitPayorsBill_ShouldSplitBillPrice()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -78,7 +78,7 @@ namespace OurHome.UnitTests
                     SplitBill = true,
                 };
 
-                List<BillPayor> billPayors = new List<BillPayor>() 
+                List<BillPayorBill> billPayors = new List<BillPayorBill>() 
                 {
                     new()
                     {
@@ -108,7 +108,7 @@ namespace OurHome.UnitTests
                 context.Add(bill);
                 context.SaveChanges();
 
-                List<Bill> bills = billService.GetAll().ToList();
+                List<Bill> bills = await billService.GetAllBillsAsync(ownerUser.Id);
 
                 // Assert
                 Assert.Fail("Still needs to be implemented"); // Throws error 

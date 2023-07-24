@@ -6,7 +6,7 @@ namespace OurHome.Models.Models
     public class User : IdentityUser<Guid>
     {
         public List<Bill>? BillsOwned { get; set; }
-        public List<BillPayor>? BillPayors { get; set; }
+        public List<BillPayorBill>? BillPayors { get; set; }
         public List<Home>? HomesOwned { get; set; }
         public List<BillCoOwner> BillCoOwners { get; set; }
         public List<Bill>? BillsCoOwned { get; set; }
