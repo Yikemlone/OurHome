@@ -4,13 +4,6 @@ namespace OurHome.UnitTests
 {
     public class UserTests
     {
-        private readonly IBillsService billsService;
-
-        //public BillTests(IBillsService billsService)
-        //{
-        //    this.billsService = billsService;
-        //}
-
         [Fact]
         public void CreateNewUser_ShouldCreateNewUser()
         {

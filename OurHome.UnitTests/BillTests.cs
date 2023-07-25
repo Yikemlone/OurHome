@@ -1,4 +1,4 @@
-using OurHome.DataAccess.Services.BillsServices;
+using OurHome.DataAccess.Services.UnitOfWorkServices;
 using OurHome.Model.Models;
 using OurHome.Models.Models;
 
@@ -6,8 +6,6 @@ namespace OurHome.UnitTests
 {
     public class BillTests
     {
-        private readonly IBillsService _billsService;
-
         private readonly DbContextOptions<OurHomeDbContext> _options = new DbContextOptionsBuilder<OurHomeDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDB")
             .Options;
@@ -37,13 +35,13 @@ namespace OurHome.UnitTests
                     Reoccurring = true,
                     SplitBill =  false
                 };
-                
-                BillService billService = new(context);
+
+                UnitOfWorkService unitOfWorkService = new(context);
 
                 // Act
                 context.Add(bill);
                 context.SaveChanges();
-                List<Bill> bills = await billService.GetAllBillsAsync(user.Id);
+                List<Bill> bills = await unitOfWorkService.BillService.GetAllAsync(user.Id);
 
                 // Assert
                 Assert.Single(bills);
@@ -102,17 +100,21 @@ namespace OurHome.UnitTests
                     }
                 };
 
-                BillService billService = new(context);
+                UnitOfWorkService unitOfWorkService = new(context);
 
                 // Act
                 context.Add(bill);
+                context.AddRange(billPayors);
                 context.SaveChanges();
 
-                List<Bill> bills = await billService.GetAllBillsAsync(ownerUser.Id);
+                List<Bill> bills = await unitOfWorkService.BillService.GetAllAsync(ownerUser.Id);
+                List<BillPayorBill> actualBillPayors = await unitOfWorkService.BillPayorBillService.GetAllAsync();
+
 
                 // Assert
-                Assert.Fail("Still needs to be implemented"); // Throws error 
+                //Assert.Fail("Still needs to be implemented"); // Throws error 
                 Assert.Single(bills);
+                Assert.Equal(billPayors.Count, actualBillPayors.Count);
 
                 context.Database.EnsureDeleted(); // Reset Database
             }

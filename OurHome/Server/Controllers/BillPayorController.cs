@@ -5,7 +5,7 @@ namespace OurHome.Server.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class UserBillController : ControllerBase
+    public class BillPayorController : ControllerBase
     {
         [HttpGet]
         [Route("all")]

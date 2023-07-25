@@ -1,53 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
+using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
 using OurHome.Models.Models;
-using OurHome.Server.Services.Bills;
+using OurHome.Server.Services.BillsServices;
 
 namespace OurHome.DataAccess.Services.BillsServices
 {
-    public class BillService : IBillsService
+    public class BillService : RepositoryService<Bill>, IBillsService
     {
         private readonly OurHomeDbContext _context;
 
-        public BillService(OurHomeDbContext context)
+        public BillService(OurHomeDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public async Task<Bill> AddBillAsync(Bill obj)
-        {
-            Bill newBill = new()
-            {
-                BillName = obj.BillName,
-                BillOwner = obj.BillOwner,
-                DateTime = obj.DateTime,
-                HomeID = obj.HomeID,
-                Price = obj.Price,
-                Note = obj.Note,
-                Reoccurring = obj.Reoccurring,
-                SplitBill = obj.SplitBill
-            };
-
-            await _context.Bills.AddAsync(newBill);
-
-            return newBill;
-        }
-
-        public async Task<List<Bill>> GetAllBillsAsync(Guid billOwnerID)
+        public async Task<List<Bill>> GetAllAsync(Guid billOwnerID)
         {
             List<Bill> bills = await _context.Bills
                 .Where(u => u.BillOwnerID == billOwnerID)
                 .Select(m => m)
                 .ToListAsync();
-
-            return bills;
-        }
-
-        public async Task<Bill?> GetBillAsync(int id)
-        {
-            Bill? bills = await _context.Bills
-                .Where(b => b.ID == id)
-                .Select(m => m).FirstOrDefaultAsync();
 
             return bills;
         }
@@ -67,18 +40,9 @@ namespace OurHome.DataAccess.Services.BillsServices
                 BillCoOwners = bill.BillCoOwners
             };
 
+            // Do I want to add this to the db here or just retu
+
             return newBill;
-        }
-
-
-
-
-        // NEED TO THINK ABOUT THESE MORE
-        public async Task<Bill> UpdateAsync(Bill obj)
-        {
-            // If user needs to update, ensure it's correct user maybe?
-            _context.Update(obj);
-            return obj;
         }
     }
 }

@@ -32,6 +32,12 @@ namespace OurHome.DataAccess.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<User>()
+                .HasMany(a => a.BillCoOwners)
+                .WithOne(a => a.User)
+                .HasForeignKey(a => a.UserID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
                 .HasMany(a => a.ReceivedInvitations)
                 .WithOne(a => a.FromUser)
                 .HasForeignKey(a => a.FromUserID)

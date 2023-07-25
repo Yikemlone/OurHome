@@ -1,19 +1,20 @@
-﻿using OurHome.DataAccess.Context;
+﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
+using OurHome.DataAccess.Context;
 using OurHome.Model.Models;
 using OurHome.Models.Models;
 
-namespace OurHome.DataAccess.Services.BillCoOwnerService
+namespace OurHome.DataAccess.Services.BillCoOwnerServices
 {
-    public class BillCoOwnerService : IBillCoOwnerService
+    public class BillCoOwnerService : RepositoryService<BillCoOwner>, IBillCoOwnerService
     {
         private readonly OurHomeDbContext _context;
 
-        public BillCoOwnerService(OurHomeDbContext context)
+        public BillCoOwnerService(OurHomeDbContext context) : base(context)
         {
             _context = context;
         }
 
-        public async Task<List<BillCoOwner>> AddAllAsync(List<User> coOwners, Bill bill)
+        public async Task<List<BillCoOwner>> AddAsync(List<User> coOwners, Bill bill)
         {
             List<BillCoOwner> billCoOwners = new List<BillCoOwner>();
 

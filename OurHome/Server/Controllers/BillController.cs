@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OurHome.DataAccess.Context;
-using OurHome.DataAccess.Services.BillCoOwnerService;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+using OurHome.DataAccess.Services.UnitOfWorkServices;
 using OurHome.Model.Models;
 using OurHome.Models.Models;
-using OurHome.Server.Services.Bills;
 using OurHome.Shared.DTO;
 
 namespace OurHome.Server.Controllers
@@ -14,16 +13,12 @@ namespace OurHome.Server.Controllers
     [Route("/api/[controller]")]
     public class BillController : ControllerBase
     {
-        private OurHomeDbContext _context;
-        private readonly IBillsService _billsService;
-        private readonly IBillCoOwnerService _billCoOwnerService;
+        IUnitOfWorkService _unitOfWork;
 
-        public BillController(IBillsService billsService, IBillCoOwnerService billCoOwnerService)
+        public BillController(IUnitOfWorkService unitOfWork)
         {
-            _billsService = billsService;
-            _billCoOwnerService = billCoOwnerService;
+            _unitOfWork = unitOfWork;
         }
-
 
         [HttpGet]
         [Route("all")]
@@ -43,37 +38,30 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            // IF > 0 TRUE ADD BOTH OWNER AND CO-OWNER TO DATABASE, DON'T TOUCH ORIGINAL BILL
+            await _unitOfWork.BillService.AddAsync(createBillDTO.Bill);
 
-            // Divide the Bill price by amount of Co-Owners
-            // Foreach Co-owner, create a BillPayor Bill
-            // Assign each unique user ID
-            // Use Bill to create Bill Payors
-
-            Bill bill = await _billsService.AddBillAsync(createBillDTO.Bill);
-
-            if (createBillDTO.BillCoOwners.Count > 0) 
+            if (createBillDTO.BillCoOwners != null && createBillDTO.BillCoOwners.Count > 0) 
             {
-                await _billCoOwnerService.AddAllAsync(createBillDTO.BillCoOwners, bill);
+                await _unitOfWork.BillCoOwnerService.AddAsync(createBillDTO.BillCoOwners, createBillDTO.Bill);
             }
 
-
-
+            await _unitOfWork.BillPayorBillService.AddAsync(createBillDTO.BillPayors, createBillDTO.Bill);
+            await _unitOfWork.Save();
         }
 
         [HttpPost]
         [Route("update")]
-        public async Task Update([FromBody] Bill bill) 
-        { 
-        
+        public void Update([FromBody] Bill bill) 
+        {
+            _unitOfWork.BillService.Update(bill);
         }
 
         [HttpPost]
         [Route("delete")]
-        public async Task Delete([FromBody] Bill bill)
+        public void Delete([FromBody] Bill bill)
         {
-
+            _unitOfWork.BillService.Delete(bill);
         }
-
+        
     }
 } 

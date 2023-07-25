@@ -2,22 +2,19 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
-using OurHome.DataAccess.Services.BillsServices;
+using OurHome.DataAccess.Services.UnitOfWorkServices;
 using OurHome.Models.Models;
-using OurHome.Server.Services.Bills;
 
 var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
-
-//builder.Services.AddScoped<IBillsService, BillsService>();
 
 builder.Services.AddDbContext<OurHomeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
 );
 
 // Custom Services
-builder.Services.AddScoped<IBillsService, BillService>();
+builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 
 // Identity
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
