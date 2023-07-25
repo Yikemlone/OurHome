@@ -23,7 +23,8 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                 billPayorBills.Add(new BillPayorBill
                 {
                     Bill = bill,
-                    User = billPayor
+                    User = billPayor, 
+                    UserPrice = bill.Price/billPayorUsers.Count
                 });
             }
 

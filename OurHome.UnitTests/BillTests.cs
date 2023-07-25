@@ -51,7 +51,7 @@ namespace OurHome.UnitTests
         }
          
         [Fact]
-        public async void CreateSplitPayorsBill_ShouldSplitBillPrice()
+        public async void CreateSplitPayorsBill_ShouldSplitBillPrice() // Should rename our dupe this, doesn't actually test this case  
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -76,44 +76,30 @@ namespace OurHome.UnitTests
                     SplitBill = true,
                 };
 
-                List<BillPayorBill> billPayors = new List<BillPayorBill>() 
+                List<User> billPayors = new List<User>() 
                 {
-                    new()
-                    {
-                        User = new(),
-                        Bill = bill,
-                    },
-                    new()
-                    {
-                        User = new(),
-                        Bill = bill
-                    },
-                    new()
-                    {
-                        User = new(),
-                        Bill = bill
-                    },
-                    new()
-                    {
-                        User = new(),
-                        Bill = bill
-                    }
+                    new(),
+                    new(),
+                    new(),
+                    new(),
+                    new(),
                 };
 
-                UnitOfWorkService unitOfWorkService = new(context);
+                UnitOfWorkService unitOfWork = new(context);
 
                 // Act
-                context.Add(bill);
-                context.AddRange(billPayors);
-                context.SaveChanges();
+                await unitOfWork.BillService.AddAsync(bill);
+                await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
+                await unitOfWork.Save();
 
-                List<Bill> bills = await unitOfWorkService.BillService.GetAllAsync(ownerUser.Id);
-                List<BillPayorBill> actualBillPayors = await unitOfWorkService.BillPayorBillService.GetAllAsync();
+                List<Bill> bills = await unitOfWork.BillService.GetAllAsync(ownerUser.Id);
+                List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
 
                 // Assert
                 Assert.Single(bills);
                 Assert.Equal(billPayors.Count, actualBillPayors.Count);
                 Assert.Equal(actualBillPayors[0].BillID, bills[0].ID);
+                Assert.Equal(bill.Price/billPayors.Count, actualBillPayors[0].UserPrice);
 
                 context.Database.EnsureDeleted(); // Reset Database
             }
