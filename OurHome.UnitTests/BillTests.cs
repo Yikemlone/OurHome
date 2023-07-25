@@ -110,11 +110,10 @@ namespace OurHome.UnitTests
                 List<Bill> bills = await unitOfWorkService.BillService.GetAllAsync(ownerUser.Id);
                 List<BillPayorBill> actualBillPayors = await unitOfWorkService.BillPayorBillService.GetAllAsync();
 
-
                 // Assert
-                //Assert.Fail("Still needs to be implemented"); // Throws error 
                 Assert.Single(bills);
                 Assert.Equal(billPayors.Count, actualBillPayors.Count);
+                Assert.Equal(actualBillPayors[0].BillID, bills[0].ID);
 
                 context.Database.EnsureDeleted(); // Reset Database
             }

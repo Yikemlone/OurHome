@@ -9,7 +9,6 @@ namespace OurHome.Models.Models
         public List<BillPayorBill>? BillPayors { get; set; }
         public List<Home>? HomesOwned { get; set; }
 
-        public List<BillCoOwner> BillCoOwners { get; set; }
         public List<Bill>? BillsCoOwned { get; set; }
 
         public List<Invitation>? ReceivedInvitations { get; set; }

@@ -37,7 +37,7 @@ namespace OurHome.DataAccess.Services.BillsServices
                 SplitBill = bill.SplitBill,
                 Note = bill.Note,
                 DateTime = bill.DateTime.AddMonths(1),
-                BillCoOwners = bill.BillCoOwners
+                CoOwners = bill.CoOwners
             };
 
             // Do I want to add this to the db here or just retu

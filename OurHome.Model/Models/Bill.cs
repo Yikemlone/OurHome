@@ -22,7 +22,6 @@ namespace OurHome.Models.Models
         public int HomeID { get; set; }
         public Home? Home { get; set; }
 
-        public List<User>? BillCoOwners { get; set; }
         public List<User>? CoOwners { get; set; }
     }
 }
