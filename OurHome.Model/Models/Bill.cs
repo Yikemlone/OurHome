@@ -9,11 +9,11 @@ namespace OurHome.Models.Models
         public int ID { get; set; }
 
         public string BillName { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } // This may need to be nullable 
         public decimal? Price { get; set; }
         public bool Reoccurring { get; set; }
         public bool SplitBill { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
 
         public Guid BillOwnerID { get; set; }

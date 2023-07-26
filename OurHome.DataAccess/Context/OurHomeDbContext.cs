@@ -32,10 +32,6 @@ namespace OurHome.DataAccess.Context
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<User>()
-                .HasMany(a => a.BillsCoOwned)
-                .WithMany(a => a.CoOwners);
-
-            builder.Entity<User>()
                 .HasMany(a => a.ReceivedInvitations)
                 .WithOne(a => a.FromUser)
                 .HasForeignKey(a => a.FromUserID)
@@ -43,9 +39,19 @@ namespace OurHome.DataAccess.Context
 
             builder.Entity<User>()
                 .HasMany(b => b.BillPayors)
-                .WithOne(b => b.User)
-                .HasForeignKey(b => b.UserID)
+                .WithOne(b => b.Payor)
+                .HasForeignKey(b => b.PayorID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
+                .HasMany(b => b.BillPayees)
+                .WithOne(b => b.Payee)
+                .HasForeignKey(b => b.PayeeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<User>()
+                .HasMany(a => a.BillsCoOwned)
+                .WithMany(a => a.CoOwners);
 
             builder.Entity<Bill>()
                 .HasOne(b => b.BillOwner)
