@@ -11,14 +11,13 @@ namespace OurHome.UnitTests
             .Options;
 
         [Fact]
-        public async void CreateNewHome_ShouldCreateHome ()
+        public async void CreateNewHome_ShouldCreateHome()
         {
-            // Arrange
             using (var context = new OurHomeDbContext(_options))
             {
                 // Arrange
                 Home home = new() { Name = "Test Home" };
-
+                
                 UnitOfWorkService unitOfWork = new(context);
 
                 // Act
@@ -42,34 +41,214 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public void UpadateHomeName_ShouldUpdateHomeName()
+        public async void UpadateHomeName_ShouldUpdateHomeName()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                Home home = new() { Name = "Test Home" };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.SaveAsync();
+
+                home.Name = "Updated Test Home";
+                unitOfWork.HomeService.Update(home);
+                await unitOfWork.SaveAsync();
+
+                var homes = await unitOfWork.HomeService.GetAllAsync();
+
+                // Assert
+                Assert.Equal("Updated Test Home", homes[0].Name);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
         [Fact]
-        public void AddHomeBills_ShouldAddHomeBills()
+        public async void AddHomeBills_ShouldAddHomeBills()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                Home home = new() { Name = "Test Home" };
+
+                List<HomeBill> homeBills = new()
+                {
+                    new()
+                    {
+                        BillName = "Bins",
+                        DueDate = DateTime.Now.AddMonths(1),
+                        Price = 25M,
+                        Home = home
+                    }
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.HomeBillService.AddAsync(homeBills);
+                await unitOfWork.SaveAsync();
+
+                var homes = await unitOfWork.HomeBillService.GetAllAsync();
+
+                // Assert
+                Assert.Single(homes);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
         [Fact]
-        public void UpadateHomeBills_ShouldUpdateHomeBills()
+        public async void UpadateHomeBills_ShouldUpdateHomeBills()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                Home home = new() { Name = "Test Home" };
+
+                List<HomeBill> homeBills = new()
+                {
+                    new()
+                    {
+                        BillName = "Bins",
+                        DueDate = DateTime.Now.AddMonths(1),
+                        Price = 25M,
+                        Home = home
+                    }
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.HomeBillService.AddAsync(homeBills);
+                await unitOfWork.SaveAsync();
+
+                var homes = await unitOfWork.HomeService.GetAllAsync();
+
+                // Assert
+                Assert.Single(homes);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
         [Fact]
-        public void UserJoinsThroughInvite_ShouldJoinHome()
+        public async void InviteCreated_ShouldCreateInvite()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User sender = new();
+                User receiver = new();
+
+                Home home = new() { Name = "Test Home" };
+
+                Invitation invitation = new Invitation()
+                {
+                    FromUser = sender,
+                    ToUser = receiver,
+                    Home = home,
+                    Status = "Accepted"
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.InvitationService.AddAsync(invitation);
+                await unitOfWork.SaveAsync();
+
+                var invitations = await unitOfWork.InvitationService.GetAllAsync();
+
+                // Assert
+                Assert.Single(invitations);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
         [Fact]
-        public void UserDoesJoinThroughInvite_ShouldNotJoinHome()
+        public async void UserJoinsThroughInvite_ShouldJoinHome()
         {
-            throw new NotImplementedException();
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User sender = new();
+                User receiver = new();
+
+                Home home = new() { Name = "Test Home" };
+
+                Invitation invitation = new Invitation()
+                {
+                    FromUser = sender,
+                    ToUser = receiver,
+                    Home = home,
+                    Status = "ACCEPTED"
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.InvitationService.AddAsync(invitation);
+                await unitOfWork.HomeUserService.AddAsync(invitation);
+
+                await unitOfWork.SaveAsync();
+
+                var homeUsers = await unitOfWork.HomeUserService.GetAllAsync();
+
+                // Assert
+                Assert.Single(homeUsers);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
+        [Fact]
+        public async void UserDoesJoinThroughInvite_ShouldNotJoinHome()
+        {
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User sender = new();
+                User receiver = new();
+
+                Home home = new() { Name = "Test Home" };
+
+                Invitation invitation = new Invitation()
+                {
+                    FromUser = sender,
+                    ToUser = receiver,
+                    Home = home,
+                    Status = "REJECTED"
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.HomeService.AddAsync(home);
+                await unitOfWork.InvitationService.AddAsync(invitation);
+                await unitOfWork.HomeUserService.AddAsync(invitation);
+                await unitOfWork.SaveAsync();
+
+                var homeUsers = await unitOfWork.HomeUserService.GetAllAsync();
+
+                // Assert
+                Assert.Empty(homeUsers);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
+        }
     }
 }

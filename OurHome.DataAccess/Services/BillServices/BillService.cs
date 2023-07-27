@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
 using OurHome.Models.Models;
-using OurHome.Server.Services.BillsServices;
+using OurHome.Server.Services.BillServices;
 
-namespace OurHome.DataAccess.Services.BillsServices
+namespace OurHome.DataAccess.Services.BillServices
 {
-    public class BillService : RepositoryService<Bill>, IBillsService
+    public class BillService : RepositoryService<Bill>, IBillService
     {
         private readonly OurHomeDbContext _context;
 

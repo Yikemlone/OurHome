@@ -5,5 +5,6 @@ namespace OurHome.DataAccess.Services.HomeBillServices
 {
     public interface IHomeBillService : IRepositoryService<HomeBill>
     {
+        Task AddAsync(List<HomeBill> homeBills);
     }
 }

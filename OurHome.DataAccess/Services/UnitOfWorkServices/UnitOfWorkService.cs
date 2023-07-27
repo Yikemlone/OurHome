@@ -1,19 +1,18 @@
 ﻿using OurHome.DataAccess.Context;
 using OurHome.DataAccess.Services.BillCoOwnerServices;
 using OurHome.DataAccess.Services.BillPayorBillServices;
-using OurHome.DataAccess.Services.BillsServices;
+using OurHome.DataAccess.Services.BillServices;
 using OurHome.DataAccess.Services.HomeBillServices;
 using OurHome.DataAccess.Services.HomeServices;
-using OurHome.DataAccess.Services.HomeUsersServices;
+using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.DataAccess.Services.InvitationServices;
-using OurHome.Server.Services.BillsServices;
-using System.Runtime.CompilerServices;
+using OurHome.Server.Services.BillServices;
 
 namespace OurHome.DataAccess.Services.UnitOfWorkServices
 {
     public class UnitOfWorkService : IUnitOfWorkService
     {
-        public IBillsService BillService { get; private set; }
+        public IBillService BillService { get; private set; }
         public IBillPayorBillService BillPayorBillService { get; private set; }
         public IBillCoOwnerService BillCoOwnerService { get; private set; }
         public IHomeService HomeService { get; private set; }
@@ -29,6 +28,10 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
             BillService = new BillService(_context);
             BillPayorBillService = new BillPayorBillService(_context);
             BillCoOwnerService = new BillCoOwnerService(_context);
+            HomeService = new HomeService(_context);
+            HomeBillService = new HomeBillService(_context);
+            HomeUserService = new HomeUserService(_context);
+            InvitationService = new InvitationService(_context);
         }
 
         public void Dispose()

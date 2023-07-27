@@ -224,7 +224,7 @@ namespace OurHome.DataAccess.Migrations
                     b.ToTable("HomeBills");
                 });
 
-            modelBuilder.Entity("OurHome.Model.Models.HomeUsers", b =>
+            modelBuilder.Entity("OurHome.Model.Models.HomeUser", b =>
                 {
                     b.Property<int>("HomeID")
                         .HasColumnType("int");
@@ -293,7 +293,6 @@ namespace OurHome.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Price")
@@ -331,17 +330,20 @@ namespace OurHome.DataAccess.Migrations
                     b.Property<bool>("Payed")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("PayeeID")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("PaymentType")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PayorID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("PendingApproval")
                         .HasColumnType("bit");
 
                     b.Property<string>("PersonalNote")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("UserPrice")
                         .HasColumnType("decimal(18,2)");
@@ -350,7 +352,9 @@ namespace OurHome.DataAccess.Migrations
 
                     b.HasIndex("BillID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("PayeeID");
+
+                    b.HasIndex("PayorID");
 
                     b.ToTable("BillPayors");
                 });
@@ -513,19 +517,23 @@ namespace OurHome.DataAccess.Migrations
                     b.Navigation("Home");
                 });
 
-            modelBuilder.Entity("OurHome.Model.Models.HomeUsers", b =>
+            modelBuilder.Entity("OurHome.Model.Models.HomeUser", b =>
                 {
-                    b.HasOne("OurHome.Model.Models.Home", null)
+                    b.HasOne("OurHome.Model.Models.Home", "Home")
                         .WithMany("HomeUsers")
                         .HasForeignKey("HomeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OurHome.Models.Models.User", null)
+                    b.HasOne("OurHome.Models.Models.User", "User")
                         .WithMany("HomesJoined")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Home");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.Invitation", b =>
@@ -582,15 +590,23 @@ namespace OurHome.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OurHome.Models.Models.User", "User")
+                    b.HasOne("OurHome.Models.Models.User", "Payee")
+                        .WithMany("BillPayees")
+                        .HasForeignKey("PayeeID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.User", "Payor")
                         .WithMany("BillPayors")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("PayorID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Bill");
 
-                    b.Navigation("User");
+                    b.Navigation("Payee");
+
+                    b.Navigation("Payor");
                 });
 
             modelBuilder.Entity("OurHome.Model.Models.Home", b =>
@@ -604,6 +620,8 @@ namespace OurHome.DataAccess.Migrations
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
                 {
+                    b.Navigation("BillPayees");
+
                     b.Navigation("BillPayors");
 
                     b.Navigation("BillsOwned");
