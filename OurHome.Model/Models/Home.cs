@@ -14,7 +14,7 @@ namespace OurHome.Model.Models
 
 
         // This is a nav property needed for a many-to-many
-        public List<HomeUsers>? HomeUsers { get; set; }
+        public List<HomeUser>? HomeUsers { get; set; }
         public List<User>? Users { get; set; }
 
         public List<HomeBill>? HomeBills { get; set; }

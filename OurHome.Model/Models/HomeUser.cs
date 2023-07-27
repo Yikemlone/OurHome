@@ -2,7 +2,7 @@
 
 namespace OurHome.Model.Models
 {
-    public class HomeUsers
+    public class HomeUser
     {
         public Guid UserID { get; set; }
         public int HomeID { get; set; }

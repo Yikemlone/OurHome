@@ -46,7 +46,7 @@ namespace OurHome.Server.Controllers
             }
 
             await _unitOfWork.BillPayorBillService.AddAsync(createBillDTO.BillPayors, createBillDTO.Bill);
-            await _unitOfWork.Save();
+            await _unitOfWork.SaveAsync();
         }
 
         [HttpPost]

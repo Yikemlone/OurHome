@@ -13,7 +13,7 @@ namespace OurHome.DataAccess.Context
         public DbSet<BillCoOwner> BillCoOwners { get; set; }
         public DbSet<Home> Homes { get; set; }
         public DbSet<HomeBill> HomeBills { get; set; }
-        public DbSet<HomeUsers> HomeUsers { get; set; }
+        public DbSet<HomeUser> HomeUsers { get; set; }
         public DbSet<Invitation> Invations { get; set; }
         public DbSet<BillPayorBill> BillPayors { get; set; }
 
@@ -62,7 +62,7 @@ namespace OurHome.DataAccess.Context
             builder.Entity<Home>()
                 .HasMany(u => u.Users)
                 .WithMany(u => u.Homes)
-                .UsingEntity<HomeUsers>();
+                .UsingEntity<HomeUser>();
 
             builder.Entity<Bill>()
                 .HasMany(u => u.CoOwners)

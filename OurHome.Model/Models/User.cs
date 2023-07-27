@@ -12,7 +12,7 @@ namespace OurHome.Models.Models
         public List<Bill>? BillsCoOwned { get; set; }
         public List<Invitation>? ReceivedInvitations { get; set; }
         public List<Invitation>? SentInvitations { get; set; }
-        public List<HomeUsers>? HomesJoined { get; set; }
+        public List<HomeUser>? HomesJoined { get; set; }
         public List<Home>? Homes { get; set; }
     }
 }

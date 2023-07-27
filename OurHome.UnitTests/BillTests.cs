@@ -23,7 +23,7 @@ namespace OurHome.UnitTests
 
                 // Act
                 await unitOfWorkService.BillService.AddAsync(bill);
-                await unitOfWorkService.Save();
+                await unitOfWorkService.SaveAsync();
 
                 List<Bill> bills = await unitOfWorkService.BillService.GetAllAsync();
 
@@ -63,7 +63,7 @@ namespace OurHome.UnitTests
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
 
@@ -102,7 +102,7 @@ namespace OurHome.UnitTests
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
 
@@ -136,7 +136,7 @@ namespace OurHome.UnitTests
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 List<Bill> bills = await unitOfWork.BillService.GetAllAsync();
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
@@ -176,7 +176,7 @@ namespace OurHome.UnitTests
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillCoOwnerService.AddAsync(billCoOwners, bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
                 decimal? expectedPrice = bill.Price / billCoOwners.Count;
@@ -220,7 +220,7 @@ namespace OurHome.UnitTests
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillCoOwnerService.AddAsync(billCoOwners, bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
                 decimal? expectedPrice = bill.Price / (billCoOwners.Count * billPayors.Count);
@@ -255,7 +255,7 @@ namespace OurHome.UnitTests
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillService.AddAsync(newBill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 // Assert
                 Assert.Equal(DateTime.Now.Month, newBill.DateTime.Month);
@@ -283,9 +283,9 @@ namespace OurHome.UnitTests
 
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
                 unitOfWork.BillService.Delete(bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 var bills = await unitOfWork.BillService.GetAllAsync();
 
@@ -324,9 +324,9 @@ namespace OurHome.UnitTests
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
                 await unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
                 unitOfWork.BillService.Delete(bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 var bills = await unitOfWork.BillService.GetAllAsync();
 
@@ -356,11 +356,11 @@ namespace OurHome.UnitTests
 
                 // Act
                 await unitOfWork.BillService.AddAsync(bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 bill.BillName = "Not Bins";
                 unitOfWork.BillService.Update(bill);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 var bills = await unitOfWork.BillService.GetAllAsync();
 
@@ -392,7 +392,7 @@ namespace OurHome.UnitTests
                 await unitOfWork.BillService.AddAsync(bins);
                 await unitOfWork.BillService.AddAsync(electric);
                 await unitOfWork.BillService.AddAsync(internet);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 var bills = await unitOfWork.BillService.GetAllAsync(user);
 
@@ -427,7 +427,7 @@ namespace OurHome.UnitTests
                 await unitOfWork.BillService.AddAsync(bins);
                 await unitOfWork.BillService.AddAsync(electric);
                 await unitOfWork.BillService.AddAsync(internet);
-                await unitOfWork.Save();
+                await unitOfWork.SaveAsync();
 
                 var bills = await unitOfWork.BillService.GetAllAsync(user);
 
