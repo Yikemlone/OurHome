@@ -330,8 +330,42 @@ namespace OurHome.UnitTests
 
                 var bills = await unitOfWork.BillService.GetAllAsync();
 
+                // Reset DB
+                context.Database.EnsureDeleted();
+
                 // Assert
                 Assert.Single(bills);
+            }
+        }
+
+        [Fact]
+        public async void UpdateBillWithPayments_ShouldUpdateTheBill()
+        {
+            // Arrange
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                Bill bill = new Bill()
+                {
+                    BillName = "Bins",
+                    Reoccurring = true,
+                    DateTime = DateTime.Today.AddMonths(-1)
+                };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.BillService.AddAsync(bill);
+                await unitOfWork.Save();
+
+                bill.BillName = "Not Bins";
+                unitOfWork.BillService.Update(bill);
+                await unitOfWork.Save();
+
+                var bills = await unitOfWork.BillService.GetAllAsync();
+
+                // Assert
+                Assert.Equal("Not Bins", bills[0].BillName);
 
                 // Reset DB
                 context.Database.EnsureDeleted();
@@ -339,21 +373,72 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public void UpdateBillWithPayments_ShouldUpdateTheBill()
+        public async void GettingAllUserBill_ShouldReturnAllUsersBills()
         {
-            throw new NotImplementedException();
+            // Arrange
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User user = new User();
+
+                Bill bins = new Bill() { BillName = "Bins", BillOwner = user };
+                Bill electric = new Bill() { BillName = "Electric", BillOwner = user };
+                Bill internet = new Bill() { BillName = "Bins", BillOwner = user };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                // Never add user here, investegate later
+                await unitOfWork.BillService.AddAsync(bins);
+                await unitOfWork.BillService.AddAsync(electric);
+                await unitOfWork.BillService.AddAsync(internet);
+                await unitOfWork.Save();
+
+                var bills = await unitOfWork.BillService.GetAllAsync(user);
+
+                // Assert
+                Assert.Equal(3, bills.Count);
+                Assert.Equal(user.Id, bills[0].BillOwnerID);
+                Assert.Equal(user.Id, bills[1].BillOwnerID);
+                Assert.Equal(user.Id, bills[2].BillOwnerID);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
 
         [Fact]
-        public void GettingAllUserBill_ShouldReturnAllUsersBills()
+        public async void GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
         {
-            throw new NotImplementedException();
-        }
+            // Arrange
+            using (var context = new OurHomeDbContext(_options))
+            {
+                // Arrange
+                User user = new User();
+                Home home = new Home() { Name = "My Home", HomeOwner = user };
 
-        [Fact]
-        public void GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
-        {
-            throw new NotImplementedException();
+                Bill bins = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
+                Bill electric = new Bill() { BillName = "Electric", BillOwner = user, Home = home };
+                Bill internet = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
+
+                UnitOfWorkService unitOfWork = new(context);
+
+                // Act
+                await unitOfWork.BillService.AddAsync(bins);
+                await unitOfWork.BillService.AddAsync(electric);
+                await unitOfWork.BillService.AddAsync(internet);
+                await unitOfWork.Save();
+
+                var bills = await unitOfWork.BillService.GetAllAsync(user);
+
+                // Assert
+                Assert.Equal(3, bills.Count);
+                Assert.Equal(user.Id, bills[0].BillOwnerID);
+                Assert.Equal(home.ID, bills[0].HomeID);
+
+                // Reset DB
+                context.Database.EnsureDeleted();
+            }
         }
     }
 }

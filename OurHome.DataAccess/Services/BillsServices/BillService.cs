@@ -15,10 +15,10 @@ namespace OurHome.DataAccess.Services.BillsServices
             _context = context;
         }
 
-        public async Task<List<Bill>> GetAllAsync(Guid billOwnerID)
+        public async Task<List<Bill>> GetAllAsync(User billOwner)
         {
             List<Bill> bills = await _context.Bills
-                .Where(u => u.BillOwnerID == billOwnerID)
+                .Where(u => u.BillOwnerID == billOwner.Id)
                 .Select(m => m)
                 .ToListAsync();
 

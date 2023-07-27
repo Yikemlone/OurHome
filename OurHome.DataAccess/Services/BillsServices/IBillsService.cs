@@ -5,7 +5,7 @@ namespace OurHome.Server.Services.BillsServices
 {
     public interface IBillsService : IRepositoryService<Bill>
     {
-        Task<List<Bill>>GetAllAsync(Guid billOwnerID);
+        Task<List<Bill>>GetAllAsync(User billOwner);
         Bill CreateNewReocurringBill(Bill bill);
     }
 }
