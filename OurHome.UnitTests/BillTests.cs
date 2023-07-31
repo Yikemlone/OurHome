@@ -12,7 +12,7 @@ namespace OurHome.UnitTests
             .Options;
 
         [Fact]
-        public async void CreateNewBill_ShouldCreateBill()
+        public async Task CreateNewBill_ShouldCreateBill()
         {
             using (var context = new OurHomeDbContext(_options)) 
             {
@@ -36,7 +36,7 @@ namespace OurHome.UnitTests
         }
          
         [Fact]
-        public async void CreateSplitPayorsBill_ShouldSplitBillPrice()
+        public async Task CreateSplitPayorsBill_ShouldSplitBillPrice()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -76,7 +76,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void CreateNonSplitPayorsBill_ShouldNotSplitBillPrice()
+        public async Task CreateNonSplitPayorsBill_ShouldNotSplitBillPrice()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -115,7 +115,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void CreateBill_ShouldCreateCorrectBillPayors()
+        public async Task CreateBill_ShouldCreateCorrectBillPayors()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -151,7 +151,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void CreateCoOwnerBill_ShouldSplitBillPrice()
+        public async Task CreateCoOwnerBill_ShouldSplitBillPrice()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -195,7 +195,7 @@ namespace OurHome.UnitTests
         [InlineData(30)]
         [InlineData(20)]
         [InlineData(10)]
-        public async void CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price) 
+        public async Task CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price) 
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -236,7 +236,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void ReocurringBillMonthChanged_ShouldCreateNewBillWithUpdatedDate()
+        public async Task ReocurringBillMonthChanged_ShouldCreateNewBillWithUpdatedDate()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -267,7 +267,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void DeleteBillNoPayments_ShouldDeleteTheBill() 
+        public async Task DeleteBillNoPayments_ShouldDeleteTheBill() 
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -298,7 +298,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void DeleteBillWithPayments_ShouldNotDeleteTheBill()
+        public async Task DeleteBillWithPayments_ShouldNotDeleteTheBill()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -339,7 +339,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void UpdateBillWithPayments_ShouldUpdateTheBill()
+        public async Task UpdateBillWithPayments_ShouldUpdateTheBill()
         {
             // Arrange
             using (var context = new OurHomeDbContext(_options))
@@ -373,7 +373,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void GettingAllUserBill_ShouldReturnAllUsersBills()
+        public async Task GettingAllUserBill_ShouldReturnAllUsersBills()
         {
             // Arrange
             using (var context = new OurHomeDbContext(_options))
@@ -408,7 +408,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
+        public async Task GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
         {
             // Arrange
             using (var context = new OurHomeDbContext(_options))

@@ -1,67 +1,90 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
 using OurHome.Models.Models;
 using OurHome.Shared.DTO;
+using System.Security.Claims;
 
 namespace OurHome.Server.Controllers
 {
-    [Authorize]
+    [Authorize("User")]
     [ApiController]
     [Route("/api/[controller]")]
     public class BillController : ControllerBase
     {
         IUnitOfWorkService _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        public BillController(IUnitOfWorkService unitOfWork)
+        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [Route("all")]
-        public Task<List<Bill>> GetAll() 
+        public async Task<ActionResult<List<Bill>>> GetAll() 
         {
-            throw new NotImplementedException();
+            User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (user == null) return NotFound();
+
+            List<Bill> bills = await _unitOfWork.BillService.GetAllAsync(user);
+
+            return Ok(bills);
         }
 
         [HttpGet]
         [Route("{ID}")]
-        public Task<Bill> Get(int ID) 
+        public async Task<ActionResult<Bill>> Get(int ID) 
         {
-            throw new NotImplementedException();
+            Bill bill = await _unitOfWork.BillService.GetAsync(ID);
+
+            if (bill == null) return NotFound();
+
+            return Ok(bill);
         }
 
         [HttpPost]
         [Route("add")]
-        public async Task Add([FromBody] CreateBillDTO createBillDTO) 
+        public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            await _unitOfWork.BillService.AddAsync(createBillDTO.Bill);
+            var bill = createBillDTO.Bill;
+            var billCoOwners = createBillDTO.BillCoOwners;
+            var billPayors = createBillDTO.BillPayors;
 
-            if (createBillDTO.BillCoOwners != null && createBillDTO.BillCoOwners.Count > 0) 
+            await _unitOfWork.BillService.AddAsync(bill);
+
+            if (billCoOwners != null && billCoOwners.Count > 0)
             {
-                await _unitOfWork.BillCoOwnerService.AddAsync(createBillDTO.BillCoOwners, createBillDTO.Bill);
+                await _unitOfWork.BillCoOwnerService.AddAsync(billCoOwners, bill);
+                await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
+            }
+            else 
+            {
+                await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
             }
 
-            await _unitOfWork.BillPayorBillService.AddAsync(createBillDTO.BillPayors, createBillDTO.Bill);
             await _unitOfWork.SaveAsync();
+
+            return Ok();
         }
 
         [HttpPost]
         [Route("update")]
-        public void Update([FromBody] Bill bill) 
+        public ActionResult Update([FromBody] Bill bill) 
         {
             _unitOfWork.BillService.Update(bill);
+            return Ok();
         }
 
         [HttpPost]
         [Route("delete")]
-        public void Delete([FromBody] Bill bill)
+        public ActionResult Delete([FromBody] Bill bill)
         {
             _unitOfWork.BillService.Delete(bill);
+            return Ok();
         }
-        
     }
 } 

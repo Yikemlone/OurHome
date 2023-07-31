@@ -11,7 +11,7 @@ namespace OurHome.UnitTests
             .Options;
 
         [Fact]
-        public async void CreateNewHome_ShouldCreateHome()
+        public async Task CreateNewHome_ShouldCreateHome()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -41,7 +41,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void UpadateHomeName_ShouldUpdateHomeName()
+        public async Task UpadateHomeName_ShouldUpdateHomeName()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -69,7 +69,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void AddHomeBills_ShouldAddHomeBills()
+        public async Task AddHomeBills_ShouldAddHomeBills()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -105,7 +105,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void UpadateHomeBills_ShouldUpdateHomeBills()
+        public async Task UpadateHomeBills_ShouldUpdateHomeBills()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -141,7 +141,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void InviteCreated_ShouldCreateInvite()
+        public async Task InviteCreated_ShouldCreateInvite()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -177,7 +177,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void UserJoinsThroughInvite_ShouldJoinHome()
+        public async Task UserJoinsThroughInvite_ShouldJoinHome()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -215,7 +215,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async void UserDoesJoinThroughInvite_ShouldNotJoinHome()
+        public async Task UserDoesJoinThroughInvite_ShouldNotJoinHome()
         {
             using (var context = new OurHomeDbContext(_options))
             {
