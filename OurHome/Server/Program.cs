@@ -82,11 +82,14 @@ else
 }
 
 app.UseHttpsRedirection();
-
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
-app.UseRouting();
 
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseCors();
 
 app.MapRazorPages();
 app.MapControllers();
