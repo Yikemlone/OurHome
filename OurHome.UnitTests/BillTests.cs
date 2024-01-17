@@ -1,7 +1,6 @@
 using OurHome.DataAccess.Services.UnitOfWorkServices;
 using OurHome.Model.Models;
 using OurHome.Models.Models;
-using System.Diagnostics;
 
 namespace OurHome.UnitTests
 {
@@ -14,10 +13,10 @@ namespace OurHome.UnitTests
         [Fact]
         public async Task CreateNewBill_ShouldCreateBill()
         {
-            using (var context = new OurHomeDbContext(_options)) 
+            using (var context = new OurHomeDbContext(_options))
             {
                 // Arrange
-                Bill bill = new Bill() { BillName = "Bins"};
+                Bill bill = new Bill() { BillName = "Bins" };
 
                 UnitOfWorkService unitOfWorkService = new(context);
 
@@ -31,10 +30,10 @@ namespace OurHome.UnitTests
                 Assert.Single(bills);
 
                 // Reset DB
-                context.Database.EnsureDeleted(); 
+                context.Database.EnsureDeleted();
             }
         }
-         
+
         [Fact]
         public async Task CreateSplitPayorsBill_ShouldSplitBillPrice()
         {
@@ -49,7 +48,7 @@ namespace OurHome.UnitTests
                     SplitBill = true,
                 };
 
-                List<User> billPayors = new List<User>() 
+                List<User> billPayors = new List<User>()
                 {
                     new(),
                     new(),
@@ -68,10 +67,10 @@ namespace OurHome.UnitTests
                 List<BillPayorBill> actualBillPayors = await unitOfWork.BillPayorBillService.GetAllAsync();
 
                 // Assert
-                Assert.Equal(bill.Price/billPayors.Count, actualBillPayors[0].UserPrice);
+                Assert.Equal(bill.Price / billPayors.Count, actualBillPayors[0].UserPrice);
 
                 // Reset DB
-                context.Database.EnsureDeleted(); 
+                context.Database.EnsureDeleted();
             }
         }
 
@@ -110,7 +109,7 @@ namespace OurHome.UnitTests
                 Assert.Equal(bill.Price, actualBillPayors[0].UserPrice);
 
                 // Reset DB
-                context.Database.EnsureDeleted(); 
+                context.Database.EnsureDeleted();
             }
         }
 
@@ -120,7 +119,7 @@ namespace OurHome.UnitTests
             using (var context = new OurHomeDbContext(_options))
             {
                 // Arrange
-                Bill bill = new Bill(){ BillName = "Bins" };
+                Bill bill = new Bill() { BillName = "Bins" };
 
                 List<User> billPayors = new List<User>()
                 {
@@ -146,7 +145,7 @@ namespace OurHome.UnitTests
                 Assert.Equal(actualBillPayors[0].BillID, bills[0].ID);
 
                 // Reset DB
-                context.Database.EnsureDeleted(); 
+                context.Database.EnsureDeleted();
             }
         }
 
@@ -164,8 +163,8 @@ namespace OurHome.UnitTests
                     new(),
                 };
 
-                List<User> billCoOwners = new() 
-                { 
+                List<User> billCoOwners = new()
+                {
                     new(),
                     new(),
                 };
@@ -195,7 +194,7 @@ namespace OurHome.UnitTests
         [InlineData(30)]
         [InlineData(20)]
         [InlineData(10)]
-        public async Task CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price) 
+        public async Task CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price)
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -241,11 +240,11 @@ namespace OurHome.UnitTests
             using (var context = new OurHomeDbContext(_options))
             {
                 // Arrange
-                Bill bill = new Bill() 
-                { 
-                    BillName = "Bins", 
-                    Reoccurring = true, 
-                    DateTime = DateTime.Today.AddMonths(-1) 
+                Bill bill = new Bill()
+                {
+                    BillName = "Bins",
+                    Reoccurring = true,
+                    DateTime = DateTime.Today.AddMonths(-1)
                 };
 
                 UnitOfWorkService unitOfWork = new(context);
@@ -267,7 +266,7 @@ namespace OurHome.UnitTests
         }
 
         [Fact]
-        public async Task DeleteBillNoPayments_ShouldDeleteTheBill() 
+        public async Task DeleteBillNoPayments_ShouldDeleteTheBill()
         {
             using (var context = new OurHomeDbContext(_options))
             {
@@ -388,22 +387,25 @@ namespace OurHome.UnitTests
                 UnitOfWorkService unitOfWork = new(context);
 
                 // Act
-                // Never add user here, investegate later
-                await unitOfWork.BillService.AddAsync(bins);
-                await unitOfWork.BillService.AddAsync(electric);
-                await unitOfWork.BillService.AddAsync(internet);
-                await unitOfWork.SaveAsync();
+                throw new NotImplementedException();
 
-                var bills = await unitOfWork.BillService.GetAllAsync(user);
+                //// await unitOfWork.HomeUserService.AddAsync(user);
+                //await unitOfWork.BillService.AddAsync(bins);
+                //await unitOfWork.BillService.AddAsync(electric);
+                //await unitOfWork.BillService.AddAsync(internet);
+                ////await unitOfWork.SaveAsync();
 
-                // Assert
-                Assert.Equal(3, bills.Count);
-                Assert.Equal(user.Id, bills[0].BillOwnerID);
-                Assert.Equal(user.Id, bills[1].BillOwnerID);
-                Assert.Equal(user.Id, bills[2].BillOwnerID);
+                //var bills = await unitOfWork.BillService.GetAllAsync(user);
 
-                // Reset DB
-                context.Database.EnsureDeleted();
+                //// Assert
+                //Assert.Equal(3, bills.Count);
+                ////Assert.Equal(user.Id, bills[0].BillOwnerID);
+                ////Assert.Equal(user.Id, bills[1].BillOwnerID);
+                //Assert.Equal(user.Id, bills[2].BillOwnerID);
+
+                //// Reset DB
+                //context.Database.EnsureDeleted();
+                
             }
         }
 

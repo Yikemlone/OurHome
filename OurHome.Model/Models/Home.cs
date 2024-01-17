@@ -3,21 +3,24 @@ using OurHome.Models.Models;
 
 namespace OurHome.Model.Models
 {
+    /// <summary>
+    /// This class represents a home, keeps track of the home owner, the users in the home, the bills in the home, and the invitations to the home.
+    /// </summary>
     public class Home
     {
-        public int ID { get; set; }
+        public int ID { get; set; } // Pk
 
-        public string Name { get; set; }
+        public string Name { get; set; } // This is the name of the home
 
-        public Guid HomeOwnerID { get; set; }
-        public User?  HomeOwner { get; set; }
+        // Could add other properties such as image, description, etc.
 
+        public Guid HomeOwnerID { get; set; } // Fk
+        public User?  HomeOwner { get; set; } // Navigation property
 
-        // This is a nav property needed for a many-to-many
-        public List<HomeUser>? HomeUsers { get; set; }
-        public List<User>? Users { get; set; }
+        public List<HomeUser>? HomeUsers { get; set; } // List of users in the home
+        public List<User>? Users { get; set; } // Navigation property, needed for many to many relationship
 
-        public List<HomeBill>? HomeBills { get; set; }
-        public List<Invitation>? Invitations { get; set; }
+        public List<HomeBill>? HomeBills { get; set; } // Bills that are in the home
+        public List<Invitation>? Invitations { get; set; } // Invitations to the home
     }
 }

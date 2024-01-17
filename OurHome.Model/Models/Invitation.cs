@@ -3,20 +3,23 @@ using OurHome.Models.Models;
 
 namespace OurHome.Model.Models
 {
+    /// <summary>
+    /// Keeps track of the invitations that are sent between users.
+    /// </summary>
     public class Invitation
     {
-        public int ID { get; set; }
+        public int ID { get; set; } // Pk
 
-        public string Status { get; set; }
+        public string Status { get; set; } // This is the status of the invitation, can be pending, accepted, or declined
 
-        public Guid FromUserID { get; set; }
-        public User? FromUser { get; set; }
+        public Guid FromUserID { get; set; } // Fk
+        public User? FromUser { get; set; } // Navigation property
 
-        public Guid ToUserID { get; set; }
-        public User? ToUser { get; set; }
+        public Guid ToUserID { get; set; } // Fk
+        public User? ToUser { get; set; } // Navigation property
 
-        public int HomeID { get; set; }
-        public Home? Home { get; set; }
+        public int HomeID { get; set; } // Fk
+        public Home? Home { get; set; } // Navigation property
     }
 }
   
