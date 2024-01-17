@@ -1,7 +1,6 @@
 ﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
 using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
-using OurHome.Model.Models;
 using OurHome.Models.Models;
 
 namespace OurHome.DataAccess.Services.BillPayorBillServices
@@ -15,15 +14,18 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
             _context = context;
         }
 
-        public async Task<List<BillPayorBill>> AddAsync(List<User> billPayorUsers, Bill bill, List<User> billCoOwners = null)
+        public async Task<List<BillPayorBill>> AddAsync(List<User> billPayorUsers, Bill bill, List<User>? billCoOwners = null)
         {
             List<BillPayorBill> billPayorBills = new List<BillPayorBill>();
             int coOwnersCount = billCoOwners?.Count ?? 0;
             decimal? userPrice;
 
+
+            // Add the bill owner to the list of payors
             foreach (var billPayor in billPayorUsers) 
             {
-                if (coOwnersCount > 0)
+                // If there are co-owners, add them to the list of payees, so to create a bill for each co-owner
+                if (billCoOwners != null && coOwnersCount > 0)
                 {
                     foreach (var coOwner in billCoOwners)
                     {
@@ -46,7 +48,7 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                 }
             }
 
-
+            // If the bill price is split and there are co-owners, split the user bill price between the co-owners and the payor
             if (bill.SplitBill && coOwnersCount > 0)
             {
                 userPrice = bill.Price / (coOwnersCount * billPayorUsers.Count);
@@ -64,7 +66,7 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                 userPrice = bill.Price;
             }
 
-
+            // Set the user price for each bill payor bill
             foreach (var billPayor in billPayorBills)
             {
                 billPayor.UserPrice = userPrice;

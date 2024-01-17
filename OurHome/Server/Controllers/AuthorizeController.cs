@@ -28,7 +28,7 @@ namespace OurHome.Server.Controllers
             var singInResult = await _signInManager.CheckPasswordSignInAsync(user, parameters.Password, false);
             if (!singInResult.Succeeded) return BadRequest("Invalid password");
 
-            await _signInManager.SignInAsync(user, parameters.RememberMe);
+            await _signInManager.SignInAsync(user, false);
 
             return Ok();
         }

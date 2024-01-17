@@ -6,7 +6,7 @@ namespace OurHome.Server.Services.BillServices
     public interface IBillService : IRepositoryService<Bill>
     {
         /// <summary>
-        /// Returns a list of all bills for a given user 
+        /// Gets a list of all bills for a given user 
         /// </summary>
         /// <param name="billOwner"></param>
         /// <returns>List of Bills</returns>
@@ -16,7 +16,7 @@ namespace OurHome.Server.Services.BillServices
         /// Creates a new reocurring bill based on the given bill
         /// </summary>
         /// <param name="bill"></param>
-        /// <returns></returns>
+        /// <returns>New Bill with updated dates</returns>
         Bill CreateNewReocurringBill(Bill bill);
     }
 }
