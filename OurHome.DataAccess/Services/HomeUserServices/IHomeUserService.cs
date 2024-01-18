@@ -5,6 +5,11 @@ namespace OurHome.DataAccess.Services.HomeUserServices
 {
     public interface IHomeUserService : IRepositoryService<HomeUser>
     {
+        /// <summary>
+        /// Creates an invitation to a home
+        /// </summary>
+        /// <param name="invitation"></param>
+        /// <returns></returns>
         Task AddAsync(Invitation invitation);
     }
 }

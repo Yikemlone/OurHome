@@ -12,8 +12,8 @@ using OurHome.DataAccess.Context;
 namespace OurHome.DataAccess.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    [Migration("20230727220341_init")]
-    partial class init
+    [Migration("20240118222443_intial")]
+    partial class intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

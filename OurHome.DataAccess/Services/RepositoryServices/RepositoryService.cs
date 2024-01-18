@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
 using OurHome.DataAccess.Services.RepositoryServices;
 
@@ -20,6 +19,7 @@ namespace FlashCardBlazorApp.DataAccess.Services.RepositoryService
         {
             await dbSet.AddAsync(obj);
         }
+
         public void Update(T obj)
         {
             dbSet.Update(obj);

@@ -6,11 +6,11 @@ namespace OurHome.Server.Services.BillServices
     public interface IBillService : IRepositoryService<Bill>
     {
         /// <summary>
-        /// Gets a list of all bills for a given user 
+        /// Gets a list of all bills a user owns
         /// </summary>
         /// <param name="billOwner"></param>
         /// <returns>List of Bills</returns>
-        public Task<List<Bill>>GetAllAsync(User billOwner);
+        Task<List<Bill>>GetAllAsync(User billOwner);
     
         /// <summary>
         /// Creates a new reocurring bill based on the given bill
@@ -20,4 +20,3 @@ namespace OurHome.Server.Services.BillServices
         Bill CreateNewReocurringBill(Bill bill);
     }
 }
-    

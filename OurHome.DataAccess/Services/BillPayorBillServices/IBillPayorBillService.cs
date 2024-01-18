@@ -4,6 +4,9 @@ using OurHome.Models.Models;
 
 namespace OurHome.DataAccess.Services.BillPayorBillServices
 {
+    /// <summary>
+    /// Responsible for creating bill payor bills and getting all bills that a user needs to pay for
+    /// </summary>
     public interface IBillPayorBillService : IRepositoryService<BillPayorBill>
     {
         /// <summary>

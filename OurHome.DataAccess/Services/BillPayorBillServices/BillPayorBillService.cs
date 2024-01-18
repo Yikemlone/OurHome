@@ -72,7 +72,7 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                 billPayor.UserPrice = userPrice;
             }
 
-            await _context.AddRangeAsync(billPayorBills);
+            await _context.BillPayors.AddRangeAsync(billPayorBills);
 
             return billPayorBills;
         }

@@ -17,7 +17,7 @@ namespace OurHome.DataAccess.Services.BillServices
 
         public async Task<List<Bill>> GetAllAsync(User billOwner)
         {
-            List<Bill> bills = await _context.Bills
+            List<Bill> bills = await _context.Bills.AsNoTracking()
                 .Where(u => u.BillOwnerID == billOwner.Id)
                 .Select(m => m)
                 .ToListAsync();

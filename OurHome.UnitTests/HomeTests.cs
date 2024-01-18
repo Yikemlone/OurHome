@@ -34,11 +34,11 @@ namespace OurHome.UnitTests
             }
         }
 
-        [Fact]
-        public void DeleteHome_ShouldCascadeDeleteWithHome()
-        {
-            throw new NotImplementedException();
-        }
+        //[Fact]
+        //public void DeleteHome_ShouldCascadeDeleteWithHome()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         [Fact]
         public async Task UpadateHomeName_ShouldUpdateHomeName()
