@@ -19,118 +19,102 @@ namespace OurHome.UnitTests
             _unitOfWorkService = new UnitOfWorkService(context);
         }
 
-        //private readonly DbContextOptions<OurHomeDbContext> _options = new DbContextOptionsBuilder<OurHomeDbContext>()
-        //    .UseInMemoryDatabase(databaseName: "TestDB")
-        //    .Options;
+        [Fact]
+        public async Task CreateNewBill_ShouldCreateBill()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
 
-        //[Fact]
-        //public async Task CreateNewBill_ShouldCreateBill()
-        //{
-        //    //using (var context = new OurHomeDbContext(_options))
-        //    //{
-        //        // Arrange
-        //        Bill bill = new Bill() { BillName = "Bins" };
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //        //UnitOfWorkService unitOfWorkService = new(context);
+            Bill bills = await _unitOfWorkService.BillService.GetAsync(bill.ID);
 
-        //        // Act
-        //        await _unitOfWorkService.BillService.AddAsync(bill);
-        //        await _unitOfWorkService.SaveAsync();
+            // Assert
+            Assert.NotNull(bills);
+        }
 
-        //        List<Bill> bills = await _unitOfWorkService.BillService.GetAllAsync();
+        [Fact]
+        public async Task CreateSplitPayorsBill_ShouldSplitBillPrice()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                DateTime = DateTime.Now,
+                Price = 20M,
+                SplitBill = true,
+                BillOwner = user,
+                Home = home
+            };
 
-        //        // Assert
-        //        Assert.Single(bills);
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+                new(),
+                new(),
+                new(),
+            };
 
-        //        // Reset DB
-        //        //_context.Database.EnsureDeleted();
-        //    //}
-        //}
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //[Fact]
-        //public async Task CreateSplitPayorsBill_ShouldSplitBillPrice()
-        //{
-        //    //using (var context = new OurHomeDbContext(_options))
-        //    //{
-        //        // Arrange
-        //        Bill bill = new Bill()
-        //        {
-        //            BillName = "Bins",
-        //            DateTime = DateTime.Now,
-        //            Price = 20M,
-        //            SplitBill = true,
-        //        };
+            List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
+            BillPayorBill billPayorBill = 
+                await _unitOfWorkService.BillPayorBillService.GetAsync(actualBillPayors[actualBillPayors.Count -1].ID);
 
-        //        List<User> billPayors = new List<User>()
-        //        {
-        //            new(),
-        //            new(),
-        //            new(),
-        //            new(),
-        //            new(),
-        //        };
+            // Assert
+            Assert.Equal(bill.Price / billPayors.Count, billPayorBill.UserPrice);
+        }
 
-        //        //UnitOfWorkService unitOfWork = new(context);
+        [Fact]
+        public async Task CreateNonSplitPayorsBill_ShouldNotSplitBillPrice()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Price = 20M,
+                SplitBill = false,
+                BillOwner = user,
+                Home = home
+            };
 
-        //        // Act
-        //        await _unitOfWorkService.BillService.AddAsync(bill);
-        //        await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
-        //        await _unitOfWorkService.SaveAsync();
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+                new(),
+                new(),
+                new(),
+            };
 
-        //        List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //        // Assert
-        //        Assert.Equal(bill.Price / billPayors.Count, actualBillPayors[0].UserPrice);
+            List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
+            BillPayorBill billPayorBill =
+                await _unitOfWorkService.BillPayorBillService.GetAsync(actualBillPayors[actualBillPayors.Count - 1].ID);
 
-        //        // Reset DB
-        //        //context.Database.EnsureDeleted();
-        //    //}
-        //}
-
-        //[Fact]
-        //public async Task CreateNonSplitPayorsBill_ShouldNotSplitBillPrice()
-        //{
-        //    //using (var context = new OurHomeDbContext(_options))
-        //    //{
-        //        // Arrange
-        //        Bill bill = new Bill()
-        //        {
-        //            BillName = "Bins",
-        //            Price = 20M,
-        //            SplitBill = false,
-        //        };
-
-        //        List<User> billPayors = new List<User>()
-        //        {
-        //            new(),
-        //            new(),
-        //            new(),
-        //            new(),
-        //            new(),
-        //        };
-
-        //        //UnitOfWorkService unitOfWork = new(context);
-
-        //        // Act
-        //        await _unitOfWorkService.BillService.AddAsync(bill);
-        //        await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
-        //        await _unitOfWorkService.SaveAsync();
-
-        //        List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-
-        //        // Assert
-        //        Assert.Equal(bill.Price, actualBillPayors[0].UserPrice);
-
-        //        // Reset DB
-        //        //context.Database.EnsureDeleted();
-        //    //}
-        //}
+            // Assert
+            Assert.Equal(bill.Price, billPayorBill.UserPrice);
+        }
 
         [Fact]
         public async Task CreateBill_ShouldCreateCorrectBillPayors()
         {
-            //using (var context = new OurHomeDbContext(_options))
-            //{
             // Arrange
             User user = new User();
             Home home = new Home() { Name = "My Home", HomeOwner = user };
@@ -145,8 +129,7 @@ namespace OurHome.UnitTests
                 new(),
             };
 
-            //UnitOfWorkService unitOfWork = new(context);
-            List<BillPayorBill> actualBillPayors2 = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
+            List<BillPayorBill> billPayorsBefore = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
 
             // Act
             await _unitOfWorkService.BillService.AddAsync(bill);
@@ -157,209 +140,192 @@ namespace OurHome.UnitTests
             List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
 
             // Assert
-            Assert.Equal(billPayors.Count, actualBillPayors.Count);
-            Assert.Equal(actualBillPayors[0].BillID, bills[0].ID);
-
-            // Reset DB
-            //context.Database.EnsureDeleted();
-            //}
+            Assert.Equal(billPayorsBefore.Count + 5, actualBillPayors.Count);
         }
 
-        //    [Fact]
-        //    public async Task CreateCoOwnerBill_ShouldSplitBillPrice()
-        //    {
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            Bill bill = new Bill() { BillName = "Bins", Price = 20M };
+        [Fact]
+        public async Task CreateCoOwnerBill_ShouldSplitBillPrice()
+        {
+            // Arrange
+            User user = new User();
+            List<User> billCoOwners = new()
+            {
+                user,
+                new(),
+            };
 
-        //            List<User> billPayors = new List<User>()
-        //            {
-        //                new(),
-        //                new(),
-        //            };
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
 
-        //            List<User> billCoOwners = new()
-        //            {
-        //                new(),
-        //                new(),
-        //            };
+            Bill bill = new Bill() 
+            { 
+                BillName = "Bins", 
+                Price = 20M, 
+                BillOwner = user, 
+                CoOwners = billCoOwners,
+                Home = home
+            };
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+            };
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.BillCoOwnerService.AddAsync(billCoOwners, bill);
-        //            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
-        //            await _unitOfWorkService.SaveAsync();
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            var billPayorsCreated = await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
+            await _unitOfWorkService.SaveAsync();
+            
+            decimal? expectedPrice = bill.Price / billCoOwners.Count;
+            int expectedBillPayorsCreatedCount = billCoOwners.Count * billPayors.Count;
 
-        //            List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-        //            decimal? expectedPrice = bill.Price / billCoOwners.Count;
-        //            int expectedBillPayorsCreatedCount = billCoOwners.Count * billPayors.Count;
+            // Assert
+            Assert.Equal(expectedPrice, billPayorsCreated[0].UserPrice);
+            Assert.Equal(expectedBillPayorsCreatedCount, billPayorsCreated.Count);
+        }
 
-        //            // Assert
-        //            Assert.Equal(expectedPrice, actualBillPayors[0].UserPrice);
-        //            Assert.Equal(expectedBillPayorsCreatedCount, actualBillPayors.Count);
+        [Theory]
+        [InlineData(30)]
+        [InlineData(20)]
+        [InlineData(10)]
+        public async Task CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price)
+        {
+            // Arrange
+            User user = new User();
+            List<User> billCoOwners = new()
+            {
+                user,
+                new(),
+            };
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
 
-        //    [Theory]
-        //    [InlineData(30)]
-        //    [InlineData(20)]
-        //    [InlineData(10)]
-        //    public async Task CoOwnerBillWithSplitPayors_ShouldSplitTheBillPricesCorrectly(decimal price)
-        //    {
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            Bill bill = new Bill() { BillName = "Bins", Price = price, SplitBill = true };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Price = 20M,
+                BillOwner = user,
+                CoOwners = billCoOwners,
+                Home = home,
+                SplitBill = true
+            };
 
-        //            List<User> billPayors = new List<User>()
-        //            {
-        //                new(),
-        //                new(),
-        //            };
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+            };
 
-        //            List<User> billCoOwners = new()
-        //            {
-        //                new(),
-        //                new(),
-        //            };
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            var billPayorsCreated = await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
+            await _unitOfWorkService.SaveAsync();
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+            decimal? expectedPrice = bill.Price / (billCoOwners.Count * billPayors.Count);
+            int expectedBillPayorsCreatedCount = billCoOwners.Count * billPayors.Count;
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.BillCoOwnerService.AddAsync(billCoOwners, bill);
-        //            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
-        //            await _unitOfWorkService.SaveAsync();
+            // Assert
+            Assert.Equal(expectedPrice, billPayorsCreated[0].UserPrice);
+            Assert.Equal(expectedBillPayorsCreatedCount, billPayorsCreated.Count);
+        }
 
-        //            List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-        //            decimal? expectedPrice = bill.Price / (billCoOwners.Count * billPayors.Count);
-        //            int expectedBillPayorsCreatedCount = billCoOwners.Count * billPayors.Count;
+        [Fact]
+        public async Task ReocurringBillMonthChanged_ShouldCreateNewBillWithUpdatedDate()
+        {
+            //Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Reoccurring = true,
+                DateTime = DateTime.Today.AddMonths(-1),
+                BillOwner = user,
+                Home = home
+            };
 
-        //            // Assert
-        //            Assert.Equal(expectedPrice, actualBillPayors[0].UserPrice);
-        //            Assert.Equal(expectedBillPayorsCreatedCount, actualBillPayors.Count);
+            Bill newBill = _unitOfWorkService.BillService.CreateNewReocurringBill(bill);
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            //Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.BillService.AddAsync(newBill);
+            await _unitOfWorkService.SaveAsync();
 
-        //    [Fact]
-        //    public async Task ReocurringBillMonthChanged_ShouldCreateNewBillWithUpdatedDate()
-        //    {
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            Bill bill = new Bill()
-        //            {
-        //                BillName = "Bins",
-        //                Reoccurring = true,
-        //                DateTime = DateTime.Today.AddMonths(-1)
-        //            };
+            Assert.Equal(DateTime.Now.Month, newBill.DateTime.Month);
+            Assert.True(bill.ID != newBill.ID);
+        }
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+        [Fact]
+        public async Task DeleteBillNoPayments_ShouldDeleteTheBill()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Reoccurring = true,
+                DateTime = DateTime.Today.AddMonths(-1),
+                BillOwner = user,
+                Home = home
+            };
 
-        //            Bill newBill = _unitOfWorkService.BillService.CreateNewReocurringBill(bill);
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.BillService.AddAsync(newBill);
-        //            await _unitOfWorkService.SaveAsync();
+            _unitOfWorkService.BillService.Delete(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            // Assert
-        //            Assert.Equal(DateTime.Now.Month, newBill.DateTime.Month);
-        //            Assert.True(bill.ID != newBill.ID);
+            var deletedBill = await _unitOfWorkService.BillService.GetAsync(bill.ID);
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            // Assert
+            Assert.Null(deletedBill);
 
-        //    [Fact]
-        //    public async Task DeleteBillNoPayments_ShouldDeleteTheBill()
-        //    {
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            Bill bill = new Bill()
-        //            {
-        //                BillName = "Bins",
-        //                Reoccurring = true,
-        //                DateTime = DateTime.Today.AddMonths(-1)
-        //            };
+        }
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+        [Fact]
+        public async Task DeleteBillWithPayments_ShouldNotDeleteTheBill()
+        {
+            // Arrange
+            User user = new();
+            Home home = new() { Name = "My Home", HomeOwner = user };
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.SaveAsync();
-        //            _unitOfWorkService.BillService.Delete(bill);
-        //            await _unitOfWorkService.SaveAsync();
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Reoccurring = true,
+                DateTime = DateTime.Today.AddMonths(-1),
+                BillOwner = user,
+                Home = home
+            };
 
-        //            var bills = await _unitOfWorkService.BillService.GetAllAsync();
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+                new(),
+                new(),
+                new(),
+            };
 
-        //            // Assert
-        //            Assert.True(bills.Count == 0);
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            var test = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
 
-        //    [Fact]
-        //    public async Task DeleteBillWithPayments_ShouldNotDeleteTheBill()
-        //    {
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            User user = new();
+            test[0].Payed = true;
 
-        //            // Arrange
-        //            Bill bill = new Bill()
-        //            {
-        //                BillName = "Bins",
-        //                Reoccurring = true,
-        //                DateTime = DateTime.Today.AddMonths(-1),
-        //                BillOwner = user 
-        //            };
+            _unitOfWorkService.BillService.Delete(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            List<User> billPayors = new List<User>()
-        //            {
-        //                new(),
-        //                new(),
-        //                new(),
-        //                new(),
-        //                new(),
-        //            };
+            var bills = await _unitOfWorkService.BillService.GetAllAsync();
 
-        //            //UnitOfWorkService unitOfWork = new(context);
-
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
-        //            await _unitOfWorkService.SaveAsync();
-
-        //            var test = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-
-        //            test[0].Payed = true;
-
-        //            _unitOfWorkService.BillService.Delete(bill);
-        //            await _unitOfWorkService.SaveAsync();
-
-        //            var bills = await _unitOfWorkService.BillService.GetAllAsync();
-
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-
-        //            // Assert
-        //            Assert.Single(bills);
-        //        //}
-        //    }
+            // Assert
+            Assert.Single(bills);
+        }
 
         //    [Fact]
         //    public async Task UpdateBillWithPayments_ShouldUpdateTheBill()

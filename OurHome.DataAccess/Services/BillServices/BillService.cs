@@ -31,7 +31,9 @@ namespace OurHome.DataAccess.Services.BillServices
             {
                 BillName = bill.BillName,
                 BillOwnerID = bill.BillOwnerID,
+                BillOwner = bill.BillOwner,
                 HomeID = bill.HomeID,
+                Home = bill.Home,
                 Price = bill.Price,
                 Reoccurring = bill.Reoccurring,
                 SplitBill = bill.SplitBill,
