@@ -12,8 +12,8 @@ using OurHome.DataAccess.Context;
 namespace OurHome.DataAccess.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    [Migration("20240118222443_intial")]
-    partial class intial
+    [Migration("20240512033351_Intial")]
+    partial class Intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -503,7 +503,6 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "HomeOwner")
                         .WithMany("HomesOwned")
                         .HasForeignKey("HomeOwnerID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("HomeOwner");
@@ -571,7 +570,7 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "BillOwner")
                         .WithMany("BillsOwned")
                         .HasForeignKey("BillOwnerID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("OurHome.Model.Models.Home", "Home")

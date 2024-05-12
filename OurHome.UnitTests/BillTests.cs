@@ -11,7 +11,7 @@ namespace OurHome.UnitTests
         public BillTests()
         {
             DbContextOptions<OurHomeDbContext> options = new DbContextOptionsBuilder<OurHomeDbContext>()
-                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=OurHomeDB;Trusted_Connection=True;MultipleActiveResultSets=true")
+                .UseSqlServer("Server=(local)\\SQLEXPRESS;Database=OurHomeDB;TrustServerCertificate=True;MultipleActiveResultSets=True;Trusted_Connection=True;")
                 .Options;
 
             OurHomeDbContext context = new OurHomeDbContext(options);
@@ -317,14 +317,15 @@ namespace OurHome.UnitTests
             var test = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
 
             test[0].Payed = true;
+            await _unitOfWorkService.SaveAsync();
 
             _unitOfWorkService.BillService.Delete(bill);
             await _unitOfWorkService.SaveAsync();
 
-            var bills = await _unitOfWorkService.BillService.GetAllAsync();
+            var actualBill = await _unitOfWorkService.BillService.GetAsync(bill.ID);
 
             // Assert
-            Assert.Single(bills);
+            Assert.NotNull(actualBill);
         }
 
         //    [Fact]

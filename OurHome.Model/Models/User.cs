@@ -10,8 +10,9 @@ namespace OurHome.Models.Models
     {
         public List<Bill>? BillsOwned { get; set; } // List of bills that the user owns
 
-        public List<BillPayorBill>? BillPayors { get; set; } 
-        public List<BillPayorBill>? BillPayees { get; set; } 
+        // May rename or remove BillPayors. Too ambiguous and potentiallly uneccessary
+        public List<BillPayorBill>? BillPayors { get; set; } // List of bills the user has to be paid for
+        public List<BillPayorBill>? BillPayees { get; set; } // List of bills the user needs to pay
 
         public List<Home>? HomesOwned { get; set; } // List of homes that the user owns
         public List<Bill>? BillsCoOwned { get; set; } // List of bills that the user is a co-owner of

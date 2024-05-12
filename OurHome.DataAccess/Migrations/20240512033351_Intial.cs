@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OurHome.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class Intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -172,8 +172,7 @@ namespace OurHome.DataAccess.Migrations
                         name: "FK_Homes_AspNetUsers_HomeOwnerID",
                         column: x => x.HomeOwnerID,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -198,8 +197,7 @@ namespace OurHome.DataAccess.Migrations
                         name: "FK_Bills_AspNetUsers_BillOwnerID",
                         column: x => x.BillOwnerID,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bills_Homes_HomeID",
                         column: x => x.HomeID,

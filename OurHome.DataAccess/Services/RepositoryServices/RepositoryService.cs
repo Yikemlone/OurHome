@@ -25,7 +25,7 @@ namespace FlashCardBlazorApp.DataAccess.Services.RepositoryService
             dbSet.Update(obj);
         }
 
-        public void Delete(T obj)
+        public virtual void Delete(T obj)
         {
             dbSet.Remove(obj);
         }

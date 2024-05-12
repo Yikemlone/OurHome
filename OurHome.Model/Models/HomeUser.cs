@@ -8,9 +8,9 @@ namespace OurHome.Model.Models
     public class HomeUser
     {
         public Guid UserID { get; set; } // Fk
-        public User User { get; set; } // Navigation property
+        public User? User { get; set; } // Navigation property
 
         public int HomeID { get; set; } // Fk
-        public Home Home { get; set; } // Navigation property
+        public Home? Home { get; set; } // Navigation property
     }
 }

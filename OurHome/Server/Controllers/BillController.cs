@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace OurHome.Server.Controllers
 {
-    [Authorize("User")]
+    //[Authorize("User")]
     [ApiController]
     [Route("/api/[controller]")]
     public class BillController : ControllerBase

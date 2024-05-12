@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OurHome.Model.Models;
 using Microsoft.Data.SqlClient;
+using System.Reflection.Emit;
 
 namespace OurHome.DataAccess.Context
 {
@@ -25,6 +26,12 @@ namespace OurHome.DataAccess.Context
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Bill>()
+                .HasOne(b => b.BillOwner)
+                .WithMany()
+                .HasForeignKey(b => b.BillOwnerID)
+                .OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
+
             // A user can have many invations sent to one user at a time
             builder.Entity<User>()
                 .HasMany(a => a.SentInvitations)
@@ -39,14 +46,21 @@ namespace OurHome.DataAccess.Context
                 .HasForeignKey(a => a.FromUserID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // No idea
+            // The user can own many bills at a time
             builder.Entity<User>()
-                .HasMany(b => b.BillPayors) 
+                .HasMany(u => u.BillsOwned)
+                .WithOne(b => b.BillOwner)
+                .HasForeignKey(b => b.BillOwnerID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // When the user needs to pay a bill
+            builder.Entity<User>()
+                .HasMany(b => b.BillPayors)
                 .WithOne(b => b.Payor)
                 .HasForeignKey(b => b.PayorID)
                 .OnDelete(DeleteBehavior.Restrict);
-            
-            // No idea
+
+            // Wehn the user is owed money for a bill
             builder.Entity<User>()
                 .HasMany(b => b.BillPayees)
                 .WithOne(b => b.Payee)
@@ -62,8 +76,7 @@ namespace OurHome.DataAccess.Context
             builder.Entity<Bill>()
                 .HasOne(b => b.BillOwner)
                 .WithMany(b => b.BillsOwned)
-                .HasForeignKey(b => b.BillOwnerID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(b => b.BillOwnerID);
 
             // Many users can be apart of many homes at a time
             builder.Entity<Home>()
@@ -82,7 +95,7 @@ namespace OurHome.DataAccess.Context
                 .HasOne(h => h.HomeOwner)
                 .WithMany(u => u.HomesOwned)
                 .HasForeignKey(fk => fk.HomeOwnerID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

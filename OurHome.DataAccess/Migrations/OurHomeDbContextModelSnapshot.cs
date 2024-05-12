@@ -500,7 +500,6 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "HomeOwner")
                         .WithMany("HomesOwned")
                         .HasForeignKey("HomeOwnerID")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("HomeOwner");
@@ -568,7 +567,7 @@ namespace OurHome.DataAccess.Migrations
                     b.HasOne("OurHome.Models.Models.User", "BillOwner")
                         .WithMany("BillsOwned")
                         .HasForeignKey("BillOwnerID")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("OurHome.Model.Models.Home", "Home")

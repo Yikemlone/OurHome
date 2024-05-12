@@ -12,13 +12,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C96EE3C7-C9BD-4CB5-8F2C-83B2E516202D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Model", "OurHome.Model\OurHome.Model.csproj", "{2FA1C7CC-8612-45EE-A8B4-74A28A780237}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.DataAccess", "OurHome.DataAccess\OurHome.DataAccess.csproj", "{63A5F348-3916-485E-93FE-17E17154A1CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OurHome.UnitTests", "OurHome.UnitTests\OurHome.UnitTests.csproj", "{1646CEED-1554-4F51-9EFD-92407269EB27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.UnitTests", "OurHome.UnitTests\OurHome.UnitTests.csproj", "{1646CEED-1554-4F51-9EFD-92407269EB27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
