@@ -42,9 +42,35 @@ namespace OurHome.DataAccess.Services.BillServices
                 CoOwners = bill.CoOwners
             };
 
-            // Do I want to add this to the db here or just retu
+            // Do I want to add this to the db here or just return it?
 
             return newBill;
+        }
+
+        public override void Delete(Bill bill)
+        {
+            // I want to check if a bill has any payments before deleting it
+            // If it does, I don't want to delete it
+
+            var payments = _context.BillPayors
+                .Where(p => p.BillID == bill.ID)
+                .ToList();
+
+            foreach(var payment in payments)
+            {
+                if(payment.Payed) return;
+            }
+
+            _context.Bills.Remove(bill);
+        }
+
+        public async Task<List<Bill>> GetUserBillsByHomeIDAsync(User user, int homeID)
+        {
+            var userHomeBills = await _context.Bills
+                .Where(u => u.BillOwnerID == user.Id && u.HomeID == homeID)
+                .ToListAsync();
+
+            return userHomeBills;
         }
     }
 }

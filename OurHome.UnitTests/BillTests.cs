@@ -293,7 +293,7 @@ namespace OurHome.UnitTests
 
             Bill bill = new Bill()
             {
-                BillName = "Bins",
+                BillName = "Funny New Bill",
                 Reoccurring = true,
                 DateTime = DateTime.Today.AddMonths(-1),
                 BillOwner = user,
@@ -314,13 +314,11 @@ namespace OurHome.UnitTests
             await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
             await _unitOfWorkService.SaveAsync();
 
-            var test = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-
-            test[0].Payed = true;
-            await _unitOfWorkService.SaveAsync();
+            var userBills = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
+            userBills[0].Payed = true;
+            _unitOfWorkService.BillPayorBillService.Update(userBills[0]);
 
             _unitOfWorkService.BillService.Delete(bill);
-            await _unitOfWorkService.SaveAsync();
 
             var actualBill = await _unitOfWorkService.BillService.GetAsync(bill.ID);
 
@@ -328,107 +326,86 @@ namespace OurHome.UnitTests
             Assert.NotNull(actualBill);
         }
 
-        //    [Fact]
-        //    public async Task UpdateBillWithPayments_ShouldUpdateTheBill()
-        //    {
-        //        // Arrange
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            Bill bill = new Bill()
-        //            {
-        //                BillName = "Bins",
-        //                Reoccurring = true,
-        //                DateTime = DateTime.Today.AddMonths(-1)
-        //            };
+        [Fact]
+        public async Task UpdateBillWithPayments_ShouldUpdateTheBill()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                Home = home,
+                BillOwner = user,
+                BillName = "Bins",
+                Reoccurring = true,
+                DateTime = DateTime.Today.AddMonths(-1)
+            };
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bill);
-        //            await _unitOfWorkService.SaveAsync();
+            bill.BillName = "Not Bins";
+            _unitOfWorkService.BillService.Update(bill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            bill.BillName = "Not Bins";
-        //            _unitOfWorkService.BillService.Update(bill);
-        //            await _unitOfWorkService.SaveAsync();
+            var actualBill = await _unitOfWorkService.BillService.GetAsync(bill.ID);
 
-        //            var bills = await _unitOfWorkService.BillService.GetAllAsync();
+            // Assert
+            Assert.Equal("Not Bins", actualBill.BillName);
+        }
 
-        //            // Assert
-        //            Assert.Equal("Not Bins", bills[0].BillName);
+        [Fact]
+        public async Task GettingAllUserBill_ShouldReturnAllUsersBills()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            Bill bins = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
+            Bill electric = new Bill() { BillName = "Electric", BillOwner = user, Home = home };
+            Bill internet = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
 
-        //    [Fact]
-        //    public async Task GettingAllUserBill_ShouldReturnAllUsersBills()
-        //    {
-        //        // Arrange
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            User user = new User();
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bins);
+            await _unitOfWorkService.BillService.AddAsync(electric);
+            await _unitOfWorkService.BillService.AddAsync(internet);
+            await _unitOfWorkService.SaveAsync();
 
-        //            Bill bins = new Bill() { BillName = "Bins", BillOwner = user };
-        //            Bill electric = new Bill() { BillName = "Electric", BillOwner = user };
-        //            Bill internet = new Bill() { BillName = "Bins", BillOwner = user };
+            var bills = await _unitOfWorkService.BillService.GetAllAsync(user);
 
-        //            //UnitOfWorkService unitOfWork = new(context);
+            // Assert
+            Assert.Equal(3, bills.Count);
+            Assert.Equal(user.Id, bills[0].BillOwnerID);
+        }
 
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bins);
-        //            await _unitOfWorkService.BillService.AddAsync(electric);
-        //            await _unitOfWorkService.BillService.AddAsync(internet);
-        //            await _unitOfWorkService    .SaveAsync();
+        [Fact]
+        public async Task GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Home newHome = new Home() { Name = "My New Home", HomeOwner = user };
 
-        //            var bills = await   _unitOfWorkService.BillService.GetAllAsync(user);
+            Bill bins = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
+            Bill electric = new Bill() { BillName = "Electric", BillOwner = user, Home = home };
+            Bill internet = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
+            Bill newHomeBill = new Bill() { BillName = "New Home Bill", BillOwner = user, Home = newHome };
 
-        //            // Assert
-        //            Assert.Equal(3, bills.Count);
-        //            //Assert.Equal(user.Id, bills[0].BillOwnerID);
-        //            //Assert.Equal(user.Id, bills[1].BillOwnerID);
-        //            //Assert.Equal(user.Id, bills[2].BillOwnerID);
+             // Act
+            await _unitOfWorkService.BillService.AddAsync(bins);
+            await _unitOfWorkService.BillService.AddAsync(electric);
+            await _unitOfWorkService.BillService.AddAsync(internet);
+            await _unitOfWorkService.BillService.AddAsync(newHomeBill);
+            await _unitOfWorkService.SaveAsync();
 
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
+            // Need to create a method to get all bills in a home exclusivly 
+            var bills = await _unitOfWorkService.BillService.GetUserBillsByHomeIDAsync(user, home.ID);
 
-        //        //}
-        //    }
-
-        //    [Fact]
-        //    public async Task GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
-        //    {
-        //        // Arrange
-        //        //using (var context = new OurHomeDbContext(_options))
-        //        //{
-        //            // Arrange
-        //            User user = new User();
-        //            Home home = new Home() { Name = "My Home", HomeOwner = user };
-
-        //            Bill bins = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
-        //            Bill electric = new Bill() { BillName = "Electric", BillOwner = user, Home = home };
-        //            Bill internet = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
-
-        //            //UnitOfWorkService unitOfWork = new(context);
-
-        //            // Act
-        //            await _unitOfWorkService.BillService.AddAsync(bins);
-        //            await _unitOfWorkService.BillService.AddAsync(electric);
-        //            await _unitOfWorkService.BillService.AddAsync(internet);
-        //            await _unitOfWorkService.SaveAsync();
-
-        //            var bills = await _unitOfWorkService.BillService.GetAllAsync(user);
-
-        //            // Assert
-        //            Assert.Equal(3, bills.Count);
-        //            Assert.Equal(user.Id, bills[0].BillOwnerID);
-        //            Assert.Equal(home.ID, bills[0].HomeID);
-
-        //            // Reset DB
-        //            //context.Database.EnsureDeleted();
-        //        //}
-        //    }
+            // Assert
+            Assert.Equal(3, bills.Count);
+            Assert.Equal(user.Id, bills[0].BillOwnerID);
+            Assert.Equal(home.ID, bills[0].HomeID);
+        }
     }
 }

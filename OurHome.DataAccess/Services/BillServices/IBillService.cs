@@ -1,4 +1,5 @@
-﻿using OurHome.DataAccess.Services.RepositoryServices;
+﻿using Microsoft.EntityFrameworkCore;
+using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Models.Models;
 
 namespace OurHome.Server.Services.BillServices
@@ -18,5 +19,14 @@ namespace OurHome.Server.Services.BillServices
         /// <param name="bill"></param>
         /// <returns>New Bill with updated dates</returns>
         Bill CreateNewReocurringBill(Bill bill);
+
+        /// <summary>
+        /// Will return a list of all bills that a user has in a specific home
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="homeID"></param>
+        /// <returns></returns>
+        Task<List<Bill>> GetUserBillsByHomeIDAsync(User user, int homeID);
+
     }
 }
