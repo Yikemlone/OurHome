@@ -1,5 +1,5 @@
-﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
-using OurHome.DataAccess.Context;
+﻿using OurHome.DataAccess.Context;
+using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Model.Models;
 using OurHome.Models.Models;
 

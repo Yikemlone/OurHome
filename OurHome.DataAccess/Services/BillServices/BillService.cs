@@ -1,6 +1,6 @@
-﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
+using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Models.Models;
 using OurHome.Server.Services.BillServices;
 
@@ -49,9 +49,6 @@ namespace OurHome.DataAccess.Services.BillServices
 
         public override void Delete(Bill bill)
         {
-            // I want to check if a bill has any payments before deleting it
-            // If it does, I don't want to delete it
-
             var payments = _context.BillPayors
                 .Where(p => p.BillID == bill.ID)
                 .ToList();

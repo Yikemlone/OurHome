@@ -1,5 +1,6 @@
-﻿using FlashCardBlazorApp.DataAccess.Services.RepositoryService;
+﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
+using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Model.Models;
 
 namespace OurHome.DataAccess.Services.HomeBillServices
@@ -16,6 +17,16 @@ namespace OurHome.DataAccess.Services.HomeBillServices
         public async Task AddAsync(List<HomeBill> homeBills)
         {
             await _context.AddRangeAsync(homeBills);
+        }
+
+        public async Task<List<HomeBill>> GetHomeBillsByHomeIDAsync(int homeID)
+        {
+            var homeBills = await _context.HomeBills
+                .Where(h => h.HomeID == homeID)
+                .Select(m => m)
+                .ToListAsync();
+
+            return homeBills;
         }
     }
 }

@@ -6,6 +6,7 @@ using OurHome.DataAccess.Services.HomeBillServices;
 using OurHome.DataAccess.Services.HomeServices;
 using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.DataAccess.Services.InvitationServices;
+using OurHome.DataAccess.Services.UserServices;
 using OurHome.Server.Services.BillServices;
 
 namespace OurHome.DataAccess.Services.UnitOfWorkServices
@@ -19,6 +20,7 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
         public IHomeBillService HomeBillService { get; private set; }
         public IHomeUserService HomeUserService { get; private set; }
         public IInvitationService InvitationService { get; private set; }
+        public IUserService UserService { get; private set; }
 
         private readonly OurHomeDbContext _context;
 
@@ -32,6 +34,7 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
             HomeBillService = new HomeBillService(_context);
             HomeUserService = new HomeUserService(_context);
             InvitationService = new InvitationService(_context);
+            UserService = new UserService(_context);
         }
 
         public void Dispose()

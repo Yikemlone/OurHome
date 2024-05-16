@@ -4,6 +4,7 @@ using OurHome.DataAccess.Services.HomeBillServices;
 using OurHome.DataAccess.Services.HomeServices;
 using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.DataAccess.Services.InvitationServices;
+using OurHome.DataAccess.Services.UserServices;
 using OurHome.Server.Services.BillServices;
 
 namespace OurHome.DataAccess.Services.UnitOfWorkServices
@@ -17,8 +18,7 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
         IHomeBillService HomeBillService { get; }
         IHomeUserService HomeUserService { get; }
         IInvitationService InvitationService { get; }
-
-        // I may not even need a user service, maybe for updating their details
+        IUserService UserService { get; }
 
         Task SaveAsync();
     }

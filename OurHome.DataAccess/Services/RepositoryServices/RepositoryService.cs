@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
-using OurHome.DataAccess.Services.RepositoryServices;
 
-namespace FlashCardBlazorApp.DataAccess.Services.RepositoryService
+namespace OurHome.DataAccess.Services.RepositoryServices
 {
     public class RepositoryService<T> : IRepositoryService<T> where T : class 
     {

@@ -148,28 +148,25 @@ namespace OurHome.UnitTests
         {
             // Arrange
             User user = new User();
-            List<User> billCoOwners = new()
-            {
-                user,
-                new(),
-            };
-
+            List<User> billCoOwners = new() { user, new() };
             Home home = new Home() { Name = "My Home", HomeOwner = user };
-
+            
             Bill bill = new Bill() 
             { 
                 BillName = "Bins", 
                 Price = 20M, 
-                BillOwner = user, 
+                BillOwner = user,
+                BillOwnerID = user.Id,
+                Note = "This is a note",
                 CoOwners = billCoOwners,
+                DateTime = DateTime.Now,
+                Reoccurring = false,
+                SplitBill = false,
+                HomeID = home.ID,
                 Home = home
             };
 
-            List<User> billPayors = new List<User>()
-            {
-                new(),
-                new(),
-            };
+            List<User> billPayors = new List<User>() { new(), new() };
 
             // Act
             await _unitOfWorkService.BillService.AddAsync(bill);
@@ -182,6 +179,10 @@ namespace OurHome.UnitTests
             // Assert
             Assert.Equal(expectedPrice, billPayorsCreated[0].UserPrice);
             Assert.Equal(expectedBillPayorsCreatedCount, billPayorsCreated.Count);
+
+            // This test is not working as expected
+            // It needs to actually check for CoOwners Bills are created
+            throw new NotImplementedException();
         }
 
         [Theory]
@@ -406,6 +407,61 @@ namespace OurHome.UnitTests
             Assert.Equal(3, bills.Count);
             Assert.Equal(user.Id, bills[0].BillOwnerID);
             Assert.Equal(home.ID, bills[0].HomeID);
+        }
+
+        [Fact]
+        public async Task BillPayorPaysBill_ShouldUpdateBillPayorBillDetails()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Price = 20M,
+                BillOwner = user,
+                Home = home
+            };
+
+            List<User> billPayors = new List<User>()
+            {
+                new(),
+                new(),
+            };
+
+            // Act
+            await _unitOfWorkService.BillService.AddAsync(bill);
+            var billPayorsCreated = await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill);
+            await _unitOfWorkService.SaveAsync();
+
+            DateTime datePayed = DateTime.Now;
+
+            billPayorsCreated[0].Payed = true;
+            billPayorsCreated[0].PersonalNote = "Payed the bill today";
+            billPayorsCreated[0].DatePayed = datePayed;
+            billPayorsCreated[0].PaymentType = "Cash";
+            billPayorsCreated[0].PendingApproval = true;
+
+            _unitOfWorkService.BillPayorBillService.Update(billPayorsCreated[0]);
+            await _unitOfWorkService.SaveAsync();
+
+            var actualBillPayor = await _unitOfWorkService.BillPayorBillService.GetAsync(billPayorsCreated[0].ID);
+
+            // Assert
+            Assert.True(actualBillPayor.Payed);
+            Assert.Equal("Payed the bill today", actualBillPayor.PersonalNote);
+            Assert.Equal(datePayed, actualBillPayor.DatePayed);
+            Assert.Equal("Cash", actualBillPayor.PaymentType);
+            Assert.True(actualBillPayor.PendingApproval);
+            Assert.Equal(bill.ID, actualBillPayor.BillID);
+            Assert.Equal(bill.BillOwnerID, actualBillPayor.PayeeID);
+            Assert.Equal(billPayors[0].Id, actualBillPayor.PayorID);
+        }
+
+        [Fact]
+        public async Task CreatingCoOwnerBill_CoOwnerBillDetailsShouldBeCorrect()
+        {
+            throw new NotImplementedException();
         }
     }
 }
