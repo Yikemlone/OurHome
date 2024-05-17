@@ -32,7 +32,7 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                         billPayorBills.Add(new() 
                         {
                             Bill = bill,
-                            Payor = billPayor,
+                            Payor = billPayor,       
                             Payee = coOwner
                         });
                     }
@@ -42,8 +42,8 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
                     billPayorBills.Add(new()
                     {
                         Bill = bill,
-                        Payor = billPayor,
-                        Payee = bill.BillOwner
+                        Payee = bill.BillOwner,
+                        Payor = billPayor
                     });
                 }
             }

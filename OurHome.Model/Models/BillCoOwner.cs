@@ -1,5 +1,6 @@
 ﻿
 using OurHome.Models.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace OurHome.Model.Models
 {

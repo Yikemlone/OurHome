@@ -179,10 +179,6 @@ namespace OurHome.UnitTests
             // Assert
             Assert.Equal(expectedPrice, billPayorsCreated[0].UserPrice);
             Assert.Equal(expectedBillPayorsCreatedCount, billPayorsCreated.Count);
-
-            // This test is not working as expected
-            // It needs to actually check for CoOwners Bills are created
-            throw new NotImplementedException();
         }
 
         [Theory]
@@ -252,6 +248,7 @@ namespace OurHome.UnitTests
             await _unitOfWorkService.BillService.AddAsync(newBill);
             await _unitOfWorkService.SaveAsync();
 
+            // Assert
             Assert.Equal(DateTime.Now.Month, newBill.DateTime.Month);
             Assert.True(bill.ID != newBill.ID);
         }
@@ -400,7 +397,6 @@ namespace OurHome.UnitTests
             await _unitOfWorkService.BillService.AddAsync(newHomeBill);
             await _unitOfWorkService.SaveAsync();
 
-            // Need to create a method to get all bills in a home exclusivly 
             var bills = await _unitOfWorkService.BillService.GetUserBillsByHomeIDAsync(user, home.ID);
 
             // Assert
@@ -461,7 +457,50 @@ namespace OurHome.UnitTests
         [Fact]
         public async Task CreatingCoOwnerBill_CoOwnerBillDetailsShouldBeCorrect()
         {
-            throw new NotImplementedException();
+            // Arrange
+            User user = new User();
+            User coOwner = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Price = 20M,
+                BillOwner = user,
+                Note = "This is a note",
+                DateTime = DateTime.Now,
+                Reoccurring = false,
+                SplitBill = false,
+                Home = home
+            };
+
+            List<BillCoOwner> billCoOwners = new List<BillCoOwner>()
+            { 
+                new() 
+                { 
+                    Bill = bill, 
+                    User = user, 
+                    Price = bill.Price / 2
+                },
+                new()
+                {
+                    Bill = bill,
+                    User = coOwner,
+                    Price = bill.Price / 2
+                }
+            };
+
+            // Act
+            await _unitOfWorkService.BillCoOwnerService.AddAsync(billCoOwners);
+            await _unitOfWorkService.SaveAsync();
+
+            var actualCoOwnerBill = await _unitOfWorkService.BillCoOwnerService.GetAsync(bill.ID, coOwner.Id);
+            var actualCoOwnerBills = await _unitOfWorkService.BillCoOwnerService.GetAllBillCoOwnersByBillIDAsync(bill.ID);
+
+            // Assert
+            Assert.Equal(2, actualCoOwnerBills.Count);
+            Assert.Equal(bill.ID, actualCoOwnerBill.BillID);
+            Assert.Equal(coOwner.Id, actualCoOwnerBill.UserID);
+            Assert.Equal(bill.Price / 2, actualCoOwnerBill.Price);
         }
     }
 }

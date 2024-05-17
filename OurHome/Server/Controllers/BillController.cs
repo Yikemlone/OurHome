@@ -50,23 +50,23 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            var bill = createBillDTO.Bill;
-            var billCoOwners = createBillDTO.BillCoOwners;
-            var billPayors = createBillDTO.BillPayors;
+            //var bill = createBillDTO.Bill;
+            //var billCoOwners = createBillDTO.BillCoOwners;
+            //var billPayors = createBillDTO.BillPayors;
 
-            await _unitOfWork.BillService.AddAsync(bill);
+            //await _unitOfWork.BillService.AddAsync(bill);
 
-            if (billCoOwners != null && billCoOwners.Count > 0)
-            {
-                await _unitOfWork.BillCoOwnerService.AddAsync(billCoOwners, bill);
-                await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
-            }
-            else 
-            {
-                await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
-            }
+            //if (billCoOwners != null && billCoOwners.Count > 0)
+            //{
+            //    await _unitOfWork.BillCoOwnerService.AddAsync(billCoOwners);
+            //    await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
+            //}
+            //else 
+            //{
+            //    await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
+            //}
 
-            await _unitOfWork.SaveAsync();
+            //await _unitOfWork.SaveAsync();
 
             return Ok();
         }
