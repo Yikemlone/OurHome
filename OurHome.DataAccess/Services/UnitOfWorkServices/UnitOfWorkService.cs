@@ -44,12 +44,7 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
 
         public async Task SaveAsync()
         {
-            var num = await _context.SaveChangesAsync();
-
-            if (num > 0)
-            {
-                Console.WriteLine($"Saved {num} changes");
-            }
+            await _context.SaveChangesAsync();
         }
     }
 }

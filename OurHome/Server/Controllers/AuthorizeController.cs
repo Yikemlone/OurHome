@@ -75,7 +75,6 @@ namespace OurHome.Server.Controllers
             return BuildUserInfo();
         }
 
-
         private UserInfo BuildUserInfo()
         {
             return new UserInfo

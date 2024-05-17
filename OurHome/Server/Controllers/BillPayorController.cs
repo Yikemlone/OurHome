@@ -7,6 +7,11 @@ namespace OurHome.Server.Controllers
     [Route("/api/[controller]")]
     public class BillPayorController : ControllerBase
     {
+        /// <summary>
+        /// Returns all the bills the user needs to pay for
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
         [Route("all")]
         public Task<List<BillPayorBill>> GetAll()
@@ -14,6 +19,12 @@ namespace OurHome.Server.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Returns a bill by ID that the user needs to pay for
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
         [Route("{ID}")]
         public Task<BillPayorBill> Get(int ID)
@@ -21,6 +32,12 @@ namespace OurHome.Server.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Updates the bill payor bill with the new information
+        /// </summary>
+        /// <param name="payorBill"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         [HttpPost]
         [Route("/update")]
         public Task Update([FromBody] BillPayorBill payorBill) 

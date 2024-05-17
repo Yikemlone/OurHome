@@ -20,7 +20,6 @@ namespace OurHome.DataAccess.Services.BillPayorBillServices
             int coOwnersCount = billCoOwners?.Count ?? 0;
             decimal? userPrice;
 
-
             // Add the bill owner to the list of payors
             foreach (var billPayor in billPayorUsers) 
             {
