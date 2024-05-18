@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.Models.Models;
@@ -13,11 +14,14 @@ namespace OurHome.Server.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IDataProtectionProvider _dataProtectionProvider;
 
-        public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager)
+
+        public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager, IDataProtectionProvider dataProtectionProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dataProtectionProvider = dataProtectionProvider;
         }
 
         [HttpPost]
@@ -25,11 +29,20 @@ namespace OurHome.Server.Controllers
         {
             var user = await _userManager.FindByNameAsync(parameters.UserName);
             if (user == null) return BadRequest("User does not exist");
+
             var singInResult = await _signInManager.CheckPasswordSignInAsync(user, parameters.Password, false);
+
             if (!singInResult.Succeeded) return BadRequest("Invalid password");
 
-            await _signInManager.SignInAsync(user, false);
-
+            try
+            {
+                await _signInManager.SignInAsync(user, parameters.RememberMe);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+             
             return Ok();
         }
 
@@ -54,11 +67,13 @@ namespace OurHome.Server.Controllers
 
             if (!custSucc.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-            return await Login(new LoginParameters
+            LoginParameters loginParameters = new LoginParameters
             {
                 UserName = parameters.UserName,
                 Password = parameters.Password
-            });
+            };  
+
+            return await Login(loginParameters);
         }
 
         [Authorize]

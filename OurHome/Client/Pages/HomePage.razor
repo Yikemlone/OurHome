@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inject IdentityAuthenticationStateProvider AuthProvider
 
-@attribute [Authorize(Policy = "HomeUser")]
+@attribute [Authorize(Policy = "User")]
 
 <style>
     .chart-section {
@@ -16,6 +16,7 @@
 
 
 <PageTitle>Home</PageTitle>
+<p>Hello!</p>
 @*
 @if (_userOptions != null)
 {
