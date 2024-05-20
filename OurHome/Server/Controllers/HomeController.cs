@@ -18,11 +18,6 @@ namespace OurHome.Server.Controllers
             _unitOfWork = unitOfWorkService;
         }
 
-        /// <summary>
-        /// Returns all the users homes they own or are a part of
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
         [Route("all")]
         public async Task<ActionResult<List<Home>>> GetAll()
@@ -30,25 +25,17 @@ namespace OurHome.Server.Controllers
             // Need to get all the users homes here, not all the bills
             // Can used the User object that is with the Authorization 
             return Ok();
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Returns a the home by ID
-        /// </summary>
-        /// <param name="ID"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
+
         [HttpGet]
         [Route("{ID}")]
         public Task<Home> Get(int ID)
         {
             throw new NotImplementedException();
         }
-        /// <summary>
-        /// Add a new bill with the users that need to pay for it and the co-owners of the bill
-        /// </summary>
-        /// <param name="createBillDTO"></param>
-        /// <returns>A Ok response if the transaction went through</returns>
+
         [HttpPost]
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] HomeDTO homeDTO)
@@ -59,15 +46,10 @@ namespace OurHome.Server.Controllers
 
             await _unitOfWork.HomeService.AddAsync(home);
             await _unitOfWork.SaveAsync();
-            return Ok();
+            //return Ok();
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Updates the home information
-        /// </summary>
-        /// <param name="payorBill"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpPost]
         [Route("/update")]
         public Task Update([FromBody] HomeDTO homeDTO) 
