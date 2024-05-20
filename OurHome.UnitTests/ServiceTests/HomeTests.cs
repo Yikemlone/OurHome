@@ -1,8 +1,4 @@
-using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
-using OurHome.Models.Models;
-
-namespace OurHome.UnitTests
+namespace OurHome.UnitTests.ServiceTests
 {
     public class HomeTests
     {
@@ -25,11 +21,11 @@ namespace OurHome.UnitTests
         {
             // Arrange
             User user = new() { UserName = "Test User" };
-            Home home = new() 
+            Home home = new()
             {
-                Name = "Test Home", 
-                HomeOwner = user, 
-                HomeOwnerID = user.Id, 
+                Name = "Test Home",
+                HomeOwner = user,
+                HomeOwnerID = user.Id,
                 HomeBills = null,
                 HomeUsers = null,
                 Invitations = null,
@@ -69,7 +65,7 @@ namespace OurHome.UnitTests
 
             Home actualHome = await _unitOfWorkService.HomeService.GetAsync(home.ID);
 
-            List<HomeUser> actualHomeUsers = 
+            List<HomeUser> actualHomeUsers =
                 await _unitOfWorkService.HomeUserService.GetHomeUsersByHomeIDAsync(home.ID);
 
             // Assert
@@ -190,7 +186,7 @@ namespace OurHome.UnitTests
             // Arrange
             User sender = new();
             User receiver = new();
-            Home home = new() { Name = "Test Home", HomeOwner = sender};
+            Home home = new() { Name = "Test Home", HomeOwner = sender };
 
             Invitation invitation = new Invitation()
             {
@@ -217,7 +213,7 @@ namespace OurHome.UnitTests
             // Arrange
             User sender = new();
             User receiver = new();
-            Home home = new() { Name = "Test Home", HomeOwner = sender};
+            Home home = new() { Name = "Test Home", HomeOwner = sender };
 
             Invitation invitation = new Invitation()
             {
@@ -256,7 +252,7 @@ namespace OurHome.UnitTests
             // Arrange
             User sender = new();
             User receiver = new();
-            Home home = new() { Name = "Test Home", HomeOwner = sender};
+            Home home = new() { Name = "Test Home", HomeOwner = sender };
 
             Invitation invitation = new Invitation()
             {
@@ -282,7 +278,7 @@ namespace OurHome.UnitTests
             // Assert
             Assert.Equal("REJECTED", actualInvitation.Status);
             Assert.Empty(homeUsers);
-             
+
         }
     }
 }

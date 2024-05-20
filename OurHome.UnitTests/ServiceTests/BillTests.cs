@@ -1,8 +1,4 @@
-using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
-using OurHome.Models.Models;
-
-namespace OurHome.UnitTests
+namespace OurHome.UnitTests.ServiceTests
 {
     public class BillTests
     {
@@ -68,8 +64,8 @@ namespace OurHome.UnitTests
             await _unitOfWorkService.SaveAsync();
 
             List<BillPayorBill> actualBillPayors = await _unitOfWorkService.BillPayorBillService.GetAllAsync();
-            BillPayorBill billPayorBill = 
-                await _unitOfWorkService.BillPayorBillService.GetAsync(actualBillPayors[actualBillPayors.Count -1].ID);
+            BillPayorBill billPayorBill =
+                await _unitOfWorkService.BillPayorBillService.GetAsync(actualBillPayors[actualBillPayors.Count - 1].ID);
 
             // Assert
             Assert.Equal(bill.Price / billPayors.Count, billPayorBill.UserPrice);
@@ -150,11 +146,11 @@ namespace OurHome.UnitTests
             User user = new User();
             List<User> billCoOwners = new() { user, new() };
             Home home = new Home() { Name = "My Home", HomeOwner = user };
-            
-            Bill bill = new Bill() 
-            { 
-                BillName = "Bins", 
-                Price = 20M, 
+
+            Bill bill = new Bill()
+            {
+                BillName = "Bins",
+                Price = 20M,
                 BillOwner = user,
                 BillOwnerID = user.Id,
                 Note = "This is a note",
@@ -172,7 +168,7 @@ namespace OurHome.UnitTests
             await _unitOfWorkService.BillService.AddAsync(bill);
             var billPayorsCreated = await _unitOfWorkService.BillPayorBillService.AddAsync(billPayors, bill, billCoOwners);
             await _unitOfWorkService.SaveAsync();
-            
+
             decimal? expectedPrice = bill.Price / billCoOwners.Count;
             int expectedBillPayorsCreatedCount = billCoOwners.Count * billPayors.Count;
 
@@ -390,7 +386,7 @@ namespace OurHome.UnitTests
             Bill internet = new Bill() { BillName = "Bins", BillOwner = user, Home = home };
             Bill newHomeBill = new Bill() { BillName = "New Home Bill", BillOwner = user, Home = newHome };
 
-             // Act
+            // Act
             await _unitOfWorkService.BillService.AddAsync(bins);
             await _unitOfWorkService.BillService.AddAsync(electric);
             await _unitOfWorkService.BillService.AddAsync(internet);
@@ -474,11 +470,11 @@ namespace OurHome.UnitTests
             };
 
             List<BillCoOwner> billCoOwners = new List<BillCoOwner>()
-            { 
-                new() 
-                { 
-                    Bill = bill, 
-                    User = user, 
+            {
+                new()
+                {
+                    Bill = bill,
+                    User = user,
                     Price = bill.Price / 2
                 },
                 new()

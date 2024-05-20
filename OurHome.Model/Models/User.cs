@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OurHome.Model.Models;
 
 namespace OurHome.Models.Models
 {

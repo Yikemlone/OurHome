@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
 using OurHome.Models.Models;
 using OurHome.Shared.DTO;
 using System.Security.Claims;

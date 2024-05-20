@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
 using OurHome.Models.Models;
 using OurHome.Shared.DTO;
 
@@ -26,11 +25,11 @@ namespace OurHome.Server.Controllers
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet]
         [Route("all")]
-        public Task<List<Home>> GetAll()
+        public async Task<ActionResult<List<Home>>> GetAll()
         {
             // Need to get all the users homes here, not all the bills
             // Can used the User object that is with the Authorization 
-            throw new NotImplementedException();
+            return Ok();
         }
 
         /// <summary>

@@ -1,8 +1,4 @@
-using OurHome.DataAccess.Services.UnitOfWorkServices;
-using OurHome.Model.Models;
-using OurHome.Models.Models;
-
-namespace OurHome.UnitTests
+namespace OurHome.UnitTests.ServiceTests
 {
     public class UserTests
     {

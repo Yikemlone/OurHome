@@ -2,7 +2,6 @@
 using OurHome.DataAccess.Context;
 using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Models.Models;
-using OurHome.Server.Services.BillServices;
 
 namespace OurHome.DataAccess.Services.BillServices
 {

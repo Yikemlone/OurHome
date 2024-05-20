@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OurHome.DataAccess.Context;
 using OurHome.DataAccess.Services.RepositoryServices;
-using OurHome.Model.Models;
 using OurHome.Models.Models;
 
 namespace OurHome.DataAccess.Services.BillCoOwnerServices

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.Models.Models;
@@ -14,14 +13,11 @@ namespace OurHome.Server.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
 
-
-        public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager, IDataProtectionProvider dataProtectionProvider)
+        public AuthorizeController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _dataProtectionProvider = dataProtectionProvider;
         }
 
         [HttpPost]

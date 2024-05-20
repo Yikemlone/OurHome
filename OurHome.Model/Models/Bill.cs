@@ -1,5 +1,4 @@
-﻿using OurHome.Model.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OurHome.Models.Models
 {

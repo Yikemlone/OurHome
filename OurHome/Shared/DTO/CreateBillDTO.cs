@@ -1,5 +1,4 @@
-﻿using OurHome.Model.Models;
-using OurHome.Models.Models;
+﻿using OurHome.Models.Models;
 
 namespace OurHome.Shared.DTO
 {

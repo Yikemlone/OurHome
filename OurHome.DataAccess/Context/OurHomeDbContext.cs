@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OurHome.Model.Models;
+using OurHome.Models.Models;
 using Microsoft.Data.SqlClient;
 using System.Reflection.Emit;
 

@@ -1,7 +1,4 @@
-﻿
-using OurHome.Models.Models;
-
-namespace OurHome.Model.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// Keeps track of the invitations that are sent between users.

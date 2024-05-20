@@ -1,5 +1,4 @@
-﻿
-namespace OurHome.Models.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// This class represents a bill that a user has payed or is going to pay

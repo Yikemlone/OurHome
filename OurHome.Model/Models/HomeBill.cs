@@ -1,5 +1,4 @@
-﻿
-namespace OurHome.Model.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// Bills that are associated with a home that the users of the home can select from when creating a new bill.

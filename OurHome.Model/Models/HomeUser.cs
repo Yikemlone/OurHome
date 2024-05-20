@@ -1,6 +1,4 @@
-﻿using OurHome.Models.Models;
-
-namespace OurHome.Model.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// This keeps track of the users that are members of a home. Used for many to many relationship between users and homes.

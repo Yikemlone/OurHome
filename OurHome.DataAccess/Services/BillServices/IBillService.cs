@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OurHome.DataAccess.Services.RepositoryServices;
+﻿using OurHome.DataAccess.Services.RepositoryServices;
 using OurHome.Models.Models;
 
-namespace OurHome.Server.Services.BillServices
+namespace OurHome.DataAccess.Services.BillServices
 {
     public interface IBillService : IRepositoryService<Bill>
     {

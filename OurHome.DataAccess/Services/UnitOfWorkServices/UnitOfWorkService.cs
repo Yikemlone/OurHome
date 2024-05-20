@@ -7,7 +7,6 @@ using OurHome.DataAccess.Services.HomeServices;
 using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.DataAccess.Services.InvitationServices;
 using OurHome.DataAccess.Services.UserServices;
-using OurHome.Server.Services.BillServices;
 
 namespace OurHome.DataAccess.Services.UnitOfWorkServices
 {

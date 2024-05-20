@@ -1,7 +1,4 @@
-﻿
-using OurHome.Models.Models;
-
-namespace OurHome.Model.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// This class represents a home, keeps track of the home owner, the users in the home, the bills in the home, and the invitations to the home.

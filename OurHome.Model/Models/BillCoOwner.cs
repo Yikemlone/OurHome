@@ -1,8 +1,4 @@
-﻿
-using OurHome.Models.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace OurHome.Model.Models
+﻿namespace OurHome.Models.Models
 {
     /// <summary>
     /// Keeps track of the co-owners of a bill and the price that each co-owner payed.
