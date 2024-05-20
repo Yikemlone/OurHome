@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OurHome.Models.Models;
 
 namespace OurHome.Server.Controllers
 {
+    [Authorize("User")]
     [ApiController]
     [Route("/api/[controller]")]
     public class BillPayorController : ControllerBase
@@ -16,6 +18,8 @@ namespace OurHome.Server.Controllers
         [Route("all")]
         public Task<List<BillPayorBill>> GetAll()
         {
+            // Need to get all the users bills here, not all the bills
+            // Can used the User object that is with the Authorization 
             throw new NotImplementedException();
         }
 
