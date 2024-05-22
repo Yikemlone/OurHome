@@ -490,7 +490,7 @@ namespace OurHome.UnitTests.ServiceTests
             await _unitOfWorkService.SaveAsync();
 
             var actualCoOwnerBill = await _unitOfWorkService.BillCoOwnerService.GetAsync(bill.ID, coOwner.Id);
-            var actualCoOwnerBills = await _unitOfWorkService.BillCoOwnerService.GetAllBillCoOwnersByBillIDAsync(bill.ID);
+            var actualCoOwnerBills = await _unitOfWorkService.BillCoOwnerService.GetAllAsync(bill.ID);
 
             // Assert
             Assert.Equal(2, actualCoOwnerBills.Count);

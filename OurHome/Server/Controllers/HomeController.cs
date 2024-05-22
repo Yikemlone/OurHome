@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
 using OurHome.Models.Models;
 using OurHome.Shared.DTO;
+using System.Security.Claims;
 
 namespace OurHome.Server.Controllers
 {
@@ -12,20 +14,25 @@ namespace OurHome.Server.Controllers
     public class HomeController : ControllerBase
     {
         private readonly IUnitOfWorkService _unitOfWork;
+        private readonly UserManager<User> _userManager;
 
-        public HomeController(IUnitOfWorkService unitOfWorkService) 
+        public HomeController(IUnitOfWorkService unitOfWorkService, UserManager<User> userManager) 
         { 
             _unitOfWork = unitOfWorkService;
+            _userManager = userManager;
         }
 
         [HttpGet]
         [Route("all")]
         public async Task<ActionResult<List<Home>>> GetAll()
         {
-            // Need to get all the users homes here, not all the bills
-            // Can used the User object that is with the Authorization 
-            return Ok();
-            throw new NotImplementedException();
+            User? user = await _userManager.
+                FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (user == null) return NotFound();
+
+            var usersHomes = _unitOfWork.HomeService.GetAllAsync();
+            return Ok(usersHomes);
         }
 
 

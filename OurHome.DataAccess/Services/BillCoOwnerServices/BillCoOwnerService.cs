@@ -14,12 +14,12 @@ namespace OurHome.DataAccess.Services.BillCoOwnerServices
             _context = context;
         }
 
-        public async Task AddAsync(List<BillCoOwner> billCoOwners1)
+        public async Task AddAsync(List<BillCoOwner> billCoOwners)
         {
-            await _context.BillCoOwners.AddRangeAsync(billCoOwners1);
+            await _context.BillCoOwners.AddRangeAsync(billCoOwners);
         }
 
-        public async Task<List<BillCoOwner>> GetAllBillCoOwnersByBillIDAsync(int billID)
+        public async Task<List<BillCoOwner>> GetAllAsync(int billID)
         {
             var billCoOwners = await _context.BillCoOwners
                 .Where(b => b.BillID == billID)
@@ -28,25 +28,6 @@ namespace OurHome.DataAccess.Services.BillCoOwnerServices
             
             return billCoOwners;
         }
-
-        //public async Task<List<BillCoOwner>> AddAsync(List<User> coOwners, Bill bill)
-        //{
-        //    List<BillCoOwner> billCoOwners = new List<BillCoOwner>();
-
-        //    foreach (var coOwner in coOwners)
-        //    {
-        //        billCoOwners.Add(new()
-        //        {
-        //            Bill = bill,
-        //            Price = bill.Price / coOwners.Count,
-        //            User = coOwner,
-        //        });
-        //    }
-
-        //    await _context.BillCoOwners.AddRangeAsync(billCoOwners);
-
-        //    return billCoOwners;
-        //}
 
         public async Task<BillCoOwner> GetAsync(int billID, Guid userID)
         {
