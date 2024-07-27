@@ -26,12 +26,11 @@ namespace OurHome.Server.Controllers
         [Route("all")]
         public async Task<ActionResult<List<Home>>> GetAll()
         {
-            User? user = await _userManager.
-                FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = await GetUser();
 
             if (user == null) return NotFound();
 
-            var usersHomes = _unitOfWork.HomeService.GetAllAsync();
+            var usersHomes = _unitOfWork.HomeService.GetAllAsync(user);
             return Ok(usersHomes);
         }
 
@@ -53,8 +52,7 @@ namespace OurHome.Server.Controllers
 
             await _unitOfWork.HomeService.AddAsync(home);
             await _unitOfWork.SaveAsync();
-            //return Ok();
-            throw new NotImplementedException();
+            return Ok();
         }
 
         [HttpPost]
@@ -62,6 +60,13 @@ namespace OurHome.Server.Controllers
         public Task Update([FromBody] HomeDTO homeDTO) 
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<User> GetUser() 
+        {
+            User? user = await _userManager.
+                FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return user;
         }
 
     }
