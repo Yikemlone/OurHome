@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace OurHome.Server.Controllers
 {
-    //[Authorize("User")]
+    [Authorize("User")]
     [ApiController]
     [Route("/api/[controller]")]
     public class HomeController : ControllerBase
@@ -34,7 +34,6 @@ namespace OurHome.Server.Controllers
             return Ok(usersHomes);
         }
 
-
         [HttpGet]
         [Route("{ID}")]
         public Task<Home> Get(int ID)
@@ -52,18 +51,30 @@ namespace OurHome.Server.Controllers
 
             await _unitOfWork.HomeService.AddAsync(home);
             await _unitOfWork.SaveAsync();
-            return Ok();
+
+            return Created("/api/home/add", homeDTO);
         }
 
         [HttpPost]
-        [Route("/update")]
+        [Route("update")]
         public Task Update([FromBody] HomeDTO homeDTO) 
         {
             throw new NotImplementedException();
         }
 
-        public async Task<User> GetUser() 
+        [HttpPost]
+        [Route("delete/{ID}")]
+        public Task Delete(int ID)
         {
+            throw new NotImplementedException();
+        }
+
+        public virtual async Task<User> GetUser() 
+        {
+            // Good luck
+            // Can't mock static classes or methods, so this is going to be a pain
+            // May need to refactor the code to make it more testable
+            // or 
             User? user = await _userManager.
                 FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             return user;
