@@ -36,7 +36,7 @@ namespace OurHome.Server.Controllers
 
         [HttpGet]
         [Route("{ID}")]
-        public Task<Home> Get(int ID)
+        public Task<ActionResult<Home>> Get(int ID)
         {
             throw new NotImplementedException();
         }
@@ -45,6 +45,9 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] HomeDTO homeDTO)
         {
+            if(homeDTO == null || homeDTO.Name == string.Empty || homeDTO.Name == null)
+                return BadRequest("Invalid data");
+
             Home home = new Home();
             home.Name = homeDTO.Name;
             home.HomeOwnerID = homeDTO.HomeOwnerID;
@@ -59,6 +62,7 @@ namespace OurHome.Server.Controllers
         [Route("update")]
         public Task Update([FromBody] HomeDTO homeDTO) 
         {
+
             throw new NotImplementedException();
         }
 
@@ -71,12 +75,8 @@ namespace OurHome.Server.Controllers
 
         public virtual async Task<User> GetUser() 
         {
-            // Good luck
-            // Can't mock static classes or methods, so this is going to be a pain
-            // May need to refactor the code to make it more testable
-            // or 
-            User? user = await _userManager.
-                FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User? user = await _userManager.FindByIdAsync(userID);
             return user;
         }
 

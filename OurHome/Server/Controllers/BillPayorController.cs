@@ -43,7 +43,7 @@ namespace OurHome.Server.Controllers
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpPost]
-        [Route("/update")]
+        [Route("update")]
         public Task Update([FromBody] BillPayorBill payorBill) 
         {
             throw new NotImplementedException();

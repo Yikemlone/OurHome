@@ -16,34 +16,41 @@ namespace OurHome.UnitTests.ControllerTests
 {
     public class HomeControllerTests
     {
-        private Mock<IUnitOfWorkService> MockUnitOfWorkService;
-        private Mock<UserManager<User>> MockUserManager;
-        private Mock<IUserStore<User>> MockUserStore;
-        private Mock<HomeController> MockHomeController;
+        private Mock<IUnitOfWorkService> _mockUnitOfWorkService;
+        private Mock<UserManager<User>> _mockUserManager;
+        private Mock<IUserStore<User>> _mockUserStore;
+        private Mock<ControllerContext> _mockControllerContext;
 
         private HomeController _homeController;
 
-        private readonly User user = new User() { UserName = "Thomas"};
+        private readonly User _user = new User() { UserName = "Thomas"};
 
         public HomeControllerTests()
         {
-            MockUnitOfWorkService = new Mock<IUnitOfWorkService>();
-            MockUserStore = new Mock<IUserStore<User>>();
-            MockUserManager = new Mock<UserManager<User>>(MockUserStore.Object, null, null, null, null, null, null, null, null);
+            _mockUnitOfWorkService = new Mock<IUnitOfWorkService>();
 
-            MockUserManager.Setup(m => m.DeleteAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
-            MockUserManager.Setup(m => m.CreateAsync(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
-            MockUserManager.Setup(m => m.UpdateAsync(It.IsAny<User>())).ReturnsAsync(IdentityResult.Success);
-            MockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _mockUserStore = new Mock<IUserStore<User>>();
+            _mockUserManager = new Mock<UserManager<User>>(_mockUserStore.Object, null, null, null, null, null, null, null, null);
+            _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
 
-            MockHomeController = new Mock<HomeController>();
+            _mockControllerContext = new Mock<ControllerContext>();
 
-            _homeController = new HomeController(MockUnitOfWorkService.Object, MockUserManager.Object);
+            HttpContext httpContext = new DefaultHttpContext() 
+            { 
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, "this-is-a-valid-id"),
+                    new Claim(ClaimTypes.Name, "Thomas"),
+                }))
+            };
+
+            _mockControllerContext.Object.HttpContext = httpContext;
+            _homeController = new HomeController(_mockUnitOfWorkService.Object, _mockUserManager.Object);
+            _homeController.ControllerContext = _mockControllerContext.Object;
         }
 
-
         [Fact]
-        public async Task AddValidHome_ShouldReturnStatus201() 
+        public async Task Add_GivenValidData_ShouldReturnStatus201() 
         { 
             // Arrange
             HomeDTO homeDTO = new();
@@ -56,7 +63,7 @@ namespace OurHome.UnitTests.ControllerTests
 
             Task<Home> homeTask = Task.FromResult(home);
 
-            MockUnitOfWorkService.Setup(e => e.HomeService.AddAsync(home)).Returns(homeTask);
+            _mockUnitOfWorkService.Setup(e => e.HomeService.AddAsync(home)).Returns(homeTask);
 
             // Act
             var result = await _homeController.Add(homeDTO);
@@ -66,24 +73,32 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(201, objectResult.StatusCode);
         }
 
-
         [Fact]
-        public async Task GetAll_ShouldReturnStatus200()
+        public async Task Add_GivenInvalidData_ShouldReturnStatus400()
         {
             // Arrange
-            Home home = new();
-            home.Name = "Test";
-            home.HomeOwnerID = new Guid();
-            List<Home> homes = new()
-            {
-                home
-            };
+            HomeDTO homeDTO = new();
+            homeDTO.Name = null;
+            homeDTO.HomeOwnerID = new Guid();
+
+            // Act
+            var result = await _homeController.Add(homeDTO);
+            BadRequestObjectResult? objectResult = result as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal(400, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetAll_WhenGettingAllHomes_ShouldReturnStatus200()
+        {
+            // Arrange
+            Home home = new() { Name = "Test", HomeOwnerID = new Guid()};
+            List<Home> homes = new(){ home };
 
             Task<List<Home>> homesTask = Task.FromResult(homes);
-            Task<User> userTask = Task.FromResult(user);
-
-            MockUnitOfWorkService.Setup(e => e.HomeService.GetAllAsync(It.IsAny<User>())).Returns(homesTask);
-            MockHomeController.Setup(m => m.GetUser()).Returns(userTask);
+            
+            _mockUnitOfWorkService.Setup(e => e.HomeService.GetAllAsync(It.IsAny<User>())).Returns(homesTask);
 
             // Act
             ActionResult<List<Home>> result = await _homeController.GetAll();
@@ -93,16 +108,46 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(200, objectResult.StatusCode);
         }
 
+
+        [Fact]
+        public async Task Get_WhenGettingHomeByID_ShouldReturnStatus200()
+        {
+            // Arrange
+            Home home = new() { Name = "Test", HomeOwnerID = new Guid()};
+
+            Task<Home> homeTask = Task.FromResult(home);
+
+            _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
+
+            // Act
+            ActionResult<Home> result = await _homeController.Get(1);
+            OkObjectResult? objectResult = result.Result as OkObjectResult;
+
+            // Assert
+            Assert.Equal(200, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task Get_WhenGettingInvalidHomeID_ShouldReturnStatus404()
+        {
+            // Arrange
+            Task<Home> homeTask = Task.FromResult<Home>(null);
+
+            _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
+
+            // Act
+            ActionResult<Home> result = await _homeController.Get(1);
+            NotFoundResult? objectResult = result.Result as NotFoundResult;
+
+            // Assert
+            Assert.Equal(404, objectResult.StatusCode);
+        }
+        
+
         // TODO 
-        // - Add test for get all but 404
-        // - Add test for for get 200
-        // - Add test for get by ID but 404
-        // - Add test for add but 400 bad request
         // - Add test for update but 200 response
         // - Add test for update but 400 bad request
         // - Add test for delete but 204 response
         // - Add test for delete but 403 unauthorized
     }
-
-
 }
