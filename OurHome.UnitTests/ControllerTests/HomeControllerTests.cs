@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -7,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.Server.Controllers;
 using OurHome.Shared.DTO;
 using System.Net.Sockets;
@@ -17,13 +19,15 @@ namespace OurHome.UnitTests.ControllerTests
     public class HomeControllerTests
     {
         private Mock<IUnitOfWorkService> _mockUnitOfWorkService;
+
         private Mock<UserManager<User>> _mockUserManager;
         private Mock<IUserStore<User>> _mockUserStore;
         private Mock<ControllerContext> _mockControllerContext;
 
         private HomeController _homeController;
 
-        private readonly User _user = new User() { UserName = "Thomas"};
+        private readonly User _user = new User() { UserName = "Jerry"};
+        private readonly User _user2 = null;
 
         public HomeControllerTests()
         {
@@ -31,7 +35,6 @@ namespace OurHome.UnitTests.ControllerTests
 
             _mockUserStore = new Mock<IUserStore<User>>();
             _mockUserManager = new Mock<UserManager<User>>(_mockUserStore.Object, null, null, null, null, null, null, null, null);
-            _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
 
             _mockControllerContext = new Mock<ControllerContext>();
 
@@ -97,7 +100,8 @@ namespace OurHome.UnitTests.ControllerTests
             List<Home> homes = new(){ home };
 
             Task<List<Home>> homesTask = Task.FromResult(homes);
-            
+
+            _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
             _mockUnitOfWorkService.Setup(e => e.HomeService.GetAllAsync(It.IsAny<User>())).Returns(homesTask);
 
             // Act
@@ -117,7 +121,10 @@ namespace OurHome.UnitTests.ControllerTests
 
             Task<Home> homeTask = Task.FromResult(home);
 
+            _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
             _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
 
             // Act
             ActionResult<Home> result = await _homeController.Get(1);
@@ -128,11 +135,57 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
+        public async Task Get_WhenGettingHomeByID_ShouldReturnStatus401()
+        {
+            // Arrange
+            Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
+
+            Task<Home> homeTask = Task.FromResult(home);
+
+            _mockUserManager.Setup(m => m.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(false));
+
+            // Act
+            ActionResult<Home> result = await _homeController.Get(1);
+            UnauthorizedResult? objectResult = result.Result as UnauthorizedResult;
+
+            // Assert
+            Assert.Equal(401, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task Get_WhenGettingHomeByID_ShouldReturnStatus403()
+        {
+            // Arrange
+            Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
+
+            Task<Home> homeTask = Task.FromResult(home);
+
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user2);
+            _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(false));
+
+            // Act
+            ActionResult<Home> result = await _homeController.Get(1);
+            StatusCodeResult? objectResult = result.Result as StatusCodeResult;
+
+            // Assert
+            Assert.Equal(403, objectResult.StatusCode);
+        }
+
+
+        [Fact]
         public async Task Get_WhenGettingInvalidHomeID_ShouldReturnStatus404()
         {
             // Arrange
             Task<Home> homeTask = Task.FromResult<Home>(null);
-
+             
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockUnitOfWorkService.Setup(e => e.HomeService.GetAsync(It.IsAny<int>())).Returns(homeTask);
 
             // Act
@@ -142,7 +195,6 @@ namespace OurHome.UnitTests.ControllerTests
             // Assert
             Assert.Equal(404, objectResult.StatusCode);
         }
-        
 
         // TODO 
         // - Add test for update but 200 response

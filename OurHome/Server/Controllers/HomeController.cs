@@ -36,9 +36,22 @@ namespace OurHome.Server.Controllers
 
         [HttpGet]
         [Route("{ID}")]
-        public Task<ActionResult<Home>> Get(int ID)
+        public async Task<ActionResult<Home>> Get(int ID)
         {
-            throw new NotImplementedException();
+            User user = await GetUser();
+
+            if (user == null) return new StatusCodeResult(403);
+            
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, ID);
+
+            if (!isUserInHome) return Unauthorized();
+
+            Home home = await _unitOfWork.HomeService.GetAsync(ID);
+
+            if (home == null) return NotFound();
+
+            return Ok(home);
         }
 
         [HttpPost]
@@ -73,7 +86,7 @@ namespace OurHome.Server.Controllers
             throw new NotImplementedException();
         }
 
-        public virtual async Task<User> GetUser() 
+        public virtual async Task<User?> GetUser() 
         {
             string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User? user = await _userManager.FindByIdAsync(userID);
