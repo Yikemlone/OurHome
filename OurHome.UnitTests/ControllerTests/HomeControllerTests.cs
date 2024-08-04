@@ -1,17 +1,10 @@
 ﻿using AutoFixture;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
-using OurHome.DataAccess.Services.HomeUserServices;
 using OurHome.Server.Controllers;
 using OurHome.Shared.DTO;
-using System.Net.Sockets;
 using System.Security.Claims;
 
 namespace OurHome.UnitTests.ControllerTests
@@ -262,9 +255,24 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(204, objectResult.StatusCode);
         }
 
+        [Fact]
+        public async Task Delete_WhenDeletingHome_ShouldReturnStatus401()
+        {
+            // Arrange
+            Home home = new();
+            home.Name = "TestHome";
+            home.HomeOwnerID = new Guid();
 
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                           .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(false));
 
-        // TODO 
-        // - Add test for delete but 403 unauthorized
+            // Act
+            var result = await _homeController.Delete(1);
+            UnauthorizedResult? objectResult = result as UnauthorizedResult;
+
+            // Assert
+            Assert.Equal(401, objectResult.StatusCode);
+        }
     }
 }

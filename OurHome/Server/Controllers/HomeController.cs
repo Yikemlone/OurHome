@@ -103,7 +103,6 @@ namespace OurHome.Server.Controllers
         [Route("delete/{ID}")]
         public async Task<ActionResult> Delete(int ID)
         {
-            // Need to make sure the user is the owner of the home
             var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
             var user = await GetUser();
 
@@ -127,20 +126,20 @@ namespace OurHome.Server.Controllers
             return user;
         }
 
-        public virtual async Task<bool> CheckAdminOrOwner(User user, int homeID)
-        {
-            var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
+        //public virtual async Task<bool> CheckAdminOrOwner(User user, int homeID)
+        //{
+        //    var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
 
-            bool isUserInHome = await _unitOfWork.HomeUserService
-                .IsUserInHomeAsync(user, homeID);
+        //    bool isUserInHome = await _unitOfWork.HomeUserService
+        //        .IsUserInHomeAsync(user, homeID);
 
-            if (!isUserInHome) return false;
+        //    if (!isUserInHome) return false;
 
-            if (!exposedClaims.ContainsKey("HomeOwner") || !exposedClaims.ContainsKey("HomeAdmin"))
-                return false;
+        //    if (!exposedClaims.ContainsKey("HomeOwner") || !exposedClaims.ContainsKey("HomeAdmin"))
+        //        return false;
 
-            return true;
-        }   
+        //    return true;
+        //}   
 
     }
 }
