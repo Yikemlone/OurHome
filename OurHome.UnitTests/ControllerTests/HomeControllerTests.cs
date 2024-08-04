@@ -42,8 +42,10 @@ namespace OurHome.UnitTests.ControllerTests
             { 
                 User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, "this-is-a-valid-id"),
-                    new Claim(ClaimTypes.Name, "Thomas"),
+                    new Claim("ID", "this-is-a-valid-id"),
+                    new Claim("Name", "Thomas"),
+                    new Claim("User", "User"),
+                    new Claim("HomeAdmin", "Admin")
                 }))
             };
 
@@ -196,10 +198,73 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(404, objectResult.StatusCode);
         }
 
+        [Fact]
+        public async Task Update_WhenUpdatingHome_ShouldReturnStatus200()
+        {
+            // Arrange
+            HomeDTO homeDTO = new();
+            homeDTO.Name = "TestHome";
+            homeDTO.HomeOwnerID = new Guid();
+
+            Home home = new();
+            home.Name = homeDTO.Name;
+            home.HomeOwnerID = homeDTO.HomeOwnerID;
+
+
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            _mockUnitOfWorkService.Setup(e => e.HomeService.Update(home)).Verifiable();
+
+            // Act
+            var result = await _homeController.Update(homeDTO);
+            OkObjectResult? objectResult = result as OkObjectResult;
+
+            // Assert
+            Assert.Equal(200, objectResult.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task Update_WhenUpdatingHome_ShouldReturnStatus400()
+        {
+            // Arrange
+            HomeDTO homeDTO = new();
+            homeDTO.Name = null;
+            homeDTO.HomeOwnerID = new Guid();
+
+            // Act
+            var result = await _homeController.Update(homeDTO);
+            BadRequestObjectResult? objectResult = result as BadRequestObjectResult;
+
+            // Assert
+            Assert.Equal(400, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_WhenDeletingHome_ShouldReturnStatus204()
+        {
+            // Arrange
+            Home home = new();
+            home.Name = "TestHome";
+            home.HomeOwnerID = new Guid();
+
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            _mockUnitOfWorkService.Setup(e => e.HomeService.Delete(home)).Verifiable();
+
+            // Act
+            var result = await _homeController.Delete(1);
+            NoContentResult? objectResult = result as NoContentResult;
+
+            // Assert
+            Assert.Equal(204, objectResult.StatusCode);
+        }
+
+
+
         // TODO 
-        // - Add test for update but 200 response
-        // - Add test for update but 400 bad request
-        // - Add test for delete but 204 response
         // - Add test for delete but 403 unauthorized
     }
 }

@@ -28,7 +28,7 @@ namespace OurHome.Server.Controllers
         {
             var user = await GetUser();
 
-            if (user == null) return NotFound();
+            if (user == null) return new StatusCodeResult(403);
 
             var usersHomes = _unitOfWork.HomeService.GetAllAsync(user);
             return Ok(usersHomes);
@@ -73,17 +73,51 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("update")]
-        public Task Update([FromBody] HomeDTO homeDTO) 
+        public async Task<ActionResult> Update([FromBody] HomeDTO homeDTO) 
         {
+            if (homeDTO == null || homeDTO.Name == string.Empty || homeDTO.Name == null)
+                return BadRequest("Invalid data");
 
-            throw new NotImplementedException();
+            var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
+            var user = await GetUser();
+
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, homeDTO.HomeID);
+
+            if (!isUserInHome) return Unauthorized();
+
+            if (!exposedClaims.ContainsKey("HomeOwner") && !exposedClaims.ContainsKey("HomeAdmin"))
+                return Unauthorized();
+
+            Home home = new Home();
+            home.Name = homeDTO.Name;
+            home.HomeOwnerID = homeDTO.HomeOwnerID;
+
+            _unitOfWork.HomeService.Update(home);
+            await _unitOfWork.SaveAsync();
+
+            return Ok(homeDTO);
         }
 
         [HttpPost]
         [Route("delete/{ID}")]
-        public Task Delete(int ID)
+        public async Task<ActionResult> Delete(int ID)
         {
-            throw new NotImplementedException();
+            // Need to make sure the user is the owner of the home
+            var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
+            var user = await GetUser();
+
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, ID);
+
+            if (!isUserInHome) return Unauthorized();
+
+            if (!exposedClaims.ContainsKey("HomeOwner") && !exposedClaims.ContainsKey("HomeAdmin"))
+                return Unauthorized();
+
+            Home home = await _unitOfWork.HomeService.GetAsync(ID);
+            _unitOfWork.HomeService.Delete(home);
+            return NoContent();
         }
 
         public virtual async Task<User?> GetUser() 
@@ -92,6 +126,21 @@ namespace OurHome.Server.Controllers
             User? user = await _userManager.FindByIdAsync(userID);
             return user;
         }
+
+        public virtual async Task<bool> CheckAdminOrOwner(User user, int homeID)
+        {
+            var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
+
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, homeID);
+
+            if (!isUserInHome) return false;
+
+            if (!exposedClaims.ContainsKey("HomeOwner") || !exposedClaims.ContainsKey("HomeAdmin"))
+                return false;
+
+            return true;
+        }   
 
     }
 }
