@@ -10,12 +10,12 @@ var builder = WebApplication.CreateBuilder(args);
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
 // Db Context
-builder.Services.AddDbContext<OurHomeDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
-);
-
 builder.Services.AddDbContext<OurHomeContainerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ContainerConnection"))
+);
+
+builder.Services.AddDbContext<OurHomeDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
 );
 
 // Custom Services
