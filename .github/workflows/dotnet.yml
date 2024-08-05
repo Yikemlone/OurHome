@@ -37,9 +37,7 @@ jobs:
 
     - name: Database Migrations
       run: |
-          dotnet tool install --global dotnet-ef
-          dotnet tool restore
-          dotnet ef migrations add Initial -p OurHome.DataAccess -s OurHome.Server --context OurHomeContainerDbContext
+          dotnet ef migrations add "$(date +'%m%d%y')" -p OurHome.DataAccess -s OurHome.Server --context OurHomeContainerDbContext
           dotnet ef database update -s OurHome.Server --context OurHomeContainerDbContext
 
     - name: Test
