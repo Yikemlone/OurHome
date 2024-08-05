@@ -2,13 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OurHome.Models.Models;
-using Microsoft.Data.SqlClient;
-using System.Reflection.Emit;
 
 namespace OurHome.DataAccess.Context
 {
-    public class OurHomeDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+    public class OurHomeContainerDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         public DbSet<Bill> Bills { get; set; }
         public DbSet<BillCoOwner> BillCoOwners { get; set; }
@@ -18,7 +15,7 @@ namespace OurHome.DataAccess.Context
         public DbSet<Invitation> Invations { get; set; }
         public DbSet<BillPayorBill> BillPayors { get; set; }
 
-        public OurHomeDbContext(DbContextOptions<OurHomeDbContext> options) : base(options)
+        public OurHomeContainerDbContext(DbContextOptions<OurHomeContainerDbContext> options) : base(options)
         {
         }
 
