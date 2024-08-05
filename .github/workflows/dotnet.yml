@@ -20,15 +20,27 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
+
     - name: Restore dependencies
       run: dotnet restore
+
     - name: Build
       run: dotnet build --no-restore
+
     - name: Set SQL Database
       run: docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=MyPass@word" -e "MSSQL_PID=Developer" -e "MSSQL_USER=SA" -p 1433:1433 -d --name=OurHomeCDB mcr.microsoft.com/mssql/server
-    - name: Add Migrations
-      run: dotnet ef migrations add -p OurHome.DataAccess -s OurHome.Server
-    - name: Update Database
-      run: dotnet ef database update -s OurHome.Server
+  
+    - name: Dotnet EF Tool Install
+      run: |
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+
+    - name: Database Migrations
+      run: |
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+          dotnet ef migrations add Initial -p OurHome.DataAccess -s OurHome.Server --context OurHomeContainerDbContext
+          dotnet ef database update -s OurHome.Server --context OurHomeContainerDbContext
+
     - name: Test
       run: dotnet test --no-build --verbosity normal

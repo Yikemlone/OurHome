@@ -14,6 +14,10 @@ builder.Services.AddDbContext<OurHomeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
 );
 
+builder.Services.AddDbContext<OurHomeContainerDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ContainerConnection"))
+);
+
 // Custom Services
 builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 
