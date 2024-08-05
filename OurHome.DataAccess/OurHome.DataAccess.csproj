@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OurHome.Model\OurHome.Model.csproj" />
-    <ProjectReference Include="..\OurHome\Shared\OurHome.Shared.csproj" />
+    <ProjectReference Include="..\OurHome.Shared\OurHome.Shared.csproj" />
   </ItemGroup>
 
 

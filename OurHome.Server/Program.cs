@@ -25,6 +25,7 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("HomeOwner", policy => policy.RequireClaim("HomeOwner", "homeOwner"));
     options.AddPolicy("HomeUser", policy => policy.RequireClaim("HomeUser", "homeUser"));
+    options.AddPolicy("HomeAdmin", policy => policy.RequireClaim("HomeAdmin", "homeAdmin"));
     options.AddPolicy("User", policy => policy.RequireClaim("User", "user"));
 });
 

@@ -21,7 +21,7 @@ namespace OurHome.DataAccess.Services.BillCoOwnerServices
         /// </summary>
         /// <param name="billID"></param>
         /// <returns></returns>
-        Task<List<BillCoOwner>> GetAllBillCoOwnersByBillIDAsync(int billID);
+        Task<List<BillCoOwner>> GetAllAsync(int billID);
 
         /// <summary>
         /// Returns a Co-owner of a bill by compond key
