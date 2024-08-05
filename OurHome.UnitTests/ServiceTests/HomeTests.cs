@@ -7,7 +7,7 @@ namespace OurHome.UnitTests.ServiceTests
         public HomeTests()
         {
             DbContextOptions<OurHomeDbContext> options = new DbContextOptionsBuilder<OurHomeDbContext>()
-                .UseSqlServer("Server=(local)\\SQLEXPRESS;Database=OurHomeDBTest;TrustServerCertificate=True;MultipleActiveResultSets=True;Trusted_Connection=True;")
+                .UseSqlServer("Data Source=localhost; Initial Catalog=Developer; User Id=SA; Password=MyPass@word")
                 .Options;
 
             OurHomeDbContext context = new OurHomeDbContext(options);

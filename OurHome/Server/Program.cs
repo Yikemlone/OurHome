@@ -11,7 +11,7 @@ StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configurat
 
 // Db Context
 builder.Services.AddDbContext<OurHomeDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ContainerConnection"))
 );
 
 // Custom Services
