@@ -26,7 +26,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Set SQL Database
       run: docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=MyPass@word" -e "MSSQL_PID=Developer" -e "MSSQL_USER=SA" -p 1433:1433 -d --name=OurHomeCDB mcr.microsoft.com/mssql/server
-    - name: Run Migrations
-      run: dotnet ef database update --project OurHome.Infrastructure/OurHome.Infrastructure.csproj --startup-project OurHome.Web/OurHome.Web.csproj --context OurHomeDbContext
+    - name: Add Migrations
+      run: dotnet ef migrations add -p OurHome.DataAccess -s OurHome.Server
+    - name: Update Database
+      run: dotnet ef database update -s OurHome.Server
     - name: Test
       run: dotnet test --no-build --verbosity normal
