@@ -26,5 +26,8 @@ namespace OurHome.DataAccess.Services.HomeUserServices
         /// <param name="home"></param>
         /// <returns></returns>
         Task AddHomeOwnerAsync(User user, Home home);
+
+
+        Task<bool> IsUserInHomeAsync(User user, int homeID);
     }
 }

@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OurHome.DataAccess\OurHome.DataAccess.csproj" />
-    <ProjectReference Include="..\OurHome\Server\OurHome.Server.csproj" />
+    <ProjectReference Include="..\OurHome.Server\OurHome.Server.csproj" />
   </ItemGroup>
 
 </Project>

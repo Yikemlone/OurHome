@@ -47,5 +47,15 @@ namespace OurHome.DataAccess.Services.HomeUserServices
                 });
             }
         }
+
+        public async Task<bool> IsUserInHomeAsync(User user, int homeID)
+        {
+            var homeUser = await _context.HomeUsers
+                .Where(h => h.HomeID == homeID && h.UserID == user.Id)
+                .Select(m => m)
+                .FirstOrDefaultAsync();
+
+            return homeUser != null;
+        }   
     }
 }
