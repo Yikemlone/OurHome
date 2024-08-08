@@ -17,6 +17,7 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.14" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.14" />
 		<PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="6.0.14" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
 	</ItemGroup>
 
@@ -25,6 +26,12 @@
 		<ProjectReference Include="..\OurHome.Client\OurHome.Client.csproj" />
 		<ProjectReference Include="..\OurHome.Shared\OurHome.Shared.csproj" />
 	</ItemGroup>
-
-
+	
+	<PropertyGroup>
+	   <DockerfileFile>Dockerfile</DockerfileFile>
+	   <UserSecretsId>cc882a02-3e72-49ee-ad36-3c0b80a3022d</UserSecretsId>
+	   <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	   <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+	</PropertyGroup>
+	 
 </Project>
