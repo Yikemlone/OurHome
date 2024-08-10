@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace OurHome.Server.Controllers
 {
-    //[Authorize("User")]
+    [Authorize(Policy = "User")]
     [ApiController]
     [Route("/api/[controller]")]
     public class BillController : ControllerBase
@@ -32,7 +32,9 @@ namespace OurHome.Server.Controllers
         {
             User? user = await _userManager.
                 FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return NotFound();
+
+            if (user == null) return Unauthorized(); // 403?
+
             List<Bill> bills = await _unitOfWork.BillService.GetAllAsync(user);
             return Ok(bills);
         }
@@ -60,9 +62,17 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
+            if (createBillDTO == null || createBillDTO.BillPayors == null ||
+                createBillDTO.Bill == null) return BadRequest("Invalid bill parameters.");
+
             Bill bill = createBillDTO.Bill;
             List<User> billPayors = createBillDTO.BillPayors;
             List<BillCoOwner>? billCoOwners = createBillDTO.BillCoOwners;
+
+            User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, bill.HomeID);
 
             await _unitOfWork.BillService.AddAsync(bill);
 
@@ -83,10 +93,10 @@ namespace OurHome.Server.Controllers
                 await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
             }
 
-            // Add and if here to send and error message if the transaction fails
+            // Add an if here to send and error message if the transaction fails
             await _unitOfWork.SaveAsync();
 
-            return Ok();
+            return Ok(createBillDTO);
         }
 
         [HttpPost]
