@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -151,7 +150,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Get_WhenGettingHomeByID_ShouldReturnStatus403()
+        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus403()
         {
             // Arrange
             Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
@@ -192,7 +191,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Update_WhenUpdatingHome_ShouldReturnStatus200()
+        public async Task Update_WhenUpdatingHomeAsAdmin_ShouldReturnStatus200()
         {
             // Arrange
             HomeDTO homeDTO = new();
@@ -217,9 +216,46 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(200, objectResult.StatusCode);
         }
 
+        [Fact]
+        public async Task Update_WhenUpdatingHomeAsHomeOwner_ShouldReturnStatus200()
+        {
+            // Arrange
+            HomeDTO homeDTO = new();
+            homeDTO.Name = "TestHome";
+            homeDTO.HomeOwnerID = new Guid();
+
+            Home home = new();
+            home.Name = homeDTO.Name;
+            home.HomeOwnerID = homeDTO.HomeOwnerID;
+
+
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
+            _mockUnitOfWorkService.Setup(e => e.HomeService.Update(home)).Verifiable();
+
+
+            HttpContext httpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("HomeOwner", "homeOwner")
+                }))
+            };
+
+            _mockControllerContext.Object.HttpContext = httpContext;
+
+            // Act
+            var result = await _homeController.Update(homeDTO);
+            OkObjectResult? objectResult = result as OkObjectResult;
+
+            // Assert
+            Assert.Equal(200, objectResult.StatusCode);
+        }
+
 
         [Fact]
-        public async Task Update_WhenUpdatingHome_ShouldReturnStatus400()
+        public async Task Update_WhenUpdatingHomeWithInvalidData_ShouldReturnStatus400()
         {
             // Arrange
             HomeDTO homeDTO = new();
@@ -235,7 +271,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Delete_WhenDeletingHome_ShouldReturnStatus204()
+        public async Task Delete_WhenDeletingHomeAsHomeOwner_ShouldReturnStatus204()
         {
             // Arrange
             Home home = new();
@@ -247,6 +283,16 @@ namespace OurHome.UnitTests.ControllerTests
                 .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockUnitOfWorkService.Setup(e => e.HomeService.Delete(home)).Verifiable();
 
+            HttpContext httpContext = new DefaultHttpContext()
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("HomeOwner", "homeOwner")
+                }))
+            };
+
+            _mockControllerContext.Object.HttpContext = httpContext;
+
             // Act
             var result = await _homeController.Delete(1);
             NoContentResult? objectResult = result as NoContentResult;
@@ -255,8 +301,9 @@ namespace OurHome.UnitTests.ControllerTests
             Assert.Equal(204, objectResult.StatusCode);
         }
 
+
         [Fact]
-        public async Task Delete_WhenDeletingHome_ShouldReturnStatus401()
+        public async Task Delete_WhenDeletingHomeWhileNotBeingInIt_ShouldReturnStatus401()
         {
             // Arrange
             Home home = new();
@@ -267,6 +314,25 @@ namespace OurHome.UnitTests.ControllerTests
             _mockUnitOfWorkService.Setup(e => e.HomeUserService
                            .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(false));
 
+            // Act
+            var result = await _homeController.Delete(1);
+            UnauthorizedResult? objectResult = result as UnauthorizedResult;
+
+            // Assert
+            Assert.Equal(401, objectResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_WhenDeletingHomeAsAdmin_ShouldReturnStatus401()
+        {
+            // Arrange
+            Home home = new();
+            home.Name = "TestHome";
+            home.HomeOwnerID = new Guid();
+
+            _mockUserManager.Setup(e => e.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_user2);
+            _mockUnitOfWorkService.Setup(e => e.HomeUserService
+                           .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(false));
             // Act
             var result = await _homeController.Delete(1);
             UnauthorizedResult? objectResult = result as UnauthorizedResult;

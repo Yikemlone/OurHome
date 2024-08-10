@@ -59,7 +59,7 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult> Add([FromBody] HomeDTO homeDTO)
         {
             if(homeDTO == null || homeDTO.Name == string.Empty || homeDTO.Name == null)
-                return BadRequest("Invalid data");
+                return BadRequest("Invalid home parameters.");
 
             Home home = new Home();
             home.Name = homeDTO.Name;
@@ -76,7 +76,7 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult> Update([FromBody] HomeDTO homeDTO) 
         {
             if (homeDTO == null || homeDTO.Name == string.Empty || homeDTO.Name == null)
-                return BadRequest("Invalid data");
+                return BadRequest("Invalid home parameters.");
 
             var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
             var user = await GetUser();
@@ -111,11 +111,13 @@ namespace OurHome.Server.Controllers
 
             if (!isUserInHome) return Unauthorized();
 
-            if (!exposedClaims.ContainsKey("HomeOwner") && !exposedClaims.ContainsKey("HomeAdmin"))
+            if (!exposedClaims.ContainsKey("HomeOwner"))
                 return Unauthorized();
 
             Home home = await _unitOfWork.HomeService.GetAsync(ID);
             _unitOfWork.HomeService.Delete(home);
+            await _unitOfWork.SaveAsync();
+
             return NoContent();
         }
 
