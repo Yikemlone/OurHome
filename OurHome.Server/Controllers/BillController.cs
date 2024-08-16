@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
@@ -15,11 +16,13 @@ namespace OurHome.Server.Controllers
     {
         IUnitOfWorkService _unitOfWork;
         private readonly UserManager<User> _userManager;
+        IMapper _mapper;
 
-        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager)
+        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -91,7 +94,7 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("update")]
-        public async Task<ActionResult> Update([FromBody] BillDTO bill) 
+        public async Task<ActionResult> Update([FromBody] Bill bill) 
         {
             _unitOfWork.BillService.Update(bill);
             return Ok();

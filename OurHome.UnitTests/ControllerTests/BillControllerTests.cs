@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace OurHome.UnitTests.ControllerTests
         private Mock<UserManager<User>> _mockUserManager;
         private Mock<IUserStore<User>> _mockUserStore;
         private Mock<ControllerContext> _mockControllerContext;
-
+        private Mock<IMapper> _mockMapper;
         private BillController _billController;
 
         private readonly User _validUser = new User() { UserName = "Jerry" };
@@ -29,6 +30,7 @@ namespace OurHome.UnitTests.ControllerTests
 
             _mockUserStore = new Mock<IUserStore<User>>();
             _mockUserManager = new Mock<UserManager<User>>(_mockUserStore.Object, null, null, null, null, null, null, null, null);
+            _mockMapper = new Mock<IMapper>();
 
             _mockControllerContext = new Mock<ControllerContext>();
 
@@ -44,7 +46,7 @@ namespace OurHome.UnitTests.ControllerTests
             };
 
             _mockControllerContext.Object.HttpContext = httpContext;
-            _billController = new BillController(_mockUnitOfWorkService.Object, _mockUserManager.Object);
+            _billController = new BillController(_mockUnitOfWorkService.Object, _mockUserManager.Object, _mockMapper.Object);
             _billController.ControllerContext = _mockControllerContext.Object;
         }
 
