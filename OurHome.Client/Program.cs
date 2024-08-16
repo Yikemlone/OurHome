@@ -12,9 +12,10 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddOptions();
 
 builder.Services.AddAuthorizationCore(options => {
-    options.AddPolicy("HomeOwner", policy => policy.RequireClaim("HomeOwner", "homeOwner"));
-    options.AddPolicy("HomeUser", policy => policy.RequireClaim("HomeUser", "homeUser"));
-    options.AddPolicy("User", policy => policy.RequireClaim("User", "user"));
+    options.AddPolicy("HomeOwner", policy => policy.RequireRole("HomeOwner"));
+    options.AddPolicy("HomeUser", policy => policy.RequireRole("HomeUser"));
+    options.AddPolicy("HomeAdmin", policy => policy.RequireRole("HomeAdmin", "HomeOwner"));
+    options.AddPolicy("User", policy => policy.RequireRole("User"));
 });
 
 builder.Services.AddScoped<IdentityAuthenticationStateProvider>();

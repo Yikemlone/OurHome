@@ -27,10 +27,10 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddAuthorization(options => {
-    options.AddPolicy("HomeOwner", policy => policy.RequireClaim("HomeOwner", "homeOwner"));
-    options.AddPolicy("HomeUser", policy => policy.RequireClaim("HomeUser", "homeUser"));
-    options.AddPolicy("HomeAdmin", policy => policy.RequireClaim("HomeAdmin", "homeAdmin"));
-    options.AddPolicy("User", policy => policy.RequireClaim("User", "user"));
+    options.AddPolicy("HomeOwner", policy => policy.RequireRole("HomeOwner"));
+    options.AddPolicy("HomeUser", policy => policy.RequireRole("HomeUser"));
+    options.AddPolicy("HomeAdmin", policy => policy.RequireRole("HomeAdmin", "HomeOwner"));
+    options.AddPolicy("User", policy => policy.RequireRole("User"));
 });
 
 builder.Services.Configure<IdentityOptions>(options =>
@@ -79,6 +79,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    
 }
 else
 {
