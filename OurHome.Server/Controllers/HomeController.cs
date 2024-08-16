@@ -27,9 +27,6 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult<List<Home>>> GetAll()
         {
             var user = await GetUser();
-
-            if (user == null) return new StatusCodeResult(403);
-
             var usersHomes = _unitOfWork.HomeService.GetAllAsync(user);
             return Ok(usersHomes);
         }
@@ -40,8 +37,8 @@ namespace OurHome.Server.Controllers
         {
             User user = await GetUser();
 
-            if (user == null) return new StatusCodeResult(403);
-            
+            if (user == null) return StatusCode(403);
+
             bool isUserInHome = await _unitOfWork.HomeUserService
                 .IsUserInHomeAsync(user, ID);
 
@@ -72,8 +69,9 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "HomeOwner, HomeAdmin")]
         [Route("update")]
-        public async Task<ActionResult> Update([FromBody] HomeDTO homeDTO) 
+        public async Task<ActionResult<HomeDTO>> Update([FromBody] HomeDTO homeDTO) 
         {
             if (homeDTO == null || homeDTO.Name == string.Empty || homeDTO.Name == null)
                 return BadRequest("Invalid home parameters.");
@@ -94,7 +92,9 @@ namespace OurHome.Server.Controllers
             home.HomeOwnerID = homeDTO.HomeOwnerID;
 
             _unitOfWork.HomeService.Update(home);
-            await _unitOfWork.SaveAsync();
+            int recordsChanged = await _unitOfWork.SaveAsync();
+
+           // if (recordsChanged == 0) return Sta("No records were changed.");
 
             return Ok(homeDTO);
         }
@@ -127,21 +127,6 @@ namespace OurHome.Server.Controllers
             User? user = await _userManager.FindByIdAsync(userID);
             return user;
         }
-
-        //public virtual async Task<bool> CheckAdminOrOwner(User user, int homeID)
-        //{
-        //    var exposedClaims = User.Claims.ToDictionary(c => c.Type, c => c.Value);
-
-        //    bool isUserInHome = await _unitOfWork.HomeUserService
-        //        .IsUserInHomeAsync(user, homeID);
-
-        //    if (!isUserInHome) return false;
-
-        //    if (!exposedClaims.ContainsKey("HomeOwner") || !exposedClaims.ContainsKey("HomeAdmin"))
-        //        return false;
-
-        //    return true;
-        //}   
 
     }
 }
