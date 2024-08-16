@@ -33,7 +33,7 @@ namespace OurHome.Server.Controllers
             User? user = await _userManager.
                 FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (user == null) return Unauthorized(); // 403?
+            if (user == null) return Unauthorized();
 
             List<Bill> bills = await _unitOfWork.BillService.GetAllAsync(user);
             return Ok(bills);
@@ -48,6 +48,8 @@ namespace OurHome.Server.Controllers
         [Route("{ID}")]
         public async Task<ActionResult<Bill>> Get(int ID) 
         {
+            // Check if the user is in the home?
+
             Bill bill = await _unitOfWork.BillService.GetAsync(ID);
             if (bill == null) return NotFound();
             return Ok(bill);
@@ -70,12 +72,13 @@ namespace OurHome.Server.Controllers
             List<BillCoOwner>? billCoOwners = createBillDTO.BillCoOwners;
 
             User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             bool isUserInHome = await _unitOfWork.HomeUserService
                 .IsUserInHomeAsync(user, bill.HomeID);
+            if (!isUserInHome) return Unauthorized();
 
             await _unitOfWork.BillService.AddAsync(bill);
 
+            // TODO: Test for co-owners
             if (billCoOwners != null && billCoOwners.Count > 0)
             {
                 List<User> coOwners = new List<User>();
@@ -93,7 +96,6 @@ namespace OurHome.Server.Controllers
                 await _unitOfWork.BillPayorBillService.AddAsync(billPayors, bill);
             }
 
-            // Add an if here to send and error message if the transaction fails
             await _unitOfWork.SaveAsync();
 
             return Ok(createBillDTO);
@@ -101,18 +103,33 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Update([FromBody] Bill bill) 
+        public async Task<ActionResult> Update([FromBody] Bill bill) 
         {
+            User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+           
+            bool isUserInHome = await _unitOfWork.HomeUserService.IsUserInHomeAsync(user, bill.HomeID);
+
+            if (user == null) return Unauthorized();
+
+            if(!isUserInHome) return Unauthorized(); // Is this needed? Do we want users to
+            // modify bills of homes they are not in? Even if they own it?
+
+            if (bill.BillOwnerID != user.Id) return Unauthorized(); 
+
             _unitOfWork.BillService.Update(bill);
             return Ok();
         }
 
         [HttpPost]
         [Route("delete")]
-        public ActionResult Delete([FromBody] Bill bill)
+        public async Task<ActionResult> Delete([FromBody] Bill bill)
         {
+            User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if(bill.BillOwnerID != user.Id) return Unauthorized();
+
             _unitOfWork.BillService.Delete(bill);
-            return Ok();
+            return NoContent();
         }
     }
 } 

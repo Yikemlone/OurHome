@@ -68,7 +68,7 @@ namespace OurHome.UnitTests.ControllerTests
         {
             // Set up
             _mockUserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_invalidUser);
-            
+
             // Act
             var result = await _billController.GetAll();
 
