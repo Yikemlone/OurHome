@@ -91,7 +91,7 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Update([FromBody] Bill bill) 
+        public async Task<ActionResult> Update([FromBody] BillDTO bill) 
         {
             _unitOfWork.BillService.Update(bill);
             return Ok();
