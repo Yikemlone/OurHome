@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
@@ -15,11 +16,13 @@ namespace OurHome.Server.Controllers
     {
         IUnitOfWorkService _unitOfWork;
         private readonly UserManager<User> _userManager;
+        IMapper _mapper;
 
-        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager)
+        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace OurHome.Server.Controllers
             // Check if the user is in the home?
 
             Bill bill = await _unitOfWork.BillService.GetAsync(ID);
-            if (bill == null) return NotFound();
+            if (bill == null) return Unauthorized();                                                                                                             
             return Ok(bill);
         }
 
@@ -68,8 +71,10 @@ namespace OurHome.Server.Controllers
                 createBillDTO.Bill == null) return BadRequest("Invalid bill parameters.");
 
             Bill bill = createBillDTO.Bill;
+
+            Bill bill = _mapper.Map<Bill>(createBillDTO.Bill);
             List<User> billPayors = createBillDTO.BillPayors;
-            List<BillCoOwner>? billCoOwners = createBillDTO.BillCoOwners;
+            List<BillCoOwner>? billCoOwners = _mapper.Map<List<BillCoOwner>>(createBillDTO.BillCoOwners);
 
             User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             bool isUserInHome = await _unitOfWork.HomeUserService

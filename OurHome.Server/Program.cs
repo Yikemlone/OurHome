@@ -21,6 +21,9 @@ builder.Services.AddDbContext<OurHomeDbContext>(options =>
 // Custom Services
 builder.Services.AddScoped<IUnitOfWorkService, UnitOfWorkService>();
 
+// Mapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
 // Identity
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<OurHomeDbContext>()
