@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OurHome.DataAccess.Services.UnitOfWorkServices;
@@ -15,11 +16,13 @@ namespace OurHome.Server.Controllers
     {
         IUnitOfWorkService _unitOfWork;
         private readonly UserManager<User> _userManager;
+        IMapper _mapper;
 
-        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager)
+        public BillController(IUnitOfWorkService unitOfWork, UserManager<User> userManager, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace OurHome.Server.Controllers
         {
             User? user = await _userManager.
                 FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return NotFound();
+            if (user == null) return Unauthorized();
             List<Bill> bills = await _unitOfWork.BillService.GetAllAsync(user);
             return Ok(bills);
         }
@@ -47,7 +50,7 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult<Bill>> Get(int ID) 
         {
             Bill bill = await _unitOfWork.BillService.GetAsync(ID);
-            if (bill == null) return NotFound();
+            if (bill == null) return Unauthorized();                                                                                                             
             return Ok(bill);
         }
 
@@ -60,9 +63,10 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            Bill bill = createBillDTO.Bill;
+
+            Bill bill = _mapper.Map<Bill>(createBillDTO.Bill);
             List<User> billPayors = createBillDTO.BillPayors;
-            List<BillCoOwner>? billCoOwners = createBillDTO.BillCoOwners;
+            List<BillCoOwner>? billCoOwners = _mapper.Map<List<BillCoOwner>>(createBillDTO.BillCoOwners);
 
             await _unitOfWork.BillService.AddAsync(bill);
 
@@ -86,12 +90,12 @@ namespace OurHome.Server.Controllers
             // Add and if here to send and error message if the transaction fails
             await _unitOfWork.SaveAsync();
 
-            return Ok();
+            return Ok(createBillDTO);
         }
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Update([FromBody] Bill bill) 
+        public async Task<ActionResult> Update([FromBody] Bill bill) 
         {
             _unitOfWork.BillService.Update(bill);
             return Ok();
