@@ -35,7 +35,7 @@ namespace OurHome.Server.Controllers
         {
             User? user = await _userManager.
                 FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            if (user == null) return NotFound();
+            if (user == null) return Unauthorized();
             List<Bill> bills = await _unitOfWork.BillService.GetAllAsync(user);
             return Ok(bills);
         }
@@ -50,7 +50,7 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult<Bill>> Get(int ID) 
         {
             Bill bill = await _unitOfWork.BillService.GetAsync(ID);
-            if (bill == null) return NotFound();
+            if (bill == null) return Unauthorized();                                                                                                             
             return Ok(bill);
         }
 
@@ -89,7 +89,7 @@ namespace OurHome.Server.Controllers
             // Add and if here to send and error message if the transaction fails
             await _unitOfWork.SaveAsync();
 
-            return Ok();
+            return Ok(createBillDTO);
         }
 
         [HttpPost]
