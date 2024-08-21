@@ -63,9 +63,10 @@ namespace OurHome.Server.Controllers
         [Route("add")]
         public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
-            Bill bill = createBillDTO.Bill;
+
+            Bill bill = _mapper.Map<Bill>(createBillDTO.Bill);
             List<User> billPayors = createBillDTO.BillPayors;
-            List<BillCoOwner>? billCoOwners = createBillDTO.BillCoOwners;
+            List<BillCoOwner>? billCoOwners = _mapper.Map<List<BillCoOwner>>(createBillDTO.BillCoOwners);
 
             await _unitOfWork.BillService.AddAsync(bill);
 

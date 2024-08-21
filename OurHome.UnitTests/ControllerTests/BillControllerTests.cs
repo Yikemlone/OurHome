@@ -85,9 +85,9 @@ namespace OurHome.UnitTests.ControllerTests
             // Set up
             CreateBillDTO createBillDTO = new CreateBillDTO()
             {
-                Bill = new Bill(),
+                Bill = new BillDTO(),
                 BillPayors = new List<User>(),
-                BillCoOwners = new List<BillCoOwner>()
+                BillCoOwners = new List<BillCoOwnerDTO>()
             };
 
             _mockUserManager.Setup(x => x.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(_validUser);
