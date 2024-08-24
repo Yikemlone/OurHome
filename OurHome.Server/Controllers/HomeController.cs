@@ -40,7 +40,7 @@ namespace OurHome.Server.Controllers
         {
             User user = await GetUser();
 
-            if (user == null) return new StatusCodeResult(403);
+            if (user == null) return Unauthorized();
             
             bool isUserInHome = await _unitOfWork.HomeUserService
                 .IsUserInHomeAsync(user, ID);

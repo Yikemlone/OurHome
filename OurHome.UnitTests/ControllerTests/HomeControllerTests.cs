@@ -167,7 +167,7 @@ namespace OurHome.UnitTests.ControllerTests
             StatusCodeResult? objectResult = result.Result as StatusCodeResult;
 
             // Assert
-            Assert.Equal(403, objectResult.StatusCode);
+            Assert.Equal(401, objectResult.StatusCode);
         }
 
 
