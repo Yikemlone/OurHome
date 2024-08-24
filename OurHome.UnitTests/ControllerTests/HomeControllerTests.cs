@@ -150,7 +150,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus403()
+        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus401()
         {
             // Arrange
             Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
@@ -167,7 +167,7 @@ namespace OurHome.UnitTests.ControllerTests
             StatusCodeResult? objectResult = result.Result as StatusCodeResult;
 
             // Assert
-            Assert.Equal(403, objectResult.StatusCode);
+            Assert.Equal(401, objectResult.StatusCode);
         }
 
 

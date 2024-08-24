@@ -26,7 +26,8 @@ namespace OurHome.Server.Controllers
         [Route("all")]
         public async Task<ActionResult<List<Home>>> GetAll()
         {
-            var user = await GetUser();
+            User user = await GetUser();
+            if(user == null) return new StatusCodeResult(403);
             var usersHomes = _unitOfWork.HomeService.GetAllAsync(user);
             return Ok(usersHomes);
         }
@@ -37,8 +38,8 @@ namespace OurHome.Server.Controllers
         {
             User user = await GetUser();
 
-            if (user == null) return StatusCode(403);
-
+            if (user == null) return Unauthorized();
+            
             bool isUserInHome = await _unitOfWork.HomeUserService
                 .IsUserInHomeAsync(user, ID);
 
@@ -69,7 +70,7 @@ namespace OurHome.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "HomeOwner, HomeAdmin")]
+        [Authorize(Policy = "HomeOwner, HomeAdmin")] // TODO: Check if this works
         [Route("update")]
         public async Task<ActionResult<HomeDTO>> Update([FromBody] HomeDTO homeDTO) 
         {
@@ -119,10 +120,10 @@ namespace OurHome.Server.Controllers
             return NoContent();
         }
 
-        public virtual async Task<User?> GetUser() 
+        public virtual async Task<User> GetUser() 
         {
             string userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User? user = await _userManager.FindByIdAsync(userID);
+            User user = await _userManager.FindByIdAsync(userID);
             return user;
         }
 
