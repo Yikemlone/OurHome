@@ -20,6 +20,6 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
         IInvitationService InvitationService { get; }
         IUserService UserService { get; }
 
-        Task<int> SaveAsync();
+        Task SaveAsync();
     }
 }

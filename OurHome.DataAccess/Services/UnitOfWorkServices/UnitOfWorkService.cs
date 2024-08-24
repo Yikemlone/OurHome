@@ -41,9 +41,9 @@ namespace OurHome.DataAccess.Services.UnitOfWorkServices
             _context.Dispose();
         }
 
-        public async Task<int> SaveAsync()
+        public async Task SaveAsync()
         {
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
     }
 }

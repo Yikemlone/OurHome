@@ -92,9 +92,7 @@ namespace OurHome.Server.Controllers
             home.HomeOwnerID = homeDTO.HomeOwnerID;
 
             _unitOfWork.HomeService.Update(home);
-            int recordsChanged = await _unitOfWork.SaveAsync();
-
-           // if (recordsChanged == 0) return Sta("No records were changed.");
+            await _unitOfWork.SaveAsync();
 
             return Ok(homeDTO);
         }
