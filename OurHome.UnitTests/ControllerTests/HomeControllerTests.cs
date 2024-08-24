@@ -150,7 +150,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus403()
+        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus401()
         {
             // Arrange
             Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
@@ -167,7 +167,7 @@ namespace OurHome.UnitTests.ControllerTests
             StatusCodeResult? objectResult = result.Result as StatusCodeResult;
 
             // Assert
-            Assert.Equal(403, objectResult.StatusCode);
+            Assert.Equal(401, objectResult.StatusCode);
         }
 
 
@@ -210,7 +210,7 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            OkObjectResult? objectResult = result as OkObjectResult;
+            OkObjectResult? objectResult = result.Result as OkObjectResult;
 
             // Assert
             Assert.Equal(200, objectResult.StatusCode);
@@ -247,7 +247,7 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            OkObjectResult? objectResult = result as OkObjectResult;
+            OkObjectResult? objectResult = result.Result as OkObjectResult;
 
             // Assert
             Assert.Equal(200, objectResult.StatusCode);
@@ -264,7 +264,7 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            BadRequestObjectResult? objectResult = result as BadRequestObjectResult;
+            BadRequestObjectResult? objectResult = result.Result as BadRequestObjectResult;
 
             // Assert
             Assert.Equal(400, objectResult.StatusCode);
