@@ -95,6 +95,9 @@ namespace OurHome.UnitTests.ControllerTests
                 .IsUserInHomeAsync(It.IsAny<User>(), It.IsAny<int>())).Returns(Task.FromResult(true));
             _mockUnitOfWorkService.Setup(e => e.BillService.AddAsync(It.IsAny<Bill>())).Returns(Task.CompletedTask);
             _mockUnitOfWorkService.Setup(e => e.BillPayorBillService.AddAsync(It.IsAny<BillPayorBill>())).Returns(Task.CompletedTask);
+            _mockMapper.Setup(e => e.Map<Bill>(createBillDTO.Bill)).Returns(new Bill());
+            _mockMapper.Setup(e => e.Map<BillCoOwner>(createBillDTO.BillCoOwners)).Returns(new BillCoOwner());
+            // Will need to Map bill payors at some point ex. List<User> billPayors = createBillDTO.BillPayors;
 
             // Act
             var result = await _billController.Add(createBillDTO);

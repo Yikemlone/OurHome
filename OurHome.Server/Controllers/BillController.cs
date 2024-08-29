@@ -70,6 +70,7 @@ namespace OurHome.Server.Controllers
             if (createBillDTO == null || createBillDTO.BillPayors == null ||
                 createBillDTO.Bill == null) return BadRequest("Invalid bill parameters.");
 
+            // Mappers aren't mapping
             Bill bill = _mapper.Map<Bill>(createBillDTO.Bill);
             List<User> billPayors = createBillDTO.BillPayors;
             List<BillCoOwner>? billCoOwners = _mapper.Map<List<BillCoOwner>>(createBillDTO.BillCoOwners);
