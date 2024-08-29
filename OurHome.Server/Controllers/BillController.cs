@@ -43,23 +43,32 @@ namespace OurHome.Server.Controllers
         }
 
         /// <summary>
-        /// Returns a bill by ID
+        /// Returns a billDTO by ID
         /// </summary>
         /// <param name="ID"></param>
-        /// <returns>A single bill by ID</returns>
+        /// <returns>A single billDTO by ID</returns>
         [HttpGet]
         [Route("{ID}")]
         public async Task<ActionResult<Bill>> Get(int ID) 
         {
-            // Check if the user is in the home?
+            User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (user == null) return Unauthorized();
 
             Bill bill = await _unitOfWork.BillService.GetAsync(ID);
-            if (bill == null) return Unauthorized();                                                                                                             
+
+            if (bill == null) return NotFound();
+
+            bool isUserInHome = await _unitOfWork.HomeUserService
+                .IsUserInHomeAsync(user, bill.HomeID);
+
+            if (!isUserInHome) return Unauthorized();
+            
             return Ok(bill);
         }
 
         /// <summary>
-        /// Add a new bill with the users that need to pay for it and the co-owners of the bill
+        /// Add a new billDTO with the users that need to pay for it and the co-owners of the billDTO
         /// </summary>
         /// <param name="createBillDTO"></param>
         /// <returns>A Ok response if the transaction went through</returns>
@@ -68,9 +77,9 @@ namespace OurHome.Server.Controllers
         public async Task<ActionResult> Add([FromBody] CreateBillDTO createBillDTO) 
         {
             if (createBillDTO == null || createBillDTO.BillPayors == null ||
-                createBillDTO.Bill == null) return BadRequest("Invalid bill parameters.");
+                createBillDTO.Bill == null) return BadRequest("Invalid billDTO parameters.");
 
-            // Mappers aren't mapping
+            // Mappers aren't being tested
             Bill bill = _mapper.Map<Bill>(createBillDTO.Bill);
             List<User> billPayors = createBillDTO.BillPayors;
             List<BillCoOwner>? billCoOwners = _mapper.Map<List<BillCoOwner>>(createBillDTO.BillCoOwners);
@@ -78,6 +87,7 @@ namespace OurHome.Server.Controllers
             User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
             bool isUserInHome = await _unitOfWork.HomeUserService
                 .IsUserInHomeAsync(user, bill.HomeID);
+
             if (!isUserInHome) return Unauthorized();
 
             await _unitOfWork.BillService.AddAsync(bill);
@@ -107,16 +117,18 @@ namespace OurHome.Server.Controllers
 
         [HttpPost]
         [Route("update")]
-        public async Task<ActionResult> Update([FromBody] Bill bill) 
+        public async Task<ActionResult> Update([FromBody] BillDTO billDTO) 
         {
             User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
            
-            bool isUserInHome = await _unitOfWork.HomeUserService.IsUserInHomeAsync(user, bill.HomeID);
+            bool isUserInHome = await _unitOfWork.HomeUserService.IsUserInHomeAsync(user, billDTO.HomeID);
 
             if (user == null) return Unauthorized();
 
             if(!isUserInHome) return Unauthorized(); // Is this needed? Do we want users to
             // modify bills of homes they are not in? Even if they own it?
+
+            Bill bill = _mapper.Map<Bill>(billDTO);
 
             if (bill.BillOwnerID != user.Id) return Unauthorized(); 
 
@@ -124,11 +136,17 @@ namespace OurHome.Server.Controllers
             return Ok();
         }
 
+
+
         [HttpPost]
         [Route("delete")]
-        public async Task<ActionResult> Delete([FromBody] Bill bill)
+        public async Task<ActionResult> Delete([FromBody] BillDTO billDTO)
         {
             User user = await _userManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            if (user == null) return Unauthorized();
+
+            Bill bill = _mapper.Map<Bill>(billDTO);
 
             if(bill.BillOwnerID != user.Id) return Unauthorized();
 
