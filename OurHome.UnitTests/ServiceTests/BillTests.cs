@@ -9,7 +9,7 @@ namespace OurHome.UnitTests.ServiceTests
         public BillTests()
         {
             DbContextOptions<OurHomeDbContext> options = new DbContextOptionsBuilder<OurHomeDbContext>()
-                .UseSqlServer("Data Source=localhost; Initial Catalog=Developer; User Id=SA; Password=MyPass@word")
+                .UseSqlServer(TestConnectionString.ConnectionString)
                 .Options;
 
             OurHomeDbContext context = new OurHomeDbContext(options);
@@ -33,6 +33,20 @@ namespace OurHome.UnitTests.ServiceTests
 
             // Assert
             Assert.NotNull(bills);
+        }
+
+        [Fact]
+        public async Task CreateNewBill_ShouldThrowError()
+        {
+            // Arrange
+            User user = new User();
+            Home home = new Home() { Name = "My Home", HomeOwner = user };
+            Bill bill = new Bill() { BillName = "Bins", Home = home };
+
+            await _unitOfWorkService.BillService.AddAsync(bill);
+
+            // Act Assert
+            await Assert.ThrowsAsync<DbUpdateException>(async () => await _unitOfWorkService.SaveAsync() );
         }
 
         [Fact]
@@ -376,7 +390,7 @@ namespace OurHome.UnitTests.ServiceTests
         }
 
         [Fact]
-        public async Task GettingAllUserBillInisdeAHome_ShouldReturnAllUsersBillsInsideHome()
+        public async Task GettingAllUserBillInsideAHome_ShouldReturnAllUsersBillsInsideHome()
         {
             // Arrange
             User user = new User();
