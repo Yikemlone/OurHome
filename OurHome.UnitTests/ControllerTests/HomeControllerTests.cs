@@ -150,7 +150,7 @@ namespace OurHome.UnitTests.ControllerTests
         }
 
         [Fact]
-        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus403()
+        public async Task Get_WhenNotLoggedInGettingHomeByID_ShouldReturnStatus401()
         {
             // Arrange
             Home home = new() { Name = "Test", HomeOwnerID = new Guid() };
@@ -167,7 +167,7 @@ namespace OurHome.UnitTests.ControllerTests
             StatusCodeResult? objectResult = result.Result as StatusCodeResult;
 
             // Assert
-            Assert.Equal(403, objectResult.StatusCode);
+            Assert.Equal(401, objectResult.StatusCode);
         }
 
 
@@ -184,10 +184,9 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             ActionResult<Home> result = await _homeController.Get(1);
-            NotFoundResult? objectResult = result.Result as NotFoundResult;
 
             // Assert
-            Assert.Equal(404, objectResult.StatusCode);
+            Assert.IsType<NotFoundResult>(result.Result);
         }
 
         [Fact]
@@ -210,10 +209,9 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            OkObjectResult? objectResult = result as OkObjectResult;
 
             // Assert
-            Assert.Equal(200, objectResult.StatusCode);
+            Assert.IsType<OkObjectResult>(result.Result);
         }
 
         [Fact]
@@ -247,10 +245,9 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            OkObjectResult? objectResult = result as OkObjectResult;
-
+            
             // Assert
-            Assert.Equal(200, objectResult.StatusCode);
+            Assert.IsType<OkObjectResult>(result.Result);
         }
 
 
@@ -264,10 +261,9 @@ namespace OurHome.UnitTests.ControllerTests
 
             // Act
             var result = await _homeController.Update(homeDTO);
-            BadRequestObjectResult? objectResult = result as BadRequestObjectResult;
 
             // Assert
-            Assert.Equal(400, objectResult.StatusCode);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
         }
 
         [Fact]
