@@ -58,7 +58,7 @@ namespace OurHome.Server.Controllers
 
             if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
 
-            var userClaim = new Claim("User", "user");
+            var userClaim = new Claim(ClaimTypes.Role, "User");
             var custSucc = await _userManager.AddClaimAsync(user, userClaim);
 
             if (!custSucc.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
