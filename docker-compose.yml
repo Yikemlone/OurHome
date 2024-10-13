@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+
+    sqlserver:
+        image: mcr.microsoft.com/mssql/server
+        container_name: OurHomeCDB
+        environment:
+            - ACCEPT_EULA=Y
+            - SA_PASSWORD=${Sa_Password:-MyPass@word}
+            - MSSQL_PID=Developer
+            - MSSQL_USER=SA
+        ports:
+            - 1433:1433
+
+    ourhome.server:
+        image: ${DOCKER_REGISTRY-}ourhomeserver
+        build:
+            context: .
+            dockerfile: OurHomeApp/OurHome.Server/Dockerfile
+        depends_on:
+            - sqlserver    
