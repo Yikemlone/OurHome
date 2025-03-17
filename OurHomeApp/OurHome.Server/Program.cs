@@ -9,11 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
 
-// Db Context
-//builder.Services.AddDbContext<OurHomeContainerDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("ContainerConnection"))
-//);
-
 builder.Services.AddDbContext<OurHomeDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnectionLocal"))
 );
@@ -104,10 +99,5 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<OurHomeDbContext>();
-    db.Database.Migrate();
-}
 
 app.Run();

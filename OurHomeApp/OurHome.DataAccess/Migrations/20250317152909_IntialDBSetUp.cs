@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace OurHome.DataAccess.Migrations.OurHomeContainerDb
+namespace OurHome.DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class IntialDBSetUp : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -252,7 +252,7 @@ namespace OurHome.DataAccess.Migrations.OurHomeContainerDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "Invations",
+                name: "Invitations",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
@@ -264,21 +264,21 @@ namespace OurHome.DataAccess.Migrations.OurHomeContainerDb
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invations", x => x.ID);
+                    table.PrimaryKey("PK_Invitations", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Invations_AspNetUsers_FromUserID",
+                        name: "FK_Invitations_AspNetUsers_FromUserID",
                         column: x => x.FromUserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Invations_AspNetUsers_ToUserID",
+                        name: "FK_Invitations_AspNetUsers_ToUserID",
                         column: x => x.ToUserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Invations_Homes_HomeID",
+                        name: "FK_Invitations_Homes_HomeID",
                         column: x => x.HomeID,
                         principalTable: "Homes",
                         principalColumn: "ID",
@@ -434,18 +434,18 @@ namespace OurHome.DataAccess.Migrations.OurHomeContainerDb
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invations_FromUserID",
-                table: "Invations",
+                name: "IX_Invitations_FromUserID",
+                table: "Invitations",
                 column: "FromUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invations_HomeID",
-                table: "Invations",
+                name: "IX_Invitations_HomeID",
+                table: "Invitations",
                 column: "HomeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Invations_ToUserID",
-                table: "Invations",
+                name: "IX_Invitations_ToUserID",
+                table: "Invitations",
                 column: "ToUserID");
         }
 
@@ -479,7 +479,7 @@ namespace OurHome.DataAccess.Migrations.OurHomeContainerDb
                 name: "HomeUsers");
 
             migrationBuilder.DropTable(
-                name: "Invations");
+                name: "Invitations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

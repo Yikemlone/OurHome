@@ -12,18 +12,17 @@ using OurHome.DataAccess.Context;
 namespace OurHome.DataAccess.Migrations
 {
     [DbContext(typeof(OurHomeDbContext))]
-    [Migration("20240518195651_test")]
-    partial class test
+    [Migration("20250317152909_IntialDBSetUp")]
+    partial class IntialDBSetUp
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "6.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
@@ -59,7 +58,7 @@ namespace OurHome.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -83,7 +82,7 @@ namespace OurHome.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -156,131 +155,13 @@ namespace OurHome.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OurHome.Model.Models.BillCoOwner", b =>
-                {
-                    b.Property<int>("BillID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("BillID", "UserID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("BillCoOwners");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.Home", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<Guid>("HomeOwnerID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("HomeOwnerID");
-
-                    b.ToTable("Homes");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeBill", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("BillName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("HomeID")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<bool>("PriceVaries")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("HomeID");
-
-                    b.ToTable("HomeBills");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeUser", b =>
-                {
-                    b.Property<int>("HomeID")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("HomeID", "UserID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("HomeUsers");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.Invitation", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<Guid>("FromUserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("HomeID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ToUserID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("FromUserID");
-
-                    b.HasIndex("HomeID");
-
-                    b.HasIndex("ToUserID");
-
-                    b.ToTable("Invations");
-                });
-
             modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
                     b.Property<string>("BillName")
                         .IsRequired()
@@ -316,13 +197,31 @@ namespace OurHome.DataAccess.Migrations
                     b.ToTable("Bills");
                 });
 
+            modelBuilder.Entity("OurHome.Models.Models.BillCoOwner", b =>
+                {
+                    b.Property<int>("BillID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("BillID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("BillCoOwners");
+                });
+
             modelBuilder.Entity("OurHome.Models.Models.BillPayorBill", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
                     b.Property<int>("BillID")
                         .HasColumnType("int");
@@ -360,6 +259,106 @@ namespace OurHome.DataAccess.Migrations
                     b.HasIndex("PayorID");
 
                     b.ToTable("BillPayors");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Home", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<Guid>("HomeOwnerID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("HomeOwnerID");
+
+                    b.ToTable("Homes");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.HomeBill", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<string>("BillName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HomeID")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("PriceVaries")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("HomeID");
+
+                    b.ToTable("HomeBills");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.HomeUser", b =>
+                {
+                    b.Property<int>("HomeID")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("HomeID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("HomeUsers");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Invitation", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<Guid>("FromUserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("HomeID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ToUserID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("FromUserID");
+
+                    b.HasIndex("HomeID");
+
+                    b.HasIndex("ToUserID");
+
+                    b.ToTable("Invitations");
                 });
 
             modelBuilder.Entity("OurHome.Models.Models.User", b =>
@@ -479,7 +478,26 @@ namespace OurHome.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OurHome.Model.Models.BillCoOwner", b =>
+            modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.User", "BillOwner")
+                        .WithMany("BillsOwned")
+                        .HasForeignKey("BillOwnerID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.Home", "Home")
+                        .WithMany()
+                        .HasForeignKey("HomeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BillOwner");
+
+                    b.Navigation("Home");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.BillCoOwner", b =>
                 {
                     b.HasOne("OurHome.Models.Models.Bill", "Bill")
                         .WithMany()
@@ -496,92 +514,6 @@ namespace OurHome.DataAccess.Migrations
                     b.Navigation("Bill");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.Home", b =>
-                {
-                    b.HasOne("OurHome.Models.Models.User", "HomeOwner")
-                        .WithMany("HomesOwned")
-                        .HasForeignKey("HomeOwnerID")
-                        .IsRequired();
-
-                    b.Navigation("HomeOwner");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeBill", b =>
-                {
-                    b.HasOne("OurHome.Model.Models.Home", "Home")
-                        .WithMany("HomeBills")
-                        .HasForeignKey("HomeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Home");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.HomeUser", b =>
-                {
-                    b.HasOne("OurHome.Model.Models.Home", "Home")
-                        .WithMany("HomeUsers")
-                        .HasForeignKey("HomeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Models.Models.User", "User")
-                        .WithMany("HomesJoined")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Home");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OurHome.Model.Models.Invitation", b =>
-                {
-                    b.HasOne("OurHome.Models.Models.User", "FromUser")
-                        .WithMany("ReceivedInvitations")
-                        .HasForeignKey("FromUserID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Model.Models.Home", "Home")
-                        .WithMany("Invitations")
-                        .HasForeignKey("HomeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Models.Models.User", "ToUser")
-                        .WithMany("SentInvitations")
-                        .HasForeignKey("ToUserID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("FromUser");
-
-                    b.Navigation("Home");
-
-                    b.Navigation("ToUser");
-                });
-
-            modelBuilder.Entity("OurHome.Models.Models.Bill", b =>
-                {
-                    b.HasOne("OurHome.Models.Models.User", "BillOwner")
-                        .WithMany("BillsOwned")
-                        .HasForeignKey("BillOwnerID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("OurHome.Model.Models.Home", "Home")
-                        .WithMany()
-                        .HasForeignKey("HomeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BillOwner");
-
-                    b.Navigation("Home");
                 });
 
             modelBuilder.Entity("OurHome.Models.Models.BillPayorBill", b =>
@@ -611,7 +543,74 @@ namespace OurHome.DataAccess.Migrations
                     b.Navigation("Payor");
                 });
 
-            modelBuilder.Entity("OurHome.Model.Models.Home", b =>
+            modelBuilder.Entity("OurHome.Models.Models.Home", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.User", "HomeOwner")
+                        .WithMany("HomesOwned")
+                        .HasForeignKey("HomeOwnerID")
+                        .IsRequired();
+
+                    b.Navigation("HomeOwner");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.HomeBill", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.Home", "Home")
+                        .WithMany("HomeBills")
+                        .HasForeignKey("HomeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Home");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.HomeUser", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.Home", "Home")
+                        .WithMany("HomeUsers")
+                        .HasForeignKey("HomeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.User", "User")
+                        .WithMany("HomesJoined")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Home");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Invitation", b =>
+                {
+                    b.HasOne("OurHome.Models.Models.User", "FromUser")
+                        .WithMany("ReceivedInvitations")
+                        .HasForeignKey("FromUserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.Home", "Home")
+                        .WithMany("Invitations")
+                        .HasForeignKey("HomeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OurHome.Models.Models.User", "ToUser")
+                        .WithMany("SentInvitations")
+                        .HasForeignKey("ToUserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("Home");
+
+                    b.Navigation("ToUser");
+                });
+
+            modelBuilder.Entity("OurHome.Models.Models.Home", b =>
                 {
                     b.Navigation("HomeBills");
 

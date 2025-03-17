@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using OurHome.Models.Models;
-using Microsoft.Data.SqlClient;
-using System.Reflection.Emit;
 
 namespace OurHome.DataAccess.Context
 {
@@ -15,7 +12,7 @@ namespace OurHome.DataAccess.Context
         public DbSet<Home> Homes { get; set; }
         public DbSet<HomeBill> HomeBills { get; set; }
         public DbSet<HomeUser> HomeUsers { get; set; }
-        public DbSet<Invitation> Invations { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
         public DbSet<BillPayorBill> BillPayors { get; set; }
 
         public OurHomeDbContext(DbContextOptions<OurHomeDbContext> options) : base(options)

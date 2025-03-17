@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B4D4B635-D382-4532-A2ED-E3676AF64198}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.Client", "OurHomeApp\OurHome.Client\OurHome.Client.csproj", "{9CC50BE5-7809-4EB9-BF3A-152DA7FD4057}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OurHome.DataAccess", "OurHomeApp\OurHome.DataAccess\OurHome.DataAccess.csproj", "{D8065C46-8210-4E75-AA1D-B0F7246B4671}"
@@ -29,10 +27,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B4D4B635-D382-4532-A2ED-E3676AF64198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B4D4B635-D382-4532-A2ED-E3676AF64198}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B4D4B635-D382-4532-A2ED-E3676AF64198}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B4D4B635-D382-4532-A2ED-E3676AF64198}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CC50BE5-7809-4EB9-BF3A-152DA7FD4057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CC50BE5-7809-4EB9-BF3A-152DA7FD4057}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CC50BE5-7809-4EB9-BF3A-152DA7FD4057}.Release|Any CPU.ActiveCfg = Release|Any CPU
