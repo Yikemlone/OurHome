@@ -35,8 +35,9 @@ jobs:
   
     - name: Database Migrations
       run: |
-          dotnet ef migrations add "$(date +'%m%d%y')" -p ./OurHome.DataAccess -s ./OurHome.Server --context OurHomeDbContext
-          dotnet ef database update -s ./OurHome.Server --context OurHomeDbContext
+          pwd
+          dotnet ef migrations add "$(date +'%m%d%y')" -p ./OurHome.DataAccess -s ./OurHome.Server
+          dotnet ef database update -s ./OurHome.Server
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
