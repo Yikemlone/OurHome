@@ -36,6 +36,7 @@ jobs:
     - name: Database Migrations
       run: |
           pwd
+          ls
           dotnet ef migrations add "$(date +'%m%d%y')" -p ./OurHome.DataAccess -s ./OurHome.Server
           dotnet ef database update -s ./OurHome.Server
 
