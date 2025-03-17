@@ -30,7 +30,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Set SQL Database
-        run: docker run -e "ACCEPT_EULA=1" -e "MSSQL_SA_PASSWORD=MyPass@word" -e "MSSQL_PID=Developer" -e "MSSQL_USER=SA" -p 1433:1433 -d --name=OurHomeCDB mcr.microsoft.com/mssql/server
+        run: docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourPass@word' -p 1433:1433 --name OurHomeCDB -d mcr.microsoft.com/mssql/server:2019-latest
 
       - name: Database Migrations
         run: |
